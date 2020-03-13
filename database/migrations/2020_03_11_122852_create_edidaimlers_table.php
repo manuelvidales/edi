@@ -13,10 +13,10 @@ class CreateEdidaimlersTable extends Migration
      */
     public function up()
     {
-        Schema::create('edidaimlers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamps();
-        });
+        // Schema::create('edidaimlers', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->timestamps();
+        // });
     }
 
     /**
