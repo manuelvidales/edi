@@ -6,6 +6,8 @@ use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\messagesend;
 
 class EdiDaimler extends Command
 {
@@ -55,7 +57,7 @@ class EdiDaimler extends Command
             if (empty($buscar)) {
                 //guardar el nombre del archivo
                 DB::table('imports')->insert(['filename' => $files[$i], 'estatus' => 'process' ]);
-                Log::info('Nombre Almancenado con exito!');
+                Log::info('Archivo Almancenado con exito!');
 
             $file = Storage::disk('sftp')->get($files[$i]); //lectura del archivo txt
             $array = explode("~", $file); //separacion por signo ~            
@@ -159,7 +161,13 @@ class EdiDaimler extends Command
                 $row26td3= $tr26[3];
                 $row26td4= $tr26[4];
 
-                Log::info('Complete!!!');
+                Log::info('Datos almacenado en SqlSrv!!!');
+
+            //enviar correo
+            $email='sistemas01@autofleteshalcon.com';
+            Mail::to($email)->send(new messagesend);
+            
+            Log::info('Correo enviado!!');
 
             } else {
                 Log::info('Ya existe');
