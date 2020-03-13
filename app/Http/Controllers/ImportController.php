@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\messagesend;
 
-
 class ImportController extends Controller
 {
     /**
@@ -20,16 +19,59 @@ class ImportController extends Controller
      */
     public function index()
     {
-        if ($dir = opendir('storage')) {
-            while (false !== ($entrada = readdir($dir))) {
-                if ($entrada != "." && $entrada != ".." && substr($entrada,-4)==".txt") {
-                    //moviendo el archivo
-                    rename ('storage/'.$entrada,'storage/procesados/'.$entrada);
-                    echo 'el Archivo '.$entrada.' fue movido con exito!';
-                }
+        $files = Storage::disk('sftp')->files(''); //muestra los archivos en array
+        $cantidad = count($files); //contador de archivos en el directorio
+        for($i=0; $i<$cantidad; $i++)
+            {
+            
+            //validar Solo archivos TxT
+            if ( substr($files[$i],-4)==".txt") {
+                echo $files[$i].'<br>';
+                //Validar si ya existe el archivo
+                $buscar = DB::table('imports')->where('filename', $files[$i])->first();
+            
+            if (empty($buscar)) {
+                //guardar el nombre del archivo
+                DB::table('imports')->insert(['filename' => $files[$i], 'estatus' => 'process' ]);
+
+            $file = Storage::disk('mysftp')->get($files[$i]); //lectura del archivo txt
+            $array = explode("~", $file); //separacion por signo ~            
+
+            $row0 = $array[0];
+            $tr0 = explode ("*", $row0);
+                $row0td0= $tr0[0];
+                $row0td5= $tr0[5];
+                $row0td6= $tr0[6];
+                $row0td7= $tr0[7];
+                $row0td8= $tr0[8];
+                $row0td11= $tr0[11];
+                $row0td12= $tr0[12];
+                    echo '
+                    <table class="table table-sm table-striped text-center">
+                    <thead><tr><th>0 - '.$row0td0.'</th><th>Valores</th></tr></thead>
+                    <tbody class="text-center">
+                    <tr><td>id_qualifier_sender</td><td>'.$row0td5.'</td></tr>
+                    <tr><td>id_sender</td><td>'.$row0td6.'</td></tr>
+                    <tr><td>id_qualifier_receiver</td><td>'.$row0td7.'</td></tr>
+                    <tr><td>id_receiver</td><td>'.$row0td8.'</td></tr>
+                    <tr><td>version_number</td><td>'.$row0td11.'</td></tr>
+                    <tr><td>control_number</td><td>'.$row0td12.'</td></tr>
+                    </tbody></table>';
+                    echo "<hr>";
+
+            } else {
+                echo 'Ya existe';
             }
-            closedir($dir);
-        }
+        
+
+
+        }//if first
+        
+    }//for
+
+       
+return \view('vista');
+
     }
 
     /**
