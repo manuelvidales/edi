@@ -41,7 +41,7 @@ class EdiDaimler extends Command
     public function handle()
     {
 
-        $files = Storage::disk('mysftp')->files(''); //muestra los archivos en array
+        $files = Storage::disk('sftp')->files(''); //muestra los archivos en array
         $cantidad = count($files); //contador de archivos en el directorio
         for($i=0; $i<$cantidad; $i++)
             {
@@ -57,7 +57,7 @@ class EdiDaimler extends Command
                 DB::table('imports')->insert(['filename' => $files[$i], 'estatus' => 'process' ]);
                 Log::info('Nombre Almancenado con exito!');
 
-            $file = Storage::disk('mysftp')->get($files[$i]); //lectura del archivo txt
+            $file = Storage::disk('sftp')->get($files[$i]); //lectura del archivo txt
             $array = explode("~", $file); //separacion por signo ~            
                 Log::info('Archivo separado en array ~');
 
