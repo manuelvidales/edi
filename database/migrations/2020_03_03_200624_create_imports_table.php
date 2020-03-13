@@ -15,18 +15,9 @@ class CreateImportsTable extends Migration
     {
         Schema::create('imports', function (Blueprint $table) {
             $table->id();
-            $table->string('filename',191)->nullable();
-            $table->string('st01',191)->nullable();
-            $table->string('st02',191)->nullable();
-            $table->string('b201',191)->nullable();
-            $table->string('b202',191)->nullable();
-            $table->string('b204',191)->nullable();
-            $table->string('b206',191)->nullable();
-            $table->string('b2a01',191)->nullable();
-            $table->string('l1101',191)->nullable();
-            $table->string('l1102',191)->nullable();
-            $table->string('l11_01',191)->nullable();
-            $table->string('l11_02',191)->nullable();
+            $table->string('filename',121)->nullable();
+            $table->string('estatus',25)->nullable();
+            $table->string('response',25)->nullable();
             $table->timestamps();
         });
     }
