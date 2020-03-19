@@ -7,7 +7,8 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
-use App\Mail\messagesend;
+use App\Mail\NotificaDaimler;
+
 
 class EdiDaimler extends Command
 {
@@ -42,7 +43,7 @@ class EdiDaimler extends Command
      */
     public function handle()
     {
-
+        $today = date_create('now');
         $files = Storage::disk('sftp')->files(''); //muestra los archivos en array
         $cantidad = count($files); //contador de archivos en el directorio
         for($i=0; $i<$cantidad; $i++)
@@ -50,14 +51,12 @@ class EdiDaimler extends Command
             
             //validar Solo archivos TxT
             if ( substr($files[$i],-4)==".txt") {
-                \Log::info('Archivo:'.$files[$i]);
                 //Validar si ya existe el archivo
-                $buscar = DB::table('imports')->where('filename', $files[$i])->first();
+                $buscar = DB::table('edidaimlers')->where('filename', $files[$i])->first();
             
             if (empty($buscar)) {
+                \Log::info('Archivo:'.$files[$i]);
                 //guardar el nombre del archivo
-                DB::table('imports')->insert(['filename' => $files[$i], 'estatus' => 'process' ]);
-                Log::info('Archivo Almancenado con exito!');
 
             $file = Storage::disk('sftp')->get($files[$i]); //lectura del archivo txt
             $array = explode("~", $file); //separacion por signo ~            
@@ -160,19 +159,79 @@ class EdiDaimler extends Command
                 $row26td2= $tr26[2];
                 $row26td3= $tr26[3];
                 $row26td4= $tr26[4];
+            //almacenar en mysql
+            DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => $row3td4,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+            Log::info('Archivo Almancenado con exito!');
 
-                Log::info('Datos almacenado en SqlSrv!!!');
+            //enviar datos sqlsrv
+            DB::connection('sqlsrv')->table("edi_daimler")->insert([
+                'id_qualifier_sender' => $row0td5,
+                'id_sender' => $row0td6,
+                'id_qualifier_receiver' => $row0td7,
+                'id_receiver' => $row0td8,
+                'version_number' => $row0td11,
+                'control_number' => $row0td12,
+                'sender_code' => $row1td2,
+                'agency_code' => $row1td7,
+                'industry_identifier' => $row1td8,
+                'alpha_code' => $row3td2,
+                'shipment_identification_number' => $row3td4,
+                'method_payment' => $row3td6,
+                'reference_identification' => $row7td1,
+                'reference_identification_qualifier' => $row7td2,
+                'stop_number_load' => $row10td1,
+                'stop_reason_code_load' => $row10td2,
+                'weight_load' => $row10td3,
+                'weight_units_load' => $row10td4,
+                'quantity_load' => $row10td5,
+                'unit_for_measurement_load' => $row10td6,
+                'load_date_1' => $row13td2,
+                'load_time_1' => $row13td4,
+                'load_time_code_1' => $row13td5,
+                'load_date_qualifier_2' => $row14td1,
+                'load_date_2' => $row14td2,
+                'load_time_qualifier_2' => $row14td3,
+                'load_time_2' => $row14td4,
+                'load_time_code_2' => $row14td5,
+                'origin' => $row15td2,
+                'addres_origin' => $row16td1,
+                'city_origin' => $row17td1,
+                'state_origin' => $row17td2,
+                'postal_code_origin' => $row17td3,
+                'country_origin' => $row17td4,
+                'stop_number_stop1' => $row19td1,
+                'stop_reason_code_stop1' => $row19td2,
+                'weight_stop1' => $row19td3,
+                'weight_units_stop1' => $row19td4,
+                'quantity_stop1' => $row19td5,
+                'unit_for_measurement_stop1' => $row19td6,
+                'tracking_number' => $row20td1,
+                'stop1_date' => $row22td2,
+                'stop1_time' => $row22td4,
+                'stop1_time_code' => $row22td5,
+                'stop1' => $row24td2,
+                'addres_stop1' => $row25td1,
+                'city_stop1' => $row26td1,
+                'state_stop1' => $row26td2,
+                'postal_code_stop1' => $row26td3,
+                'country_stop1' => $row26td4,
+            ]);
+            Log::info('Datos almacenados en SqlSrv!!!');
 
-            //enviar correo
+            //para enviar por correo            
+            $id = $row3td4;
+            $origen = $row15td2;
+            $destino = $row24td2;
+            $fecha = date('d / M / Y', strtotime($row13td2));
+            
             $email='sistemas01@autofleteshalcon.com';
-            Mail::to($email)->send(new messagesend);
+            Mail::to($email)->send(new NotificaDaimler($id, $origen, $destino, $fecha));
             
             Log::info('Correo enviado!!');
 
             } else {
-                Log::info('Ya existe');
+                Log::info('No se encontraron nuevos archivos');
             }
-        
 
 
         }//if first
