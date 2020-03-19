@@ -28,6 +28,10 @@ Route::get('ediemerson/creartxt', 'EdiemersonController@create')->name('ediemers
 Route::get('edidaimler/path', 'EdidaimlerController@path')->name('edidaimler.path');
 Route::get('edidaimler/insertar', 'EdidaimlerController@store')->name('edidaimler.insertar');
 Route::get('edidaimler/creartxt', 'EdidaimlerController@create')->name('edidaimler.creartxt');
+Route::get('edidaimler/{id}', 'EdidaimlerController@show')->name('edidaimler.id');
+Route::get('edidaimler/alert/', 'EdidaimlerController@alert')->name('edidaimler.alert');
+Route::post('/edidaimler/respuesta', 'EdidaimlerController@respuesta')->name('respuesta');
+
 
 //test
 Route::get('import/index', 'ImportController@index')->name('import');
