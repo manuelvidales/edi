@@ -11,7 +11,8 @@ class messagesend extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject = '204 nuevo recibido';
+    //public $subject = '204 nuevo recibido';
+    //public $msg;
 
     /**
      * Create a new message instance.
@@ -30,6 +31,6 @@ class messagesend extends Mailable
      */
     public function build()
     {
-        return $this->view('mails.messagesend');
+        //return $this->view('mails.messagesend'); //vista html css no usar en outlook
     }
 }
