@@ -1,31 +1,32 @@
 ## Descripcion
 
-Se trata de la recepcion de archivos del cliente que nos envian mediante SFTP en formato .TXT el cual contiene informacion de una oferta de viaje en una sola linea separando cada campo por el signo * y cada signo ~ es una linea.
+Recepcion de archivos mediante SFTP en formato .TXT el cual contiene informacion de una oferta de viaje en una sola linea.
 
-Estos archivos se identifican por codigos que se manejan por EDI Standards (electronic data interchange) y estaremos usando los code 204 y 990(respuesta).
+Estos archivos se identifican por codigos que se manejan por EDI Standards (electronic data interchange) y estaremos usando el 204 y 990 de respuesta.
 
-Solo se toman en cuenta los campos que son requeridos para almacenarlos en una tabla en B.D. de Sql server para tomarlos en cuenta al responder cada recepcion.
+Solo se toman en cuenta algunos campos que son requeridos y se almacenan en una tabla de Sql server y se usara la informacion dentro del sistema ERP.
 
-Cada contestacion se almacenan en otra tabla identificada por 990 y se dara un Id incremental el cual se incluira en el archivo 990.
+Cada respuesta se almacenan en otra tabla identificada por 990 y se dara un Id incremental el cual se incluira en el archivo de respuesta.
 
 ## Conocimiento 
 
 Proceso del Funcionamiento del sistema:
 
 - Conexion a un carpeta via Sftp
-- Tarea con Scheduling de Laravel y con el Cron del servidor Centos 7 el cual estara revisando si existen nuevos archivos condicionando solo formatos .txt y ademas que el id de la oferta sea nuevo.
-- Si es null va a leer el archivo TxT y lo convertira en un array separandolo por los signos ~ & *.
-- Almacenara el nombre del archivo en una tabla de la B.D. principal en Mysql.
-- Enviamos los datos separados a la tabla de la B.D. en Sql server.
-- Se Notifica por correo con algunos datos principales del archivo y un Boton con el Link de acceso.`
-- El navegador muestra a detalle la oferta y con 2 opciones ACEPTAR o RECHARZAR.
-- Al elegir una opcion se almancenan los datos en la tabla 990 de Sql Server.
-- Despues se Generara un Archivo .txt identificado con el code 990 y se envia por el acceso SFTP.
-- Al usuario se le notifica en misma pantalla el envio y queda caducado el acceso a este link.
-- Cerrando la notificacion se muestra un aviso "Informacion no disponible".
+- Tarea con Scheduling de Laravel y con el Cron del servidor Centos, el cual estara revisando si existen nuevos archivos condicionando solo formatos .txt y ademas que el id de la oferta sea nuevo.
+- Si pasa la validacion toma lectura del archivo y lo convierte en un array separandolo por los signos (~) es una fila & cada (*) seran campos.
+- Se almacena el nombre del archivo en una tabla de la B.D. principal en Mysql.
+- Enviamos los datos separados (del array) a la tabla de la B.D. en Sql server.
+- Se Notifica por correo con un Link de acceso.
+- El navegador muestra a detalle la oferta con 2 opciones ACEPTAR o RECHAZAR.
+- La respuesta se envia y se Actuliza la tabla principal del archivo.
+- Despues se almancenan los datos en la tabla 990 de Sql Server.
+- Enseguida se generara un Archivo .txt con el code 990 y se envia al SFTP.
+- Se notifica en misma la pantalla el envio y queda caducado el acceso al link.
+- Al Cerrar la notificacion se muestra el aviso "Informacion no disponible".
 
 
-Paquetes se usan dentro del proyecto:
+Paquetes usados dentro del proyecto:
 
 - [Laravel flysystem-sftp ](https://github.com/thephpleague/flysystem-sftp)
 - [Laravel Mail](https://github.com/guzzle/guzzle)
