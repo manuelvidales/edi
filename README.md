@@ -1,77 +1,45 @@
-<p align="center"><img src="https://res.cloudinary.com/dtfbvvkyp/image/upload/v1566331377/laravel-logolockup-cmyk-red.svg" width="400"></p>
+## Descripcion
 
-<p align="center">
-<a href="https://travis-ci.org/laravel/framework"><img src="https://travis-ci.org/laravel/framework.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/d/total.svg" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/v/stable.svg" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://poser.pugx.org/laravel/framework/license.svg" alt="License"></a>
-</p>
+Se trata de la recepcion de archivos del cliente que nos envian mediante SFTP en formato .TXT el cual contiene informacion de una oferta de viaje en una sola linea separando cada campo por el signo * y cada signo ~ es una linea.
 
-## About Laravel
+Estos archivos se identifican por codigos que se manejan por EDI Standards (electronic data interchange) y estaremos usando los code 204 y 990(respuesta).
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Solo se toman en cuenta los campos que son requeridos para almacenarlos en una tabla en B.D. de Sql server para tomarlos en cuenta al responder cada recepcion.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Cada contestacion se almacenan en otra tabla identificada por 990 y se dara un Id incremental el cual se incluira en el archivo 990.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+## Conocimiento 
 
-## Learning Laravel
+Proceso del Funcionamiento del sistema:
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+- Conexion a un carpeta via Sftp
+- Tarea con Scheduling de Laravel y con el Cron del servidor Centos 7 el cual estara revisando si existen nuevos archivos condicionando solo formatos .txt y ademas que el id de la oferta sea nuevo.
+- Si es null va a leer el archivo TxT y lo convertira en un array separandolo por los signos ~ & *.
+- Almacenara el nombre del archivo en una tabla de la B.D. principal en Mysql.
+- Enviamos los datos separados a la tabla de la B.D. en Sql server.
+- Se Notifica por correo con algunos datos principales del archivo y un Boton con el Link de acceso.`
+- El navegador muestra a detalle la oferta y con 2 opciones ACEPTAR o RECHARZAR.
+- Al elegir una opcion se almancenan los datos en la tabla 990 de Sql Server.
+- Despues se Generara un Archivo .txt identificado con el code 990 y se envia por el acceso SFTP.
+- Al usuario se le notifica en misma pantalla el envio y queda caducado el acceso a este link.
+- Cerrando la notificacion se muestra un aviso "Informacion no disponible".
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains over 1500 video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
 
-## Laravel Sponsors
+Paquetes se usan dentro del proyecto:
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the Laravel [Patreon page](https://patreon.com/taylorotwell).
+- [Laravel flysystem-sftp ](https://github.com/thephpleague/flysystem-sftp)
+- [Laravel Mail](https://github.com/guzzle/guzzle)
+- [Laravel Markdown ](https://laravel.com/docs/7.x/mail#markdown-mailables)
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Cubet Techno Labs](https://cubettech.com)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[British Software Development](https://www.britishsoftware.co)**
-- **[Webdock, Fast VPS Hosting](https://www.webdock.io/en)**
-- **[DevSquad](https://devsquad.com)**
-- [UserInsights](https://userinsights.com)
-- [Fragrantica](https://www.fragrantica.com)
-- [SOFTonSOFA](https://softonsofa.com/)
-- [User10](https://user10.com)
-- [Soumettre.fr](https://soumettre.fr/)
-- [CodeBrisk](https://codebrisk.com)
-- [1Forge](https://1forge.com)
-- [TECPRESSO](https://tecpresso.co.jp/)
-- [Runtime Converter](http://runtimeconverter.com/)
-- [WebL'Agence](https://weblagence.com/)
-- [Invoice Ninja](https://www.invoiceninja.com)
-- [iMi digital](https://www.imi-digital.de/)
-- [Earthlink](https://www.earthlink.ro/)
-- [Steadfast Collective](https://steadfastcollective.com/)
-- [We Are The Robots Inc.](https://watr.mx/)
-- [Understand.io](https://www.understand.io/)
-- [Abdel Elrafa](https://abdelelrafa.com)
-- [Hyper Host](https://hyper.host)
-- [Appoly](https://www.appoly.co.uk)
-- [OP.GG](https://op.gg)
 
-## Contributing
+## Screens
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+<p align="center"><img src="https://i.ibb.co/s9kmD8P/0001.png" width="650"></p>
+<p align="center"><img src="https://i.ibb.co/48xNCvL/0002.png" width="450"></p>
+<p align="center"><img src="https://i.ibb.co/syDVpXv/0003.png" width="450"></p>
+<p align="center"><img src="https://i.ibb.co/fGT3N8L/0004.png" width="450"></p>
+<p align="center"><img src="https://i.ibb.co/XVS7Z1L/00005.png" width="450"></p>
 
-## Code of Conduct
-
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
-
-## Security Vulnerabilities
-
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
 
 ## License
 
