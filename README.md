@@ -31,6 +31,7 @@ Paquetes usados dentro del proyecto:
 - [Laravel flysystem-sftp ](https://github.com/thephpleague/flysystem-sftp)
 - [Laravel Mail](https://github.com/guzzle/guzzle)
 - [Laravel Markdown ](https://laravel.com/docs/7.x/mail#markdown-mailables)
+- [Laravel Telescope ](https://github.com/laravel/telescope)
 
 
 ## Screens
@@ -40,6 +41,7 @@ Paquetes usados dentro del proyecto:
 <p align="center"><img src="https://i.ibb.co/syDVpXv/0003.png" width="450"></p>
 <p align="center"><img src="https://i.ibb.co/fGT3N8L/0004.png" width="450"></p>
 <p align="center"><img src="https://i.ibb.co/XVS7Z1L/00005.png" width="450"></p>
+<p align="center"><img src="https://i.ibb.co/PDqSDbw/0006.png" width="450"></p>
 
 
 ## License
