@@ -224,7 +224,8 @@ class EdiDaimler extends Command
             $destino = $row24td2;
             $fecha = date('d / M / Y', strtotime($row13td2));
             
-            $email='virmanuel@gmail.com';
+            $email='sistemas@autofleteshalcon.com';
+            
             Mail::to($email)->send(new NotificaDaimler($id, $origen, $destino, $fecha));
             
             Log::info('Correo enviado!!');
