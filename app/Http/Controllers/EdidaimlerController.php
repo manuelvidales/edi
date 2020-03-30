@@ -515,7 +515,6 @@ echo '
             }
             
         }
-    
     }
 
 
@@ -535,7 +534,7 @@ echo '
         } else {
 
         if ($Request->response == 'A' || $Request->response == 'D') {
-            
+
         //almacena la respuesta en DB local del archivo recibido
             DB::table('edidaimlers')->where('shipment_id', $Request->orderid)->update(['response' => $Request->response, 'updated_at' => $today->format('Y-m-d H:i:s') ]);
 
@@ -574,7 +573,6 @@ echo '
             ]);
 
         //consultamos la tabla 990 para confirmar el id almacenado
-
         $data990 = \DB::connection('sqlsrv')->table("edi_daimler_990")->where('shipment_identification_number', '=', $Request->orderid)->first();
 
         //Crear archivo TxT 990
@@ -617,23 +615,19 @@ echo '
         $tr0td9= date('ymd', strtotime($data990->date_time));
         $tr0td10= date('Hi', strtotime($data990->date_time));
         $tr0td11= $data990->version_number;
-        $tr0td12= $data990->control_number;
-    
+        $tr0td12= $data990->control_number;    
         $tr1td2= trim($data990->id_receiver);//retira espacio en blanco
         $tr1td3= $data990->sender_code;
         $tr1td4= date('Ymd', strtotime($data990->date_time));
         $tr1td5= date('Hi', strtotime($data990->date_time));
         $id= $data990->id_incremental;
         $tr1td7= $data990->agency_code;
-        $tr1td8= $data990->industry_identifier;
-    
+        $tr1td8= $data990->industry_identifier;    
         $tr3td1= $data990->alpha_code;
         $tr3td2= $data990->shipment_identification_number;
-        $tr3td4= $data990->reservation_action_code;
-    
+        $tr3td4= $data990->reservation_action_code;    
         $tr4td1= $data990->reference_identification_qualifier;
-        $tr4td2= $data990->reference_identification;
-    
+        $tr4td2= $data990->reference_identification;    
         $tr5td1= $data990->load_date_qualifier_2;
         $tr5td2= $data990->load_date_2;
         $tr5td3= $data990->load_time_qualifier_2;
@@ -646,13 +640,9 @@ echo '
         Storage::disk('sftp')->put('files990/'.$filename.'.txt', "ISA*00*          *00*          *".$tr0td5."*".$tr0td6."*".$tr0td7."*".$tr0td8."      *".$tr0td9."*".$tr0td10."*".$tr0td11."*".$tr0td12."*".$idnew."*0*T*^~GS*GF*".$tr1td2."*".$tr1td3."*".$tr1td4."*".$tr1td5."*".$id."*".$tr1td7."*".$tr1td8."~ST*990*0001~B1*".$tr3td1."*".$tr3td2."**".$tr3td4."~N9*".$tr4td1."*".$tr4td2."~G62*".$tr5td1."*".$tr5td2."*".$tr5td3."*".$tr5td4."*".$tr5td5."~SE*5*0001~GE*1*".$id."~IEA*1*".$idnew."~");
 
         } else {
-
             return response()->json(['message'=>'Respuesta incorrecta'], 200);
-
         }
-        
-        return response()->json(['message'=>'successful response'], 200);
-
+            return response()->json(['message'=>'successful response'], 200);
         }
 
     }
