@@ -14,6 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\EdiDaimler::class,
+        Commands\Edi214Daimler::class,
     ];
 
     /**
@@ -25,6 +26,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('edi:daimler')->everyMinute();
+        $schedule->command('edi214:daimler')->everyMinute();
     }
 
     /**
