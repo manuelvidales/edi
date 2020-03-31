@@ -73,6 +73,9 @@ class EdiDaimler extends Command
                 $row1td2= $tr1[2];
                 $row1td7= $tr1[7];
                 $row1td8= $tr1[8];
+            $row2 = $array[2];
+            $tr2 = explode ("*", $row2);
+                $row2td2= $tr2[2];                
             $row3 = $array[3];
             $tr3 = explode ("*", $row3);
                 $row3td2= $tr3[2];
@@ -156,6 +159,7 @@ class EdiDaimler extends Command
                 'sender_code' => $row1td2,
                 'agency_code' => $row1td7,
                 'industry_identifier' => $row1td8,
+                'control_number_sender' => $row2td2,
                 'alpha_code' => $row3td2,
                 'shipment_identification_number' => $row3td4,
                 'method_payment' => $row3td6,
@@ -199,6 +203,7 @@ class EdiDaimler extends Command
                 'country_stop1' => $row26td4,
             ]);
                 Log::info('Datos almacenados en SqlSrv!!!');
+
                 $id = $row3td4;
                 $origen = $row15td2;
                 $destino = $row24td2;
@@ -206,7 +211,56 @@ class EdiDaimler extends Command
                 $email = Storage::disk('public')->get('to_mail.txt');//archivo con el correo
                 Mail::to($email)->send(new NotificaDaimler($id, $origen, $destino, $fecha));
                 Log::info('Correo enviado!!');
-            } else {
+
+                //inicia confirmacion de recibido 997
+                $data997 = \DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $row2td2)->get();
+                
+                $id = $data997->id_incremental;
+                $i = strlen($id);
+                if ($i == 1) { //convertir en 9 digitos
+                    $idnew = '00000000'.$id;
+                } elseif ($i == 2) {
+                    $idnew = '0000000'.$id;
+                } elseif ($i == 3) {
+                    $idnew = '000000'.$id;
+                }
+                elseif ($i == 4) {
+                    $idnew = '00000'.$id;
+                }
+                elseif ($i == 5) {
+                    $idnew = '0000'.$id;
+                }
+                elseif ($i == 6) {
+                    $idnew = '000'.$id;
+                }
+                elseif ($i == 7) {
+                    $idnew = '00'.$id;
+                }
+                elseif ($i == 8) {
+                    $idnew = '0'.$id;
+                }
+                elseif ($i == 9) {
+                    $idnew = $id;
+                }
+                else{
+                    $idnew = 'null';
+                }
+                $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
+                //Crear archivo TxT 997
+                $file997 = Storage::disk('sftp')->put('files997/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
+
+                    if (empty($file997)) {
+                        Log::error('Hubo fallos al crear archivo 997');
+                    } else {
+                        Log::info('Archivo 997 creado');
+                        // cambiar valor a 0 para no volverlo a leer
+                        $up = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
+                        Log::info('tabla edi_daimler_997_send actualizada');
+                    }                    
+                //fin de confirmacion
+                
+            } 
+            else {
                 Log::info('No se encontraron nuevos archivos');
             }
         }
