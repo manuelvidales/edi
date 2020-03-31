@@ -42,7 +42,7 @@ class Edi214Daimler extends Command
     {
         $ids = DB::table('edidaimlers')->select('shipment_id')->where('response', 'A')->get();
         foreach ($ids as $ship) {
-        $sql214 = \DB::connection('sqlsrv')->table("edi_daimler_214")->where([ ['shipment_identification_number', '=', $ship->shipment_id],[ 'send_txt', '=', '0'] ])->get();
+        $sql214 = \DB::connection('sqlsrv')->table("edi_daimler_214")->where([ ['shipment_identification_number', '=', $ship->shipment_id],[ 'send_txt', '=', '1'] ])->get();
             foreach ($sql214 as $data214) {
             if ($data214 == true) { //si obtiene datos se crea el archivo
                 $id = $data214->id_incremental;
