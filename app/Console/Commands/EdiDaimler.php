@@ -127,7 +127,8 @@ class EdiDaimler extends Command
                 $row19td6= $tr19[6];    
             $row20 = $array[20];
             $tr20 = explode ("*", $row20);
-                $row20td1= $tr20[1];    
+                $row20td1= $tr20[1];
+                $row20td2= $tr20[2];
             $row22 = $array[22];
             $tr22 = explode ("*", $row22);
                 $row22td2= $tr22[2];
@@ -192,6 +193,7 @@ class EdiDaimler extends Command
                 'quantity_stop1' => $row19td5,
                 'unit_for_measurement_stop1' => $row19td6,
                 'tracking_number' => $row20td1,
+                'id_tracking_number' => $row20td2,
                 'stop1_date' => $row22td2,
                 'stop1_time' => $row22td4,
                 'stop1_time_code' => $row22td5,
@@ -213,7 +215,7 @@ class EdiDaimler extends Command
                 Log::info('Correo enviado!!');
 
                 //inicia confirmacion de recibido 997
-                $data997 = \DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $row2td2)->get();
+                $data997 = \DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $row2td2)->first();
                 
                 $id = $data997->id_incremental;
                 $i = strlen($id);
