@@ -13,13 +13,13 @@ class CreateImportsTable extends Migration
      */
     public function up()
     {
-        Schema::create('imports', function (Blueprint $table) {
-            $table->id();
-            $table->string('filename',121)->nullable();
-            $table->string('estatus',25)->nullable();
-            $table->string('response',25)->nullable();
-            $table->timestamps();
-        });
+        // Schema::create('imports', function (Blueprint $table) {
+        //     $table->id();
+        //     $table->string('filename',121)->nullable();
+        //     $table->string('estatus',25)->nullable();
+        //     $table->string('response',25)->nullable();
+        //     $table->timestamps();
+        // });
     }
 
     /**
