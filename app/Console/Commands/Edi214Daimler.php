@@ -89,33 +89,31 @@ class Edi214Daimler extends Command
                 $tr1td4 = date('Ymd', strtotime($data214->date_time));
                 $tr1td5 = date('Hi', strtotime($data214->date_time));
                 
-                $tr1td6 = $data214->id_incremental; //revisar 4 digitos
+                $tr1td6 = $data214->id_incremental;
                 $tr1td7 = $data214->agency_code;
                 $tr1td8 = $data214->industry_identifier;
                 $tr3td1 = $data214->reference_identification;
                 $tr3td2 = $data214->shipment_identification_number;
                 $tr3td3 = $data214->alpha_code;
+                $tr04td1 = $data214->reference_identification;
+                $tr04td2 = $data214->reference_identification_qualifier;
                 $tr5td1 = $data214->status_code;
                 $tr5td2 = $data214->reason_code;
                 $tr5td5 = date('Ymd', strtotime($data214->date_time));
-                $tr5td6 = date('His', strtotime($data214->date_time));
+                $tr5td6 = date('Hi', strtotime($data214->date_time));
                 $tr6td1 = $data214->city;
                 $tr6td2 = $data214->state;
                 $tr6td3 = $data214->country;
                 $tr7td1 = $data214->alpha_code;
                 $tr7td2 = $data214->equipment;
-                $tr9td2 = $data214->weight_units_load;
-                $tr9td3 = $data214->weight_load;
-                $tr9td4 = $data214->quantity_load;
-                $tr9td6 = $data214->volume_unit_qualifier_load;
-                $tr9td7 = $data214->volume_load;
-
-                $tr11td2 = $data214->id_incremental; //revisar 4 digitos
+                $tr9td1 = $data214->tracking_number;
+                $tr9td2 = $data214->id_tracking_number;
+                $tr11td2 = $data214->id_incremental;
                 $tr12td2 = $idnew; // 9 digitos
                 $name214 = $data214->alpha_code.'_'.$data214->sender_code.'_214_'.$tr5td5.'_'.$idnew;
 
                     //Crear archivo TxT 214
-                $filenew = Storage::disk('sftp')->put('files214/'.$name214.'.txt', "ISA*00*          *00*          *".$tr0td5."*".$tr0td6."*".$tr0td7."*".$tr0td8."*".$tr0td9."*".$tr0td10."*".$tr0td11."*".$tr0td12."*".$idnew."*0*T*^~GS*QM*".$tr1td2."*".$tr1td3."*".$tr1td4."*".$tr1td5."*".$tr1td6."*".$tr1td7."*".$tr1td8."~ST*214*0001~B10*".$tr3td1."*".$tr3td2."**".$tr3td3."~LX*1~AT7*".$tr5td1."*".$tr5td2."***".$tr5td5."*".$tr5td6."*CT~MS1*".$tr6td1."*".$tr6td2."*".$tr6td3."~MS2*".$tr7td1."*".$tr7td2."~L11*1*QN~AT8*G*".$tr9td2."*".$tr9td3."*".$tr9td4."**".$tr9td6."*".$tr9td7."~SE*9*0001~GE*1*".$tr11td2."~IEA*1*".$tr12td2."~");
+                $filenew = Storage::disk('sftp')->put('files214/'.$name214.'.txt', "ISA*00*          *00*          *".$tr0td5."*".$tr0td6."*".$tr0td7."*".$tr0td8."*".$tr0td9."*".$tr0td10."*".$tr0td11."*".$tr0td12."*".$idnew."*0*T*^~GS*QM*".$tr1td2."*".$tr1td3."*".$tr1td4."*".$tr1td5."*".$tr1td6."*".$tr1td7."*".$tr1td8."~ST*214*0001~B10*".$tr3td1."*".$tr3td2."*".$tr3td3."~L11*".$tr04td1."*"."$tr04td2"."~LX*1~AT7*".$tr5td1."*".$tr5td2."***".$tr5td5."*".$tr5td6."*CT~MS1*".$tr6td1."*".$tr6td2."*".$tr6td3."~MS2*".$tr7td1."*".$tr7td2."~L11*".$tr9td1."*".$tr9td2."~SE*9*0001~GE*1*".$tr11td2."~IEA*1*".$tr12td2."~");
 
                     if (empty($filenew)) {
                         Log::error('Hubo fallos al crear archivo 214');
