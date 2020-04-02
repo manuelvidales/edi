@@ -542,7 +542,7 @@ echo '
         //consultar datos por id de la orden se envio
             $datos = \DB::connection('sqlsrv')->table("edi_daimler")->select('shipment_identification_number','Alpha_code','reference_identification_qualifier','reference_identification','load_date_qualifier_2','load_date_2','load_time_qualifier_2','load_time_2','load_time_code_2','id_qualifier_sender','id_sender','id_qualifier_receiver',
             'id_receiver','version_number','control_number','sender_code','agency_code',
-            'industry_identifier','weight_units_load','weight_load','quantity_load')->where('shipment_identification_number', '=', $Request->orderid)->first();
+            'industry_identifier','weight_units_load','weight_load','quantity_load','tracking_number','id_tracking_number')->where('shipment_identification_number', '=', $Request->orderid)->first();
 
         //Almacenamos la respuesta en tabla 990
             DB::connection('sqlsrv')->table("edi_daimler_990")->insert([  
@@ -570,7 +570,9 @@ echo '
                 'industry_identifier' => $datos->industry_identifier,
                 'date_time' => $today->format('Ymd H:i:s.000'),
                 'volume_unit_qualifier_load' => '',
-                'volume_load' => ''
+                'volume_load' => '',
+                'tracking_number' => $datos->tracking_number,
+                'id_tracking_number' => $datos->id_tracking_number
             ]);
 
         //consultamos la tabla 990 para confirmar el id almacenado
