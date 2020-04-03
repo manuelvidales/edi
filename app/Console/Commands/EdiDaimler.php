@@ -50,6 +50,8 @@ class EdiDaimler extends Command
             {
             //validar Solo archivos TxT
             if ( substr($files[$i],-4)==".txt") {
+            //validar archivos con nombre incial RYD203
+            if (substr($files[$i], 0, 6) == "RYD204") {
                 //Validar si ya existe el archivo
                 $buscar = DB::table('edidaimlers')->where('filename', $files[$i])->first();
             
@@ -260,8 +262,10 @@ class EdiDaimler extends Command
                         Log::info('tabla edi_daimler_997_send actualizada');
                     }                    
                 //fin de confirmacion
-                
-            } 
+ 
+            }
+        } //RYD204
+            
             else {
                 Log::info('No se encontraron nuevos archivos');
             }
