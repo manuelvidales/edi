@@ -46,11 +46,17 @@ class EdiDaimler extends Command
     {
         $today = date_create('now');
         //conexion FTP
-        $fileftp = Storage::disk('public')->get('dataftp.txt');//accesos
-        $infoftp = explode("~", $fileftp);
-        $ftp_server = ''.$infoftp[0].'';
-        $ftp_user = $infoftp[1];
-        $ftp_pass = $infoftp[2];
+        // $fileftp = Storage::disk('public')->get('dataftp.txt');//accesos
+        // $infoftp = explode("~", $fileftp);
+        // $ftp_server = ''.$infoftp[0].'';
+        // $ftp_user = $infoftp[1];
+        // $ftp_pass = $infoftp[2];
+
+        $ftp_server = '168.218.18.135';
+        $ftp_user = 'ATIHFTP';
+        $ftp_pass = 'At$h2365sT';
+
+
         // establecer una conexión o finalizarla
         $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server"); 
         $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
