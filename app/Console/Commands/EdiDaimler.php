@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\File;
 use App\Mail\NotificaDaimler;
 
 
@@ -44,23 +45,45 @@ class EdiDaimler extends Command
     public function handle()
     {
         $today = date_create('now');
-        $files = Storage::disk('sftp')->files(''); //muestra los archivos en array
-        $cantidad = count($files); //contador de archivos en el directorio
+        //conexion FTP
+        $fileftp = Storage::disk('public')->get('dataftp.txt');//accesos
+        $infoftp = explode("~", $fileftp);
+        $ftp_server = ''.$infoftp[0].'';
+        $ftp_user = $infoftp[1];
+        $ftp_pass = $infoftp[2];
+        // establecer una conexión o finalizarla
+        $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server"); 
+        $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
+        //validar conexion FtP
+        if ( @$login ) {
+
+        // Obtener los archivos contenidos en el directorio
+        $files = ftp_nlist($conn_id, 'fromRyder');
+        $cantidad = count($files);
         for($i=0; $i<$cantidad; $i++)
-            {
+        {
             //validar Solo archivos TxT
             if ( substr($files[$i],-4)==".txt") {
             //validar archivos con nombre incial RYD203
-            if (substr($files[$i], 0, 6) == "RYD204") {
+            if (substr($files[$i], 0, 16) == "fromRyder/RYD204") {
+
                 //Validar si ya existe el archivo
                 $buscar = DB::table('edidaimlers')->where('filename', $files[$i])->first();
-            
+
             if (empty($buscar)) {
                 Log::info('Archivo:'.$files[$i]);
-                //guardar el nombre del archivo
-
-            $file = Storage::disk('sftp')->get($files[$i]); //lectura del archivo txt
-            $array = explode("~", $file); //separacion por signo ~            
+            // Se procede a descargar archivo
+            //$conn = ftp_connect($ftp_server);
+            $local = 'public/storage/'.$files[$i]; //ruta alamacenar            
+            if (ftp_get($conn_id, $local, $files[$i], FTP_BINARY)) { //descarga
+                Log::info('Decarga archivo exitoso');
+            } else {
+                echo "Ha habido un problema\n";
+                Log::error('Ha ocurrido un problema al descargar');
+            }
+            
+            $path = file::get('public/storage/'.$files[$i]);//lectura local
+            $array = explode("~", $path); //array inicial       
                 Log::info('Archivo separado en array ~');
             $row0 = $array[0];
             $tr0 = explode ("*", $row0);
@@ -251,7 +274,7 @@ class EdiDaimler extends Command
                 }
                 $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
                 //Crear archivo TxT 997
-                $file997 = Storage::disk('sftp')->put('files997/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
+                $file997 = Storage::disk('ftp')->put('fromRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
 
                     if (empty($file997)) {
                         Log::error('Hubo fallos al crear archivo 997');
@@ -270,6 +293,16 @@ class EdiDaimler extends Command
                 Log::info('No se encontraron nuevos archivos');
             }
         }
+        }
+    
+    }//if ftp
+    
+        else {
+            Log::error('No se pudo conectar al FTP');
+        }
+        // cerrar la conexión ftp
+        //ftp_close($conn_id);
+    
     }
-    }
+
 }
