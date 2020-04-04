@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'default' => env('FILESYSTEM_DRIVER', 'local'),
+    'default' => env('FILESYSTEM_DRIVER', 'ftp'),
 
     /*
     |--------------------------------------------------------------------------
@@ -64,14 +64,14 @@ return [
             'url' => env('AWS_URL'),
         ],
 
-        'sftp' => [
-            'driver' => 'sftp',
+        'ftp' => [
+            'driver' => 'ftp',
             'host' => env('FTP_HOST'),
             'username' => env('FTP_USERNAME'),
             'password' => env('FTP_PASSWORD'),
-            'url' => env('APP_URL').'/sftp',
-            'root' => '/home/ftpedi/edi/daimleredi204/',
-            'port' => 22,
+            //'url' => env('APP_URL').'/sftp',
+            //'root' => '/home/ftpedi/edi/daimleredi204',
+            'port' => 21,
         ],
 
     ],
