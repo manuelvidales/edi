@@ -174,7 +174,7 @@ class EdiDaimler extends Command
             DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => $row3td4,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
             Log::info('Archivo Almancenado con exito!');
             //enviar datos sqlsrv
-            /*DB::connection('sqlsrv')->table("edi_daimler")->insert([
+            DB::connection('sqlsrv')->table("edi_daimler")->insert([
                 'id_qualifier_sender' => $row0td5,
                 'id_sender' => $row0td6,
                 'id_qualifier_receiver' => $row0td7,
@@ -227,7 +227,7 @@ class EdiDaimler extends Command
                 'state_stop1' => $row26td2,
                 'postal_code_stop1' => $row26td3,
                 'country_stop1' => $row26td4,
-            ]); */
+            ]); 
                 Log::info('Datos almacenados en SqlSrv!!!');
 
                 $id = $row3td4;
@@ -241,7 +241,7 @@ class EdiDaimler extends Command
 
                 //inicia confirmacion de recibido 997
                 $data997 = \DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $row2td2)->first();
-                /*
+                
                 $id = $data997->id_incremental;
                 $i = strlen($id);
                 if ($i == 1) { //convertir en 9 digitos
@@ -283,7 +283,7 @@ class EdiDaimler extends Command
                         // cambiar valor a 0 para no volverlo a leer
                         $up = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
                         Log::info('tabla edi_daimler_997_send actualizada');
-                    } */
+                    } 
                 //fin de confirmacion
  
             }
