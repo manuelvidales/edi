@@ -181,7 +181,7 @@ class EdiDaimler extends Command
             DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => $row3td4,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
             Log::info('Archivo Almancenado con exito!');
             //enviar datos sqlsrv
-            DB::connection('sqlsrv')->table("edi_daimler")->insert([
+            /*DB::connection('sqlsrv')->table("edi_daimler")->insert([
                 'id_qualifier_sender' => $row0td5,
                 'id_sender' => $row0td6,
                 'id_qualifier_receiver' => $row0td7,
@@ -234,15 +234,15 @@ class EdiDaimler extends Command
                 'state_stop1' => $row26td2,
                 'postal_code_stop1' => $row26td3,
                 'country_stop1' => $row26td4,
-            ]);
+            ]); */
                 Log::info('Datos almacenados en SqlSrv!!!');
 
                 $id = $row3td4;
                 $origen = $row15td2;
                 $destino = $row24td2;
                 $fecha = date('d / M / Y', strtotime($row13td2));
-                //$email = Storage::disk('public')->get('to_mail.txt');//archivo con el correo
-                $email = 'sistemas@autofleteshalcon.com';
+                $email = Storage::disk('public')->get('to_mail.txt');//archivo con el correo
+                //$email = 'sistemas@autofleteshalcon.com';
                 Mail::to($email)->send(new NotificaDaimler($id, $origen, $destino, $fecha));
                 Log::info('Correo enviado!!');
 
@@ -281,7 +281,7 @@ class EdiDaimler extends Command
                 }
                 $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
                 //Crear archivo TxT 997
-                $file997 = Storage::disk('ftp')->put('fromRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
+                /*$file997 = Storage::disk('ftp')->put('fromRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
 
                     if (empty($file997)) {
                         Log::error('Hubo fallos al crear archivo 997');
@@ -290,7 +290,7 @@ class EdiDaimler extends Command
                         // cambiar valor a 0 para no volverlo a leer
                         $up = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
                         Log::info('tabla edi_daimler_997_send actualizada');
-                    }                    
+                    } */
                 //fin de confirmacion
  
             }
