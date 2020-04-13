@@ -45,17 +45,10 @@ class EdiDaimler extends Command
     public function handle()
     {
         $today = date_create('now');
-        //conexion FTP
-        // $fileftp = Storage::disk('public')->get('dataftp.txt');//accesos
-        // $infoftp = explode("~", $fileftp);
-        // $ftp_server = ''.$infoftp[0].'';
-        // $ftp_user = $infoftp[1];
-        // $ftp_pass = $infoftp[2];
-
-        $ftp_server = '168.218.18.135';
-        $ftp_user = 'ATIHFTP';
-        $ftp_pass = 'At$h2365sT';
-
+        //credenciales del FTP desde el env
+        $ftp_server = env('FTP_HOST');
+        $ftp_user = env('FTP_USERNAME');
+        $ftp_pass = env('FTP_PASSWORD');
 
         // establecer una conexión o finalizarla
         $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server"); 
@@ -178,7 +171,7 @@ class EdiDaimler extends Command
                 $row26td3= $tr26[3];
                 $row26td4= $tr26[4];
             //almacenar en mysql
-            //DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => $row3td4,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+            DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => $row3td4,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
             Log::info('Archivo Almancenado con exito!');
             //enviar datos sqlsrv
             /*DB::connection('sqlsrv')->table("edi_daimler")->insert([
