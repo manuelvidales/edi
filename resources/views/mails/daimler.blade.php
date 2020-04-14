@@ -11,7 +11,7 @@ Fecha de carga: **{{ $fecha}}**
 
 <br>
 <br>
-Favor de enviar su confirmacion!
+¡Favor de enviar su confirmacion!
 @component('mail::button', ['url' => 'http://192.168.1.220:8012/edidaimler/'.$id, 'color' => 'success']) Ver Orden
 @endcomponent
 
