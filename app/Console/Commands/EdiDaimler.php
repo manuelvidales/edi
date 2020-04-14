@@ -75,7 +75,7 @@ class EdiDaimler extends Command
             //$conn = ftp_connect($ftp_server);
             $local = 'public/storage/'.$files[$i]; //ruta alamacenar            
             if (ftp_get($conn_id, $local, $files[$i], FTP_BINARY)) { //descarga
-                Log::info('Decarga archivo exitoso');
+                Log::info('Descarga archivo exitoso');
             } else {
                 echo "Ha habido un problema\n";
                 Log::error('Ha ocurrido un problema al descargar');
@@ -172,7 +172,7 @@ class EdiDaimler extends Command
                 $row26td4= $tr26[4];
             //almacenar en mysql
             DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => $row3td4,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
-            Log::info('Archivo Almancenado con exito!');
+            Log::info('Archivo Almacenado con exito!');
             //enviar datos sqlsrv
             DB::connection('sqlsrv')->table("edi_daimler")->insert([
                 'id_qualifier_sender' => $row0td5,
