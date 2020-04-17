@@ -46,7 +46,7 @@ class EdiDaimler extends Command
     {
         $today = date_create('now');
         //credenciales del FTP desde el env
-        $ftp_server = env('FTP_HOST');
+        $ftp_server = '168.218.18.135';
         $ftp_user = env('FTP_USERNAME');
         $ftp_pass = env('FTP_PASSWORD');
 
@@ -301,7 +301,7 @@ class EdiDaimler extends Command
             Log::error('No se pudo conectar al FTP');
         }
         // cerrar la conexión ftp
-        //ftp_close($conn_id);
+        ftp_close($conn_id);
     
     }
 
