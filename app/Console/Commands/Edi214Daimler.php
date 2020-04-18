@@ -78,7 +78,7 @@ class Edi214Daimler extends Command
                 $tr0td5 = $data214->id_qualifier_receiver;
                 $tr0td6 = $data214->id_receiver;
                 $tr0td7 = $data214->id_qualifier_sender;
-                $tr0td8 = trim($data214->id_sender);//retira espacio en blanco
+                $tr0td8 = $data214->id_sender;
                 $tr0td9 = date('ymd', strtotime($data214->date_time));
                 $tr0td10 = date('Hi', strtotime($data214->date_time));
                 $tr0td11 = $data214->version_number;
