@@ -15,6 +15,7 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Commands\EdiDaimler::class,
         Commands\Edi214Daimler::class,
+        Commands\EdiVisteon::class,
     ];
 
     /**
@@ -27,6 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('edi:daimler')->everyMinute();
         $schedule->command('edi214:daimler')->everyMinute();
+        $schedule->command('edi210:visteon')->everyMinute();
     }
 
     /**
