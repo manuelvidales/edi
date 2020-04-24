@@ -614,7 +614,7 @@ echo '
         $tr0td5= $data990->id_qualifier_receiver;
         $tr0td6= $data990->id_receiver;
         $tr0td7= $data990->id_qualifier_sender;
-        $tr0td8= $data990->id_sender);
+        $tr0td8= $data990->id_sender;
         $tr0td9= date('ymd', strtotime($data990->date_time));
         $tr0td10= date('Hi', strtotime($data990->date_time));
         $tr0td11= $data990->version_number;
