@@ -1,12 +1,11 @@
 @component('mail::message')
-# Introduction
+# Notificacion nueva orden de facturacion
 
-The body of your message.
+Identificacion: **{{ $id}}**<br>
+Fecha de Emision: **{{ $fecha}}**
 
-@component('mail::button', ['url' => ''])
-Button Text
-@endcomponent
 
-Thanks,<br>
+
+Gracias,<br>
 {{ config('app.name') }}
 @endcomponent
