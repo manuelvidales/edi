@@ -11,14 +11,19 @@ class NotificaVisteon extends Mailable
 {
     use Queueable, SerializesModels;
 
+    public $subject = 'Notificacion Halcon';
+    public $id;
+    public $fecha;
+
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($id, $fecha)
     {
-        //
+        $this->id = $id;
+        $this->fecha = $fecha;
     }
 
     /**
