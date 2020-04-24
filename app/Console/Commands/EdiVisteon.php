@@ -42,6 +42,18 @@ class EdiVisteon extends Command
      */
     public function handle()
     {
-        //
+        $filename = 'Edi210';
+        //Crear archivo TxT 210 //CREA NUEVa Conexion FTP
+        Storage::disk('public')->put('storage/'.$filename.'.txt', "ISA*00* PRUEBA*00*~");
+        Log::info('Archivo almacenado!!');
+
+        $today = date_create('now');
+
+        $id = '123456789';
+        $fecha = $today->format('d/m/Y');
+        $email = env('MAIL_SEND_VISTEON');
+        Mail::to($email)->send(new NotificaVisteon($id, $fecha));
+        Log::info('Correo enviado!!');
+
     }
 }
