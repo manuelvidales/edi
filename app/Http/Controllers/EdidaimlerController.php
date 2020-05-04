@@ -499,7 +499,7 @@ echo '
     public function show($id)
     {
         $valida = DB::table('edidaimlers')->where('shipment_id', $id)->first();
-
+        
         if (empty($valida)) {
             return \view('daimler.alert'); //no continuar
         } else {
