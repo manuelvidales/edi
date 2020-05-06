@@ -21,12 +21,13 @@
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 <body>
-    @if (session('msg'))
+<!-- Alertas -->
+@if (session('info'))
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-2">
                 <div class="alert alert-success" role="alert">
-                    <strong>Aviso:</strong> {{ session('msg') }}
+                    <strong>Aviso:</strong> {{ session('info') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -34,12 +35,12 @@
             </div>
         </div>
     </div>
-@elseif (session('err'))
+@elseif (session('error'))
     <div class="container">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-2">
                 <div class="alert alert-danger" role="alert">
-                    <strong>Aviso:</strong> {{ session('err') }}
+                    <strong>Aviso:</strong> {{ session('error') }}
                     <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
