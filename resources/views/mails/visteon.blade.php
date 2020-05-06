@@ -1,5 +1,5 @@
 @component('mail::message')
-# Notificacion nueva orden de facturacion
+# Envio de Factura a cliente
 
 Identificacion: **{{ $id}}**<br>
 Fecha de Emision: **{{ $fecha}}**
