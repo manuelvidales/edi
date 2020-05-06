@@ -73,6 +73,15 @@ return [
             //'root' => '/home/ftpedi/edi/daimleredi204',
             'port' => 21,
         ],
+        'localftp' => [
+            'driver' => 'ftp',
+            'host' => env('FTP_HOST_LOCAL'),
+            'username' => env('FTP_USERNAME_LOCAL'),
+            'password' => env('FTP_PASSWORD_LOCAL'),
+            //'url' => env('APP_URL').'/sftp',
+            //'root' => '/home/ftpedi/edi/daimleredi204',
+            //'port' => 21,
+        ],
 
     ],
 
