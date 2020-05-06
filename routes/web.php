@@ -22,11 +22,6 @@ Route::get('/home', function () {
 //Preparar array TxT
 Route::post('import/show', 'ImportController@show')->name('import.filetxt');
 
-//Emerson
-Route::get('ediemerson/path', 'EdiemersonController@path')->name('ediemerson.path');
-Route::get('ediemerson/insertar', 'EdiemersonController@store')->name('ediemerson.insertar');
-Route::get('ediemerson/creartxt', 'EdiemersonController@create')->name('ediemerson.creartxt');
-
 //Daimler
 Route::get('edidaimler/path', 'EdidaimlerController@path')->name('edidaimler.path');
 Route::get('edidaimler/insertar', 'EdidaimlerController@store')->name('edidaimler.insertar');
@@ -35,6 +30,15 @@ Route::get('edidaimler/{id}', 'EdidaimlerController@show')->name('edidaimler.id'
 Route::get('edidaimler/alert/', 'EdidaimlerController@alert')->name('edidaimler.alert');
 Route::post('/edidaimler/respuesta', 'EdidaimlerController@respuesta')->name('respuesta');
 
+//visteon
+Route::get('clientes', 'ClientesController@index')->name('clientes');
+Route::post('clientes/visteon', 'ClientesController@store')->name('visteon.clientes');
+
+
+//Emerson test
+Route::get('ediemerson/path', 'EdiemersonController@path')->name('ediemerson.path');
+Route::get('ediemerson/insertar', 'EdiemersonController@store')->name('ediemerson.insertar');
+Route::get('ediemerson/creartxt', 'EdiemersonController@create')->name('ediemerson.creartxt');
 
 //test
 Route::get('import/index', 'ImportController@index')->name('import');
