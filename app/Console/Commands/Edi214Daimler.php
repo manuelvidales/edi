@@ -113,7 +113,7 @@ class Edi214Daimler extends Command
                 $name214 = $data214->alpha_code.'_'.$data214->sender_code.'_214_'.$tr5td5.'_'.$idnew;
 
                     //Crear archivo TxT 214
-                $filenew = Storage::disk('ftp')->put('fromRyder/'.$name214.'.txt', "ISA*00*          *00*          *".$tr0td5."*".$tr0td6."*".$tr0td7."*".$tr0td8."*".$tr0td9."*".$tr0td10."*".$tr0td11."*".$tr0td12."*".$idnew."*0*T*^~GS*QM*".$tr1td2."*".$tr1td3."*".$tr1td4."*".$tr1td5."*".$tr1td6."*".$tr1td7."*".$tr1td8."~ST*214*0001~B10*".$tr3td1."*".$tr3td2."*".$tr3td3."~L11*".$tr04td1."*"."$tr04td2"."~LX*1~AT7*".$tr5td1."*".$tr5td2."***".$tr5td5."*".$tr5td6."*CT~MS1*".$tr6td1."*".$tr6td2."*".$tr6td3."~MS2*".$tr7td1."*".$tr7td2."~L11*".$tr9td1."*".$tr9td2."~SE*9*0001~GE*1*".$tr11td2."~IEA*1*".$tr12td2."~");
+                $filenew = Storage::disk('ftp')->put('toRyder/'.$name214.'.txt', "ISA*00*          *00*          *".$tr0td5."*".$tr0td6."*".$tr0td7."*".$tr0td8."*".$tr0td9."*".$tr0td10."*".$tr0td11."*".$tr0td12."*".$idnew."*0*T*^~GS*QM*".$tr1td2."*".$tr1td3."*".$tr1td4."*".$tr1td5."*".$tr1td6."*".$tr1td7."*".$tr1td8."~ST*214*0001~B10*".$tr3td1."*".$tr3td2."*".$tr3td3."~L11*".$tr04td1."*"."$tr04td2"."~LX*1~AT7*".$tr5td1."*".$tr5td2."***".$tr5td5."*".$tr5td6."*CT~MS1*".$tr6td1."*".$tr6td2."*".$tr6td3."~MS2*".$tr7td1."*".$tr7td2."~L11*".$tr9td1."*".$tr9td2."~SE*9*0001~GE*1*".$tr11td2."~IEA*1*".$tr12td2."~");
 
                     if (empty($filenew)) {
                         Log::error('Hubo fallos al crear archivo 214');
