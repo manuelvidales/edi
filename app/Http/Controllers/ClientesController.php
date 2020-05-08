@@ -98,7 +98,9 @@ class ClientesController extends Controller
      */
     public function edit($id)
     {
-        //
+        $data = \DB::connection('sqlsrv')->table("edi_clientes")->where('id_cliente', $id)->first();
+
+        return response()->json($data);
     }
 
     /**
@@ -108,9 +110,20 @@ class ClientesController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request)
     {
-        //
+        $update = DB::connection('sqlsrv')->table("edi_clientes")->where('id_cliente', '=', $request->idhalcon)->update([
+            'id_cliente' => $request->idhalcon,
+            'cliente' => $request->idvisteon,
+            'nombre' => $request->cliente,
+            'direccion' => $request->direccion,
+            'ciudad' => $request->ciudad,
+            'estado' => $request->estado,
+            'pais' => $request->pais,
+            'cp' => $request->cp,
+        ]);
+
+        return response()->json($update);
     }
 
     /**
