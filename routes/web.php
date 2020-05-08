@@ -33,6 +33,8 @@ Route::post('/edidaimler/respuesta', 'EdidaimlerController@respuesta')->name('re
 //visteon
 Route::get('clientes', 'ClientesController@index')->name('clientes');
 Route::post('clientes/visteon', 'ClientesController@store')->name('visteon.clientes');
+Route::get('clientes/{id}', 'ClientesController@edit')->name('clientes.editar');
+Route::post('clientes/actualizar', 'ClientesController@update')->name('clientes.actualizar');
 
 
 //Emerson test
