@@ -19,74 +19,10 @@ class ImportController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index()
+
     {
-        
-        // PARA PRUEBAS DEL SISTEMA
-        $today = date_create('now');
-
-        $fileftp = Storage::disk('public')->get('dataftp.txt');//accesos
-        $infoftp = explode("~", $fileftp);
-        $ftp_server = ''.$infoftp[0].'';
-        $ftp_user = $infoftp[1];
-        $ftp_pass = $infoftp[2];
-        // establecer una conexión o finalizarla
-        $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server"); 
-        $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
-        // intentar iniciar sesión
-        if ( @$login ) {
-        //Log::info('conexion FTP establecida');
-
-        // Obtener los archivos contenidos en el directorio
-        $files = ftp_nlist($conn_id, 'fromRyder');
-        $cantidad = count($files);
-        for($i=0; $i<$cantidad; $i++)
-        {
-        //validar Solo archivos TxT
-        if ( substr($files[$i],-4)==".txt") {
-        //validar archivos nombre incial
-        if (substr($files[$i], 0, 16) == "fromRyder/RYD204") {
-            //Validar si ya existe el archivo
-            $buscar = DB::table('edidaimlers')->where('filename', $files[$i])->first();
-            if (empty($buscar)) { //Si es null
-                //Log::info('Archivo:'.$files[$i]);
-            // Se procede a descargar archivo
-
-            $local = 'storage/'.$files[$i]; //ruta alamacenar            
-            if (ftp_get($conn_id, $local, $files[$i], FTP_BINARY)) { //descarga
-                echo "Se ha guardado satisfactoriamente".'<br>';
-                $path = file::get('storage/'.$files[$i]);//lectura local
-                $array = explode("~", $path); //array inicial
-
-                $row0 = $array[0];
-                $tr0 = explode ("*", $row0);
-
-                //dd($tr0);
-
-            } else {
-                echo "Ha habido un problema\n";
-            }
-
-            
-        }
-        }
-        }     
-
-        
-    }
-}  
-        else {
-            echo "No se pudo conectar como $ftp_user\n";
-        }
-        // cerrar la conexión ftp
-        ftp_close($conn_id);
-        
-
-
-
-
-
-//return \view('vista');
-
+        $data210 = \DB::connection('sqlsrv')->table("edi_210")->get();
+        dd($data210);
 
 
 
