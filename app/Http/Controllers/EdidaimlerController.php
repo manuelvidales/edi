@@ -640,7 +640,7 @@ echo '
         $filename = $data990->alpha_code.'_'.$data990->sender_code.'_990_'.$data990->load_date_2.'_'.$idnew;
     
         //Crear archivo TxT 990
-        Storage::disk('ftp')->put('fromRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$tr0td5."*".$tr0td6."*".$tr0td7."*".$tr0td8."*".$tr0td9."*".$tr0td10."*".$tr0td11."*".$tr0td12."*".$idnew."*0*T*^~GS*GF*".$tr1td2."*".$tr1td3."*".$tr1td4."*".$tr1td5."*".$id."*".$tr1td7."*".$tr1td8."~ST*990*0001~B1*".$tr3td1."*".$tr3td2."**".$tr3td4."~N9*".$tr4td1."*".$tr4td2."~G62*".$tr5td1."*".$tr5td2."*".$tr5td3."*".$tr5td4."*".$tr5td5."~SE*5*0001~GE*1*".$id."~IEA*1*".$idnew."~");
+        Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$tr0td5."*".$tr0td6."*".$tr0td7."*".$tr0td8."*".$tr0td9."*".$tr0td10."*".$tr0td11."*".$tr0td12."*".$idnew."*0*T*^~GS*GF*".$tr1td2."*".$tr1td3."*".$tr1td4."*".$tr1td5."*".$id."*".$tr1td7."*".$tr1td8."~ST*990*0001~B1*".$tr3td1."*".$tr3td2."**".$tr3td4."~N9*".$tr4td1."*".$tr4td2."~G62*".$tr5td1."*".$tr5td2."*".$tr5td3."*".$tr5td4."*".$tr5td5."~SE*5*0001~GE*1*".$id."~IEA*1*".$idnew."~");
 
         } else {
             return response()->json(['message'=>'Respuesta incorrecta'], 200);

@@ -7,83 +7,127 @@ function Selectedpais(){
   let select=document.getElementById("pais");
   let optionvalue=select.options[select.selectedIndex].value;
   let select1 = $('#selectores1');
-  let select2 = $('#selectores2');
   console.log(optionvalue);
     if (optionvalue == 'MX') {
         $(select1).html('');
-        $(select2).html('');
         $(select1).prepend(`<label for="inputState">Estado</label>
-        <select id="estado" name="estado" class="form-control"></select>`);
-        $(selectores2).prepend(`<label for="inputCity">Ciudad</label>
-        <input type="text" class="form-control" name="ciudad">`);
+        <select id="estadoMx" name="estado" class="form-control"></select>`);
     } else {
         $(select1).html('');
-        $(select2).html('');
         $(select1).prepend(`<label for="inputState">Estado</label>
-        <select id="" name="estado" class="form-control">
-			<option value="AL">Alabama</option>
-			<option value="AK">Alaska</option>
-			<option value="AZ">Arizona</option>
-			<option value="AR">Arkansas</option>
-			<option value="CA">California</option>
-			<option value="CO">Colorado</option>
-			<option value="CT">Connecticut</option>
-			<option value="DE">Delaware</option>
-			<option value="DC">District Of Columbia</option>
-			<option value="FL">Florida</option>
-			<option value="GA">Georgia</option>
-			<option value="HI">Hawaii</option>
-			<option value="ID">Idaho</option>
-			<option value="IL">Illinois</option>
-			<option value="IN">Indiana</option>
-			<option value="IA">Iowa</option>
-			<option value="KS">Kansas</option>
-			<option value="KY">Kentucky</option>
-			<option value="LA">Louisiana</option>
-			<option value="ME">Maine</option>
-			<option value="MD">Maryland</option>
-			<option value="MA">Massachusetts</option>
-			<option value="MI">Michigan</option>
-			<option value="MN">Minnesota</option>
-			<option value="MS">Mississippi</option>
-			<option value="MO">Missouri</option>
-			<option value="MT">Montana</option>
-			<option value="NE">Nebraska</option>
-			<option value="NV">Nevada</option>
-			<option value="NH">New Hampshire</option>
-			<option value="NJ">New Jersey</option>
-			<option value="NM">New Mexico</option>
-			<option value="NY">New York</option>
-			<option value="NC">North Carolina</option>
-			<option value="ND">North Dakota</option>
-			<option value="OH">Ohio</option>
-			<option value="OK">Oklahoma</option>
-			<option value="OR">Oregon</option>
-			<option value="PA">Pennsylvania</option>
-			<option value="RI">Rhode Island</option>
-			<option value="SC">South Carolina</option>
-			<option value="SD">South Dakota</option>
-			<option value="TN">Tennessee</option>
-			<option value="TX">Texas</option>
-			<option value="UT">Utah</option>
-			<option value="VT">Vermont</option>
-			<option value="VA">Virginia</option>
-			<option value="WA">Washington</option>
-			<option value="WV">West Virginia</option>
-			<option value="WI">Wisconsin</option>
-			<option value="WY">Wyoming</option>
-		</select>`);
-    $(selectores2).prepend(`<label for="inputCity">Ciudad</label>
-    <input type="text" class="form-control" name="ciudad">`);
+        <select id="estadoUsa" name="estado" class="form-control"></select>`);
     }
 }
-//solo Estados no mostrara ciudades
+//muestra los estados
 $(document).on('click', '.country', function(){
- 		
-	$.getJSON('js/estados.json', function(data) {
+	$.getJSON('js/estadosMx.json', function(data) {
 		$.each(data, function(key, value) {
-			$("#estado").append('<option value="' + key + '">' + value + '</option>');
+			$("#estadoMx").append('<option value="' + key + '">' + value + '</option>');
 		}); // close each()
 	}); // close getJSON()
-
 });
+$(document).on('click', '.country', function(){ 	
+	$.getJSON('js/estadosUsa.json', function(data) {
+		$.each(data, function(key, value) {
+			$("#estadoUsa").append('<option value="' + key + '">' + value + '</option>');
+		}); // close each()
+	}); // close getJSON()
+});
+//Editar
+$(document).on('click', '.editar', function(){
+	let id = $(this).closest('tr').data('id');
+	let modal = $('#editarForm');
+	$(name).html('');
+	$('#editarMessage').html('');//limpia mensajes
+	  $.ajax({
+		  type:'GET',
+		  url:'clientes/'+id,
+		  success: function(data){
+				console.log(data);
+			  $(modal).find('#idhalcon').val(data.id_cliente);
+			  $(modal).find('#idvisteon').val(data.cliente);
+			  $(modal).find('#cliente').val(data.nombre);
+			  $(modal).find('#direccion').val(data.direccion);
+			  $(modal).find('#ciudad').val(data.ciudad);
+			  $(modal).find('#cp').val(data.cp);
+		  },
+		  error: function(error){
+			console.log(error);
+		  }
+	  });
+  });
+//Guardar datos
+$('#editarForm').submit(function(e){
+	e.preventDefault();
+	let msg = $('#editarMessage');
+	//datos del form
+	let input1 = $('#editarForm input[name="idhalcon"]'),
+	  input2 = $('#editarForm input[name="idvisteon"]'),
+	  input3 = $('#editarForm input[name="cliente"]'),
+	  input4 = $('#editarForm input[name="direccion"]'),
+	  select5 = $('#editarForm select[name="pais"]'),
+	  select6 = $('#editarForm select[name="estado"]'),
+	  input7 = $('#editarForm input[name="ciudad"]'),
+	  input8 = $('#editarForm input[name="cp"]');
+
+	  let formData = {
+		idhalcon: $(input1).val(),
+		idvisteon: $(input2).val(),
+		cliente: $(input3).val(),
+		direccion: $(input4).val(),
+		pais: $(select5).val(),
+		estado: $(select6).val(),
+		ciudad: $(input7).val(),
+		cp: $(input8).val(),
+	  }
+	$.ajax({
+	  type: 'POST',
+	  url: 'clientes/actualizar',
+	  dataType: 'json',
+	  data: formData,
+	  success: function(data){
+		$(msg).html('');
+		console.log(data);
+		$(msg).prepend(`<div class="alert alert-success alert-dismissible fade show" role="alert"><strong>Se actualizo con exito!</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span> </button> </div>`);
+	  },
+	  error: function(error){
+		$(msg).html('');
+		console.log(error);
+		$(msg).prepend(`<div class="alert alert-danger"><strong>Error al actualizar, favor de revisar campos</strong><button type="button" class="close" data-dismiss="alert" aria-label="Close"> <span aria-hidden="true">&times;</span></div>`);
+	  }
+	})
+});
+//Editar Selecion de Pais y Estado
+function SelectedpaisEditar(){
+	let select=document.getElementById("paisEditar");
+	let optionvalue=select.options[select.selectedIndex].value;
+	let selecteditar1 = $('#selectorEditar1');
+	console.log(optionvalue);
+    if (optionvalue == 'MX') {
+        $(selecteditar1).html('');
+        $(selecteditar1).prepend(`<label for="inputState">Estado</label>
+        <select id="estadoEditarMx" name="estado" class="form-control"></select>`);
+    } else {
+        $(selecteditar1).html('');
+        $(selecteditar1).prepend(`<label for="inputState">Estado</label>
+        <select id="estadoEditarUsa" name="estado" class="form-control"></select>`);
+    }
+  }
+  $(document).on('click', '.countryEditar', function(){
+	  $.getJSON('js/estadosMx.json', function(data) {
+		  $.each(data, function(key, value) {
+			  $("#estadoEditarMx").append('<option value="' + key + '">' + value + '</option>');
+		  }); // close each()
+	  }); // close getJSON()
+  });
+  $(document).on('click', '.countryEditar', function(){
+	$.getJSON('js/estadosUsa.json', function(data) {
+		$.each(data, function(key, value) {
+			$("#estadoEditarUsa").append('<option value="' + key + '">' + value + '</option>');
+		}); // close each()
+	}); // close getJSON()
+});
+//recarga page al cerrar el modal crear-actualizar
+$('.reloadpage').on('hidden.bs.modal', function () {
+	location.reload();
+  });
