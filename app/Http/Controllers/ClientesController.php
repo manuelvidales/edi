@@ -16,7 +16,7 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        $clientes = \DB::connection('sqlsrv')->table("edi_clientes")->paginate(5);
+        $clientes = \DB::connection('sqlsrvpro')->table("edi_clientes")->paginate(5);
         return \view('visteon.clientes', \compact('clientes'));
     }
 
@@ -64,7 +64,7 @@ class ClientesController extends Controller
             return back()->withInput()->with('error','La informacion NO fue enviada')->withErrors($validacion->errors());
             }
             else{
-                DB::connection('sqlsrv')->table("edi_clientes")->insert([
+                DB::connection('sqlsrvpro')->table("edi_clientes")->insert([
                     'id_cliente' => $request->idhalcon,
                     'cliente' => $request->idvisteon,
                     'nombre' => $request->cliente,
