@@ -21,8 +21,9 @@ class ImportController extends Controller
     public function index()
 
     {
-        $data210 = \DB::connection('sqlsrv')->table("edi_210")->get();
+        $data210 = \DB::connection('sqlsrvpro')->table("edi_210")->get();
         dd($data210);
+
 
 
 
