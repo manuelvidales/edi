@@ -28,7 +28,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('edi:daimler')->everyMinute();
         $schedule->command('edi214:daimler')->everyMinute();
-        // $schedule->command('edi210:visteon')->everyMinute();
+        $schedule->command('edi210:visteon')->everyMinute();
     }
 
     /**
