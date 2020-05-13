@@ -48,6 +48,7 @@ class EdiVisteon extends Command
         }else{
             foreach ($sql as $row) {
                 if ($row->send_txt == '0') { //no hacer nada...
+                    Log::info('No existen nuevos registros de Visteon!');
                 }elseif ($row->send_txt == '1') {
                     $id = $row->id_incremental;
                     $i = strlen($id);//cantidad de caracteres
