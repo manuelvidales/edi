@@ -42,7 +42,7 @@ class EdiVisteon extends Command
      */
     public function handle()
     {
-        $sql = \DB::connection('sqlsrv')->table("edi_210")->get();
+        $sql = \DB::connection('sqlsrvpro')->table("edi_210")->get();
         if (empty($sql)) {
             Log::error('problemas con sqlsrv tabla edi_210');
         }else{
@@ -85,7 +85,7 @@ class EdiVisteon extends Command
                         Mail::to($email)->send(new NotificaVisteon($id, $fecha));
                         Log::info('Correo enviado!!');
                         //Actualizar Send_txt Valor a 0
-                        $update = DB::connection('sqlsrv')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
+                        $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
                             if (empty($update)) {
                                 Log::error('Error al Actualizar tabla edi_210 con Send_txt a 0');
                             } else {
@@ -129,7 +129,7 @@ class EdiVisteon extends Command
                         Mail::to($email)->send(new NotificaVisteon($id, $fecha));
                         Log::info('Correo enviado!!');
                         //Actualizar Send_txt Valor a 0
-                        $update = DB::connection('sqlsrv')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
+                        $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
                             if (empty($update)) {
                                 Log::error('Error al Actualizar tabla edi_210 con Send_txt a 0');
                             } else {
@@ -173,7 +173,7 @@ class EdiVisteon extends Command
                             Mail::to($email)->send(new NotificaVisteon($id, $fecha));
                             Log::info('Correo enviado!!');
                             //Actualizar Send_txt Valor a 0
-                            $update = DB::connection('sqlsrv')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
+                            $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
                                 if (empty($update)) {
                                     Log::error('Error al Actualizar tabla edi_210 con Send_txt a 0');
                                 } else {
