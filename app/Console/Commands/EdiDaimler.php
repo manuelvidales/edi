@@ -345,7 +345,7 @@ class EdiDaimler extends Command
                 }
                 elseif($pcode == '01'){ //Si es 01 se Cancela, se aCtualiza y se Notifica
                         $val01 = \DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $shipid)->first();
-                        if($val01->purpose_code == '01'){
+                        if($val01->purpose_code === '01'){
                             //No hacer nada
                             //Log::info('validacion 01 ya fue actualizado');
                         }
