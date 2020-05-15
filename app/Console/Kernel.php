@@ -27,8 +27,8 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         $schedule->command('edi:daimler')->everyMinute();
-        $schedule->command('edi214:daimler')->everyMinute();
-        $schedule->command('edi210:visteon')->everyMinute();
+        // $schedule->command('edi214:daimler')->everyMinute();
+        // $schedule->command('edi210:visteon')->everyMinute();
     }
 
     /**
