@@ -540,7 +540,7 @@ echo '
             DB::table('edidaimlers')->where('shipment_id', $Request->orderid)->update(['response' => $Request->response, 'updated_at' => $today->format('Y-m-d H:i:s') ]);
 
         //consultar datos por id de la orden se envio
-            $datos = \DB::connection('sqlsrv')->table("edi_daimler")->select('shipment_identification_number','Alpha_code','reference_identification_qualifier','reference_identification','load_date_qualifier_2','load_date_2','load_time_qualifier_2','load_time_2','load_time_code_2','id_qualifier_sender','id_sender','id_qualifier_receiver',
+            $datos = \DB::connection('sqlsrv')->table("edi_daimler")->select('shipment_identification_number','purpose_code','Alpha_code','reference_identification_qualifier','reference_identification','load_date_qualifier_2','load_date_2','load_time_qualifier_2','load_time_2','load_time_code_2','id_qualifier_sender','id_sender','id_qualifier_receiver',
             'id_receiver','version_number','control_number','sender_code','agency_code',
             'industry_identifier','weight_units_load','weight_load','quantity_load','tracking_number','id_tracking_number')->where('shipment_identification_number', '=', $Request->orderid)->first();
 
@@ -572,7 +572,8 @@ echo '
                 'volume_unit_qualifier_load' => '',
                 'volume_load' => '',
                 'tracking_number' => $datos->tracking_number,
-                'id_tracking_number' => $datos->id_tracking_number
+                'id_tracking_number' => $datos->id_tracking_number,
+                'purpose_code' => $datos->purpose_code,
             ]);
 
         //consultamos la tabla 990 para confirmar el id almacenado
