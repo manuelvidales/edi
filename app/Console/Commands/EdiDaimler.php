@@ -53,10 +53,9 @@ class EdiDaimler extends Command
         // establecer una conexión o finalizarla
         $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server"); 
         $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
-        //validar conexion FtP
+        //validar conexion FTP
         if ( @$login ) {
-
-        // Obtener los archivos contenidos en el directorio
+        // Obtener los archivos del directorio ftp
         $files = ftp_nlist($conn_id, 'fromRyder');
         $cantidad = count($files);
         for($i=0; $i<$cantidad; $i++)
@@ -65,14 +64,11 @@ class EdiDaimler extends Command
             if ( substr($files[$i],-4)==".txt") {
             //validar archivos con nombre incial RYD204
             if (substr($files[$i], 0, 16) == "fromRyder/RYD204") {
-
                 //Validar si ya existe el archivo
                 $buscar = DB::table('edidaimlers')->where('filename', $files[$i])->first();
-
             if (empty($buscar)) {
                 Log::info('Archivo:'.$files[$i]);
             // Se procede a descargar archivo
-            //$conn = ftp_connect($ftp_server);
             $local = 'public/storage/'.$files[$i]; //ruta alamacenar            
             if (ftp_get($conn_id, $local, $files[$i], FTP_BINARY)) { //descarga
                 Log::info('Descarga archivo exitoso');
@@ -80,7 +76,6 @@ class EdiDaimler extends Command
                 echo "Ha habido un problema\n";
                 Log::error('Ha ocurrido un problema al descargar');
             }
-            
             $path = file::get('public/storage/'.$files[$i]);//lectura local
             $array = explode("~", $path); //array inicial       
                 Log::info('Archivo separado en array ~');
@@ -93,9 +88,7 @@ class EdiDaimler extends Command
                 $rowdata = $array[4];
                 $codevalue = explode ("*", $rowdata);
                 $pcode= $codevalue[1];
-
                 if (empty($shipm)) { //si es null se procesa por primera vez Codigo
-            
                 $row0 = $array[0];
                 $tr0 = explode ("*", $row0);
                     $row0td5= $tr0[5];
@@ -318,20 +311,13 @@ class EdiDaimler extends Command
                         
                         $val = \DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $shipid)->first();
                         if($val->load_date_1 === $date_1 and $val->load_time_1 === $time_1){
-                            //No hacer nada
-                            //Log::info('validacion 05 fecha/hora confirmado');
+                            //Log::info('validacion 05 fecha/hora confirmado'); //No hacer nada
                         }
                         else{
-                        $update05 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $shipid] ])->update([
-                            'purpose_code' => '05',
-                            'load_date_1' => $date_1,
-                            'load_time_1' => $time_1,
-                            'load_date_2' => $date_2,
-                            'load_time_2' => $time_2,
-                            'stop1_date' => $stop_date,
-                            'stop1_time' => $stop_time
-                            ]);
+                        $update05 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $shipid] ])->update(['purpose_code' => '05','load_date_1' => $date_1,'load_time_1' => $time_1,'load_date_2' => $date_2,'load_time_2' => $time_2,'stop1_date' => $stop_date,'stop1_time' => $stop_time]);
                                 Log::info('pedido actualizado purpose_code = 05');
+                                //graba el nombre de archivo para no volver a leerlo
+                                DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => '','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                             $code = '5';
                             $id = $val->shipment_identification_number;
                             $origen = $val->origin;
@@ -346,13 +332,12 @@ class EdiDaimler extends Command
                 elseif($pcode == '01'){ //Si es 01 se Cancela, se aCtualiza y se Notifica
                         $val01 = \DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $shipid)->first();
                         if($val01->purpose_code === '01'){
-                            //No hacer nada
-                            //Log::info('validacion 01 ya fue actualizado');
+                            //Log::info('validacion 01 ya fue actualizado');//No hacer nada
                         }
                         else{
-                        $update01 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $shipid] ])->update([
-                            'purpose_code' => '01'
-                            ]);
+                        $update01 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $shipid] ])->update(['purpose_code' => '01']);
+                        //graba el nombre de archivo para no volver a leerlo
+                        DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => 'cancelado','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                             $code = '1';
                             $id = $val01->shipment_identification_number;
                             $origen = $val01->origin;
@@ -362,11 +347,18 @@ class EdiDaimler extends Command
                             $email = env('MAIL_SEND');
                             Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                                 Log::info('Correo de Cancelacion enviado!!');
+                            //buscamos en tabla 990 si existe actualizar(si respodieron)
+                            $data990 = \DB::connection('sqlsrv')->table("edi_daimler_990")->where('shipment_identification_number', '=', $shipid)->first();
+                            //valida si existe
+                            if (empty($data990)) {
+                                //no sucedera nada
+                            } else { //si existe actualiza el purpose_code a 01
+                                $update990 = DB::connection('sqlsrv')->table("edi_daimler_990")->where([ ['shipment_identification_number', '=', $shipid] ])->update(['purpose_code' => '01']);
+                            }
                         }
                 }
             }
-        } //RYD204
-            
+        } //RYD204            
             else {
                 //comentar para no llenar el log
                 Log::info('No se encontraron nuevos archivos');
