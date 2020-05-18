@@ -83,9 +83,9 @@ class EdiVisteon extends Command
                         $id = $row->B302_invoice;
                         $fecha = date('d/m/Y', strtotime($row->B309_dalivery_date));
                         $email = env('MAIL_SEND_VISTEON');
-                        $cc1 = env('CC1MAIL_SEND_VISTEON');
-                        $cc2 = env('CC2MAIL_SEND_VISTEON');
-                        Mail::to($email)->cc($cc1)->bcc($cc2)->send(new NotificaVisteon($id, $fecha));
+                        $ccmails = env('CCMAIL_SEND_VISTEON');
+                        $cc = explode(',', $ccmails);
+                        Mail::to($email)->cc([$cc[0],$cc[1]])->send(new NotificaVisteon($id, $fecha));
                         Log::info('Correo enviado!!');
                         //Actualizar Send_txt Valor a 0
                         $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
@@ -129,9 +129,9 @@ class EdiVisteon extends Command
                         $id = $row->B302_invoice;
                         $fecha = date('d/m/Y', strtotime($row->B309_dalivery_date));
                         $email = env('MAIL_SEND_VISTEON');
-                        $cc1 = env('CC1MAIL_SEND_VISTEON');
-                        $cc2 = env('CC2MAIL_SEND_VISTEON');
-                        Mail::to($email)->cc($cc1)->bcc($cc2)->send(new NotificaVisteon($id, $fecha));
+                        $ccmails = env('CCMAIL_SEND_VISTEON');
+                        $cc = explode(',', $ccmails);
+                        Mail::to($email)->cc([$cc[0],$cc[1]])->send(new NotificaVisteon($id, $fecha));
                         Log::info('Correo enviado!!');
                         //Actualizar Send_txt Valor a 0
                         $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
@@ -175,9 +175,9 @@ class EdiVisteon extends Command
                             $id = $row->B302_invoice;
                             $fecha = date('d/m/Y', strtotime($row->B309_dalivery_date));
                             $email = env('MAIL_SEND_VISTEON');
-                            $cc1 = env('CC1MAIL_SEND_VISTEON');
-                            $cc2 = env('CC2MAIL_SEND_VISTEON');
-                            Mail::to($email)->cc($cc1)->bcc($cc2)->send(new NotificaVisteon($id, $fecha));
+                            $ccmails = env('CCMAIL_SEND_VISTEON');
+                            $cc = explode(',', $ccmails);
+                            Mail::to($email)->cc([$cc[0],$cc[1]])->send(new NotificaVisteon($id, $fecha));
                             Log::info('Correo enviado!!');
                             //Actualizar Send_txt Valor a 0
                             $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
