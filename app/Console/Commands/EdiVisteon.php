@@ -131,7 +131,7 @@ class EdiVisteon extends Command
                         $email = env('MAIL_SEND_VISTEON');
                         $ccmails = env('CCMAIL_SEND_VISTEON');
                         $cc = explode(',', $ccmails);
-                        Mail::to($email)->cc([$cc[0],$cc[1]])->send(new NotificaVisteon($id, $fecha));
+                        Mail::to($email)->cc([$cc[0],$cc[1],$cc[2],$cc[3]])->send(new NotificaVisteon($id, $fecha));
                         Log::info('Correo enviado!!');
                         //Actualizar Send_txt Valor a 0
                         $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
