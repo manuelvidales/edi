@@ -72,6 +72,7 @@
             <div class="dropdown-menu">
                 <a class="dropdown-item" href="{{ route('clientes') }}">Clientes</a>
                 <a class="dropdown-item" href="{{ url('home') }}">testing</a>
+                <a class="dropdown-item" href="{{ route('telescope') }}">telescope</a>
             </div>
         </div>
     </footer>
