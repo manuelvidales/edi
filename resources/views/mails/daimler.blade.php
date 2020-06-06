@@ -30,7 +30,7 @@ Hora de carga: **{{ $hora}}**
 | {{ $origen }} | - | {{ $destino }} |
 
 <br>
-@else
+@elseif($code == 1)
 # Cancelacion de orden por DAIMLER:
 
 Identificacion de envio: **{{ $id}}**<br>
@@ -41,6 +41,18 @@ Hora de carga: **{{ $hora}}**
 | Origen |  | Destino |
 | ------ | ------ | ------ |
 | {{ $origen }} | - | {{ $destino }} |
+
+<br>
+@endif
+
+<br>
+@elseif($code == 824)
+# Falta de informacion en orden de DAIMLER:
+
+Identificacion de orden: **{{ $id}}**<br>
+Codigo error: **{{ $fecha}}**<br>
+Mensaje: **{{ $hora}}**
+
 
 <br>
 @endif
