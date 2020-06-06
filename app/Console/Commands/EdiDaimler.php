@@ -51,329 +51,361 @@ class EdiDaimler extends Command
         $ftp_pass = env('FTP_PASSWORD');
 
         // establecer una conexión o finalizarla
-        $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server"); 
+        $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server");
         $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
         //validar conexion FTP
         if ( @$login ) {
         // Obtener los archivos del directorio ftp
-        $files = ftp_nlist($conn_id, 'fromRyder');
-        $cantidad = count($files);
-        for($i=0; $i<$cantidad; $i++)
-        {
-            //validar Solo archivos TxT
-            if ( substr($files[$i],-4)==".txt") {
-            //validar archivos con nombre incial RYD204
-            if (substr($files[$i], 0, 16) == "fromRyder/RYD204") {
+            $files = ftp_nlist($conn_id, 'fromRyder');
+            $cantidad = count($files);
+        for($i=0; $i<$cantidad; $i++){
+            $filename = $files[$i];
+            //validar Solo archivos .txt y nombre incial RYD204
+        if ( substr($filename,-4)==".txt" and substr($filename, 0, 16) == "fromRyder/RYD204") {
                 //Validar si ya existe el archivo
-                $buscar = DB::table('edidaimlers')->where('filename', $files[$i])->first();
+                $buscar = DB::table('edidaimlers')->where('filename', $filename)->first();
             if (empty($buscar)) {
-                Log::info('Archivo:'.$files[$i]);
-            // Se procede a descargar archivo
-            $local = 'public/storage/'.$files[$i]; //ruta alamacenar            
-            if (ftp_get($conn_id, $local, $files[$i], FTP_BINARY)) { //descarga
-                Log::info('Descarga archivo exitoso');
-            } else {
-                echo "Ha habido un problema\n";
-                Log::error('Ha ocurrido un problema al descargar');
-            }
-            $path = file::get('public/storage/'.$files[$i]);//lectura local
-            $array = explode("~", $path); //array inicial       
-                Log::info('Archivo separado en array ~');
-                // Validar si existe el shipment_id
-                $rowid = $array[3];
-                $trid = explode ("*", $rowid);
-                $shipid= $trid[4];
-                $shipm = DB::table('edidaimlers')->where('shipment_id', $shipid)->first();
-                //obtener el valor de purpose_code
-                $rowdata = $array[4];
-                $codevalue = explode ("*", $rowdata);
-                $pcode= $codevalue[1];
-                if (empty($shipm)) { //si es null se procesa por primera vez Codigo
-                $row0 = $array[0];
-                $tr0 = explode ("*", $row0);
-                    $row0td5= $tr0[5];
-                    $row0td6= $tr0[6];
-                    $row0td7= $tr0[7];
-                    $row0td8= $tr0[8];
-                    $row0td11= $tr0[11];
-                    $row0td12= $tr0[12];
-                $row1 = $array[1];
-                $tr1 = explode ("*", $row1);
-                    $row1td2= $tr1[2];
-                    $row1td7= $tr1[7];
-                    $row1td8= $tr1[8];
-                $row2 = $array[2];
-                $tr2 = explode ("*", $row2);
-                    $row2td2= $tr2[2];                
-                $row3 = $array[3];
-                $tr3 = explode ("*", $row3);
-                    $row3td2= $tr3[2];
-                    $row3td4= $tr3[4];
-                    $row3td6= $tr3[6];
-                
-                $row4 = $array[4];
-                $tr4 = explode ("*", $row4);
-                    $row4td1= $tr4[1]; //purpose_code
-
-                $row7 = $array[7];
-                $tr7 = explode ("*", $row7);
-                    $row7td1= $tr7[1];
-                    $row7td2= $tr7[2];    
-                $row10 = $array[10];
-                $tr10 = explode ("*", $row10);
-                    $row10td1= $tr10[1];
-                    $row10td2= $tr10[2];
-                    $row10td3= $tr10[3];
-                    $row10td4= $tr10[4];
-                    $row10td5= $tr10[5];
-                    $row10td6= $tr10[6];    
-                $row13 = $array[13];
-                $tr13 = explode ("*", $row13);
-                    $row13td2= $tr13[2];
-                    $row13td4= $tr13[4];
-                    $row13td5= $tr13[5];    
-                $row14 = $array[14];
-                $tr14 = explode ("*", $row14);
-                    $row14td1= $tr14[1];
-                    $row14td2= $tr14[2];
-                    $row14td3= $tr14[3];
-                    $row14td4= $tr14[4];
-                    $row14td5= $tr14[5];    
-                $row15 = $array[15];
-                $tr15 = explode ("*", $row15);
-                    $row15td2= $tr15[2];    
-                $row16 = $array[16];
-                $tr16 = explode ("*", $row16);
-                    $row16td1= $tr16[1];    
-                $row17 = $array[17];
-                $tr17 = explode ("*", $row17);
-                    $row17td1= $tr17[1];
-                    $row17td2= $tr17[2];
-                    $row17td3= $tr17[3];
-                    $row17td4= $tr17[4];    
-                $row19 = $array[19];
-                $tr19 = explode ("*", $row19);
-                    $row19td1= $tr19[1];
-                    $row19td2= $tr19[2];
-                    $row19td3= $tr19[3];
-                    $row19td4= $tr19[4];
-                    $row19td5= $tr19[5];
-                    $row19td6= $tr19[6];    
-                $row20 = $array[20];
-                $tr20 = explode ("*", $row20);
-                    $row20td1= $tr20[1];
-                    $row20td2= $tr20[2];
-                $row22 = $array[22];
-                $tr22 = explode ("*", $row22);
-                    $row22td2= $tr22[2];
-                    $row22td4= $tr22[4];
-                    $row22td5= $tr22[5];    
-                $row24 = $array[24];
-                $tr24 = explode ("*", $row24);
-                    $row24td2= $tr24[2];    
-                $row25 = $array[25];
-                $tr25 = explode ("*", $row25);
-                    $row25td1= $tr25[1];    
-                $row26 = $array[26];
-                $tr26 = explode ("*", $row26);
-                    $row26td1= $tr26[1];
-                    $row26td2= $tr26[2];
-                    $row26td3= $tr26[3];
-                    $row26td4= $tr26[4];
-                //almacenar en mysql
-                DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => $row3td4,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
-                Log::info('Archivo Almacenado con exito!');
-                //enviar datos sqlsrv
-                DB::connection('sqlsrv')->table("edi_daimler")->insert([
-                    'id_qualifier_sender' => $row0td5,
-                    'id_sender' => $row0td6,
-                    'id_qualifier_receiver' => $row0td7,
-                    'id_receiver' => $row0td8,
-                    'version_number' => $row0td11,
-                    'control_number' => $row0td12,
-                    'sender_code' => $row1td2,
-                    'agency_code' => $row1td7,
-                    'industry_identifier' => $row1td8,
-                    'control_number_sender' => $row2td2,
-                    'alpha_code' => $row3td2,
-                    'shipment_identification_number' => $row3td4,
-                    'method_payment' => $row3td6,
-                    'purpose_code' => $row4td1,
-                    'reference_identification' => $row7td1,
-                    'reference_identification_qualifier' => $row7td2,
-                    'stop_number_load' => $row10td1,
-                    'stop_reason_code_load' => $row10td2,
-                    'weight_load' => $row10td3,
-                    'weight_units_load' => $row10td4,
-                    'quantity_load' => $row10td5,
-                    'unit_for_measurement_load' => $row10td6,
-                    'load_date_1' => $row13td2,
-                    'load_time_1' => $row13td4,
-                    'load_time_code_1' => $row13td5,
-                    'load_date_qualifier_2' => $row14td1,
-                    'load_date_2' => $row14td2,
-                    'load_time_qualifier_2' => $row14td3,
-                    'load_time_2' => $row14td4,
-                    'load_time_code_2' => $row14td5,
-                    'origin' => $row15td2,
-                    'addres_origin' => $row16td1,
-                    'city_origin' => $row17td1,
-                    'state_origin' => $row17td2,
-                    'postal_code_origin' => $row17td3,
-                    'country_origin' => $row17td4,
-                    'stop_number_stop1' => $row19td1,
-                    'stop_reason_code_stop1' => $row19td2,
-                    'weight_stop1' => $row19td3,
-                    'weight_units_stop1' => $row19td4,
-                    'quantity_stop1' => $row19td5,
-                    'unit_for_measurement_stop1' => $row19td6,
-                    'tracking_number' => $row20td1,
-                    'id_tracking_number' => $row20td2,
-                    'stop1_date' => $row22td2,
-                    'stop1_time' => $row22td4,
-                    'stop1_time_code' => $row22td5,
-                    'stop1' => $row24td2,
-                    'addres_stop1' => $row25td1,
-                    'city_stop1' => $row26td1,
-                    'state_stop1' => $row26td2,
-                    'postal_code_stop1' => $row26td3,
-                    'country_stop1' => $row26td4,
-                ]); 
-                    Log::info('Datos almacenados en SqlSrv!!!');
-                    $code = '0';
-                    $id = $row3td4;
-                    $origen = $row15td2;
-                    $destino = $row24td2;
-                    $fecha = date('d/M/Y', strtotime($row13td2));
-                    $hora = date('H:i', strtotime($row13td4));
-                    $email = env('MAIL_SEND');
-                    Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
-                    Log::info('Correo enviado!!');
-                    //inicia confirmacion de recibido 997
-                    $data997 = \DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $row2td2)->first();
-                    $id = $data997->id_incremental;
-                    $i = strlen($id);
-                    if ($i == 1) { //convertir en 9 digitos
-                        $idnew = '00000000'.$id;
-                    } elseif ($i == 2) {
-                        $idnew = '0000000'.$id;
-                    } elseif ($i == 3) {
-                        $idnew = '000000'.$id;
-                    }
-                    elseif ($i == 4) {
-                        $idnew = '00000'.$id;
-                    }
-                    elseif ($i == 5) {
-                        $idnew = '0000'.$id;
-                    }
-                    elseif ($i == 6) {
-                        $idnew = '000'.$id;
-                    }
-                    elseif ($i == 7) {
-                        $idnew = '00'.$id;
-                    }
-                    elseif ($i == 8) {
-                        $idnew = '0'.$id;
-                    }
-                    elseif ($i == 9) {
-                        $idnew = $id;
-                    }
-                    else{
-                        $idnew = 'null';
-                    }
-                    $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
-                    //Crear archivo TxT 997
-                    $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
-
-                        if (empty($file997)) {
-                            Log::error('Hubo fallos al crear archivo 997');
-                        } else {
-                            Log::info('Archivo 997 creado');
-                            // cambiar valor a 0 para no volverlo a leer
-                            $up = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
-                            Log::info('tabla edi_daimler_997_send actualizada');
-                        } 
-                    //fin de confirmacion
-                }
-                elseif($pcode == '05'){ //Si es 05 se Actualizaran las Fechas
-                    $uprow13 = $array[13];
-                    $uptr13 = explode ("*", $uprow13);
-                        $date_1= $uptr13[2];
-                        $time_1= $uptr13[4];
-                    $uprow14 = $array[14];
-                    $uptr14 = explode ("*", $uprow14);
-                        $date_2= $uptr14[2];
-                        $time_2= $uptr14[4];
-                    $uprow22 = $array[22];
-                    $uptr22 = explode ("*", $uprow22);
-                        $stop_date= $uptr22[2];
-                        $stop_time= $uptr22[4];
-                        
-                        $val = \DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $shipid)->first();
-                        if($val->load_date_1 === $date_1 and $val->load_time_1 === $time_1){
-                            //Log::info('validacion 05 fecha/hora confirmado'); //No hacer nada
-                        }
-                        else{
-                        $update05 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $shipid] ])->update(['purpose_code' => '05','load_date_1' => $date_1,'load_time_1' => $time_1,'load_date_2' => $date_2,'load_time_2' => $time_2,'stop1_date' => $stop_date,'stop1_time' => $stop_time]);
-                                Log::info('pedido actualizado purpose_code = 05');
-                                //graba el nombre de archivo para no volver a leerlo
-                                DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => '','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
-                            $code = '5';
-                            $id = $val->shipment_identification_number;
-                            $origen = $val->origin;
-                            $destino = $val->stop1;
-                            $fecha = date('d/M/Y', strtotime($date_1));
-                            $hora = date('H:i', strtotime($time_1));
-                            $email = env('MAIL_SEND');
-                            Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
-                                Log::info('Correo de Actualizacion fue enviado!!');
-                        }
-                }
-                elseif($pcode == '01'){ //Si es 01 se Cancela, se aCtualiza y se Notifica
-                        $val01 = \DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $shipid)->first();
-                        if($val01->purpose_code === '01'){
-                            //Log::info('validacion 01 ya fue actualizado');//No hacer nada
-                        }
-                        else{
-                        $update01 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $shipid] ])->update(['purpose_code' => '01']);
-                        //graba el nombre de archivo para no volver a leerlo
-                        DB::table('edidaimlers')->insert(['filename' => $files[$i], 'shipment_id' => 'cancelado','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
-                            $code = '1';
-                            $id = $val01->shipment_identification_number;
-                            $origen = $val01->origin;
-                            $destino = $val01->stop1;
-                            $fecha = date('d/M/Y', strtotime($date_1));
-                            $hora = date('H:i', strtotime($time_1));
-                            $email = env('MAIL_SEND');
-                            Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
-                                Log::info('Correo de Cancelacion enviado!!');
-                            //buscamos en tabla 990 si existe actualizar(si respodieron)
-                            $data990 = \DB::connection('sqlsrv')->table("edi_daimler_990")->where('shipment_identification_number', '=', $shipid)->first();
-                            //valida si existe
-                            if (empty($data990)) {
-                                //no sucedera nada
-                            } else { //si existe actualiza el purpose_code a 01
-                                $update990 = DB::connection('sqlsrv')->table("edi_daimler_990")->where([ ['shipment_identification_number', '=', $shipid] ])->update(['purpose_code' => '01']);
+                Log::info('Archivo:'.$filename);
+                // Se procede a descargar archivo
+                $local = 'public/storage/'.$filename; //ruta para almacenar
+                    if (ftp_get($conn_id, $local, $filename, FTP_BINARY)) { //descarga
+                        Log::info('Descarga archivo exitoso');
+                        //////////////////////////////////////////////////////////
+                            //elimina el archivo del directorio ftp
+                            if (ftp_delete($conn_id, $filename)) {
+                                Log::info($filename .' se elimino satisfactoriamente');                
+                            } else {
+                                Log::warning('No se pudo eliminar ');
                             }
+                    } else { //esta parte mover al final
+                        Log::error('Ha ocurrido un problema al descargar');
+                    }
+                $path = file::get('public/storage/'.$filename);//lectura local
+                $array = explode("~", $path); //array inicial
+                    Log::info('Archivo separado en array ~');
+                $finalcount = count($array);
+            //////////////////////////////////////////////////////////////
+                for($i = 0; $i<$finalcount; $i++) {
+                    $data_item=explode("*",$array[$i]); // explode the segment into an array of data_items
+                    switch($i) { //Encabezado 204
+                        case 0: //ISA
+                            $ISA05_id_qualifier_sender=$data_item[5];
+                            $ISA06_id_sender=$data_item[6];
+                            $ISA07_id_qualifier_receiver=$data_item[7];
+                            $ISA08_id_receiver=$data_item[8];
+                            $ISA11_version_number=$data_item[11];
+                            $ISA12_control_number=$data_item[12];
+                        break;
+                        case 1://GS
+                            $GS02_sender_code=$data_item[2];
+                            $GS07_agency_code=$data_item[7];
+                            $GS08_industry_identifier=$data_item[8];
+                        break;
+                        case 2://ST
+                            $ST02_control_number_sender=$data_item[2];
+                        break;
+                        case 3://B2
+                            $B202_alpha_code=$data_item[2];
+                            $B204_shipment_identification_number=$data_item[4];
+                            $B206_method_payment=$data_item[6];
+                        break;
+                        case 4://B2A
+                            $B2A01_purpose_code = $data_item[1];
+                        break;
+                        case 7://L11
+                            $L1103_reference_identification=$data_item[1];
+                            $L1103_reference_identification_qualifier=$data_item[2];
+                        break;
+                    //s5 inicial
+                        case 9://S5
+                            $S501_stop_number_load=$data_item[1];
+                            $S502_stop_reason_code_load=$data_item[2];
+                            $S503_weight_load=$data_item[3];
+                            $S504_weight_units_load=$data_item[4];
+                            $S505_quantity_load=$data_item[5];
+                            $S506_unit_for_measurement_load=$data_item[6];
+                        break;
+                        case 12://G62
+                            $G6202_load_date_1=$data_item[2];
+                            $G6204_load_time_1=$data_item[4];
+                            $G6205_load_time_code_1=$data_item[5];
+                        break;
+                        case 13://G62
+                            $G6201_load_date_qualifier_2=$data_item[1];
+                            $G6202_load_date_2=$data_item[2];
+                            $G6203_load_time_qualifier_2=$data_item[3];
+                            $G6204load_time_2=$data_item[4];
+                            $G6205_load_time_code_2=$data_item[5];
+                        break;
+                        case 14://N1
+                            $N102_origin=$data_item[2];
+                        break;
+                        case 15://N3
+                            $N301_addres_origin=$data_item[1];
+                        break;
+                        case 16://N4
+                            $N401_city_origin=$data_item[1];
+                            $N402_state_origin=$data_item[2];
+                            $N403_postal_code_origin=$data_item[3];
+                            $N404_country_origin=$data_item[4];
+                        break;
+                    }
+                }
+        //Condicionales por lineas totales
+                if ($finalcount == 32) {
+                    for($i = 0; $i<$finalcount; $i++) {
+                        $data_item=explode("*",$array[$i]);
+                        switch($i) {   //s5 Final
+                            case 18://S5
+                                $S501_stop_number_stop1=$data_item[1];
+                                $S502_stop_reason_code_stop1=$data_item[2];
+                                $S503_weight_stop1=$data_item[3];
+                                $S504_weight_units_stop1=$data_item[4];
+                                $S505_quantity_stop1=$data_item[5];
+                                $S506_unit_for_measurement_stop1=$data_item[6];
+                            break;
+                            case 19://L11
+                                $L1101_tracking_number=$data_item[1];
+                                $l1102_id_tracking_number=$data_item[2];
+                            break;
+                            case 21://G62
+                                $G6202_stop1_date=$data_item[2];
+                                $G6204_stop1_time=$data_item[4];
+                                $G6205_stop1_time_code=$data_item[5];
+                            break;
+                            case 23://N1
+                                $N102_stop1=$data_item[2];
+                            break;
+                            case 24://N3
+                                $N301_addres_stop1=$data_item[1];
+                            break;
+                            case 25://N4
+                                $N401_city_stop1=$data_item[1];
+                                $N402_state_stop1=$data_item[2];
+                                $N403_postal_code_stop1=$data_item[3];
+                                $N404_country_stop1=$data_item[4];
+                            break;
                         }
+                    }
+                } elseif($finalcount == 48) {
+                    for($i = 0; $i<$finalcount; $i++) {
+                        $data_item=explode("*",$array[$i]);
+                        switch($i) {   //s5 Final
+                            case 34://S5
+                                $S501_stop_number_stop1=$data_item[1];
+                                $S502_stop_reason_code_stop1=$data_item[2];
+                                $S503_weight_stop1=$data_item[3];
+                                $S504_weight_units_stop1=$data_item[4];
+                                $S505_quantity_stop1=$data_item[5];
+                                $S506_unit_for_measurement_stop1=$data_item[6];
+                            break;
+                            case 35://L11
+                                $L1101_tracking_number=$data_item[1];
+                                $l1102_id_tracking_number=$data_item[2];
+                            break;
+                            case 37://G62
+                                $G6202_stop1_date=$data_item[2];
+                                $G6204_stop1_time=$data_item[4];
+                                $G6205_stop1_time_code=$data_item[5];
+                            break;
+                            case 39://N1
+                                $N102_stop1=$data_item[2];
+                            break;
+                            case 40://N3
+                                $N301_addres_stop1=$data_item[1];
+                            break;
+                            case 41://N4
+                                $N401_city_stop1=$data_item[1];
+                                $N402_state_stop1=$data_item[2];
+                                $N403_postal_code_stop1=$data_item[3];
+                                $N404_country_stop1=$data_item[4];
+                            break;
+                        }
+                    }
+                }
+                else {
+                    Log::error('No hubo coincidencias en Array(32 o 48)');
+                }
+        // Validar si existe el shipment_id para procesar el purpose_code
+            $shipm = DB::table('edidaimlers')->where('shipment_id', $B204_shipment_identification_number)->first();
+            if (empty($shipm)) { //si es null se procesa por primera vez Codigo
+        //almacenar en mysql
+            $savefile = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $B204_shipment_identification_number,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                    if (empty($savefile)) { Log::warning('Nombre de archivo no se almaceno Mysql'); }
+                    else { Log::info('Archivo Almacenado Mysql'); }
+        //almacenar en SqlSrv
+            $save204 = DB::connection('sqlsrv')->table("edi_daimler")->insert([
+                    'id_qualifier_sender' => $ISA05_id_qualifier_sender,
+                    'id_sender' => $ISA06_id_sender,
+                    'id_qualifier_receiver' => $ISA07_id_qualifier_receiver,
+                    'id_receiver' => $ISA08_id_receiver,
+                    'version_number' => $ISA11_version_number,
+                    'control_number' => $ISA12_control_number,
+                    'sender_code' => $GS02_sender_code,
+                    'agency_code' => $GS07_agency_code,
+                    'industry_identifier' => $GS08_industry_identifier,
+                    'control_number_sender' => $ST02_control_number_sender,
+                    'alpha_code' => $B202_alpha_code,
+                    'shipment_identification_number' => $B204_shipment_identification_number,
+                    'method_payment' => $B206_method_payment,
+                    'purpose_code' => $B2A01_purpose_code,
+                    'reference_identification' => $L1103_reference_identification,
+                    'reference_identification_qualifier' => $L1103_reference_identification_qualifier,
+                    'stop_number_load' => $S501_stop_number_load,
+                    'stop_reason_code_load' => $S502_stop_reason_code_load,
+                    'weight_load' => $S503_weight_load,
+                    'weight_units_load' => $S504_weight_units_load,
+                    'quantity_load' => $S505_quantity_load,
+                    'unit_for_measurement_load' => $S506_unit_for_measurement_load,
+                    'load_date_1' => $G6202_load_date_1,
+                    'load_time_1' => $G6204_load_time_1,
+                    'load_time_code_1' => $G6205_load_time_code_1,
+                    'load_date_qualifier_2' => $G6201_load_date_qualifier_2,
+                    'load_date_2' => $G6202_load_date_2,
+                    'load_time_qualifier_2' => $G6203_load_time_qualifier_2,
+                    'load_time_2' => $G6204load_time_2,
+                    'load_time_code_2' => $G6205_load_time_code_2,
+                    'origin' => $N102_origin,
+                    'addres_origin' => $N301_addres_origin,
+                    'city_origin' => $N401_city_origin,
+                    'state_origin' => $N402_state_origin,
+                    'postal_code_origin' => $N403_postal_code_origin,
+                    'country_origin' => $N404_country_origin,
+                    'stop_number_stop1' => $S501_stop_number_stop1,
+                    'stop_reason_code_stop1' => $S502_stop_reason_code_stop1,
+                    'weight_stop1' => $S503_weight_stop1,
+                    'weight_units_stop1' => $S504_weight_units_stop1,
+                    'quantity_stop1' => $S505_quantity_stop1,
+                    'unit_for_measurement_stop1' => $S506_unit_for_measurement_stop1,
+                    'tracking_number_stop1' => $L1101_tracking_number,
+                    'id_tracking_number' => $l1102_id_tracking_number,
+                    'stop1_date' => $G6202_stop1_date,
+                    'stop1_time' => $G6204_stop1_time,
+                    'stop1_time_code' => $G6205_stop1_time_code,
+                    'stop1' => $N102_stop1,
+                    'addres_stop1' => $N301_addres_stop1,
+                    'city_stop1' => $N401_city_stop1,
+                    'state_stop1' => $N402_state_stop1,
+                    'postal_code_stop1' => $N403_postal_code_stop1,
+                    'country_stop1' => $N404_country_stop1, ]);
+                    if (empty($save204)) { Log::warning('No se guardaron datos de txt204 SqlSrv'); } 
+                    else { Log::info('Datos almacenados en SqlSrv!'); }
+                $code = '0'; //es para usar la plantilla correo con markdown
+                $id = $B204_shipment_identification_number;
+                $origen = $N102_origin;
+                $destino = $N102_stop1;
+                $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
+                $hora = date('H:i', strtotime($G6204_load_time_1));
+                $email = env('MAIL_SEND');
+                Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                    Log::info('Correo enviado!');
+                //inicia confirmacion de recibido 997
+                $data997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $ST02_control_number_sender)->first();
+                if (empty($file997)) { Log::critical('No existen datos edi_daimler_997_send'); }
+                else {
+                    $id = $data997->id_incremental;
+                    $i = strlen($id);//convertir en 9 digitos
+                    if     ($i == 1) { $idnew = '00000000'.$id; }
+                    elseif ($i == 2) { $idnew = '0000000'.$id; } 
+                    elseif ($i == 3) { $idnew = '000000'.$id; }
+                    elseif ($i == 4) { $idnew = '00000'.$id; }
+                    elseif ($i == 5) { $idnew = '0000'.$id; }
+                    elseif ($i == 6) { $idnew = '000'.$id; }
+                    elseif ($i == 7) { $idnew = '00'.$id; }
+                    elseif ($i == 8) { $idnew = '0'.$id; }
+                    elseif ($i == 9) { $idnew = $id; }
+                    else { $idnew = 'null'; }
+                        $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
+                        //Crear archivo TxT 997
+                        $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
+                    if (empty($file997)) {
+                        Log::error('Hubo fallos al crear archivo 997');
+                    } else {
+                        Log::info('Archivo 997 creado');
+                        // cambiar valor a 0 para no volverlo a leer
+                        $up997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
+                        if (empty($up997)) { Log::warning('Hubo fallos al actualizar edi_daimler_997_send');
+                        } else { Log::info('tabla edi_daimler_997_send actualizada'); }
+                    }
                 }
             }
-        } //RYD204            
-            else {
-                //comentar para no llenar el log
-                Log::info('No se encontraron nuevos archivos');
+//Validacion segun el purpose_code
+            elseif ($B2A01_purpose_code == '05') { //Si es 05 Actualizar Fechas y notificar
+                $val = DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
+                if (empty($val)) { Log::warning('No existen datos edi_daimler'); } 
+                else {
+                    if ($val->load_date_1 === $G6202_load_date_1 and $val->load_time_1 === $G6204_load_time_1) {
+                    }//Log::info('validacion 05 fecha/hora con iguales'); //No hacer nada
+                    else {
+                    //actualizar SqlSrv tabla edi_daimler txt204
+                    $update05 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '05','load_date_1' => $G6202_load_date_1,'load_time_1' => $G6204_load_time_1,'load_date_2' => $G6202_load_date_2,'load_time_2' => $G6204load_time_2,'stop1_date' => $G6202_stop1_date,'stop1_time' => $G6204_stop1_time]);
+                    if (empty($update05)) { Log::critical('Fallo al actualizar datos purpose:05 de txt204'); }
+                    else {
+                        Log::info('pedido actualizado purpose:05');
+                    //graba el nombre de archivo para no volver a leerlo
+                        $save204_05 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => '','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                        if (empty($save204_05)) { Log::warning('No se almaceno archivo txt204 Mysql'); } 
+                            else { Log::info('Datos almacenados en MySql'); }
+                    //Notificar por correo
+                        $code = '5';
+                        $id = $val->shipment_identification_number;
+                        $origen = $val->origin;
+                        $destino = $val->stop1;
+                        $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
+                        $hora = date('H:i', strtotime($G6204_load_time_1));
+                        $email = env('MAIL_SEND');
+                        Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                            Log::info('Correo de Actualizacion fue enviado!!');
+                        }
+                    }
+                }
+            }
+            elseif ($B2A01_purpose_code == '01') { //Si es 01 se Cancela pedido, actualizar y Notificar
+                $val01 = DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
+                if ($val01->purpose_code === '01') {
+                    //Log::info('validacion 01 ya fue actualizado');//No hacer nada
+                } else {
+                    $update01 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '01']);
+                    if (empty($update01)) { Log::critical('Fallo al actualizar datos purpose:01 de txt204'); }
+                    else {
+                        Log::info('pedido actualizado purpose:05');
+                    //graba el nombre de archivo para no volver a leerlo
+                        $save204_01 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => 'cancelado','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                        if (empty($save204_01)) { Log::warning('No se almaceno archivo txt204 Mysql'); } 
+                        else { Log::info('Datos almacenados en MySql'); }
+                    //Notificar por correo
+                        $code = '1';
+                        $id = $val01->shipment_identification_number;
+                        $origen = $val01->origin;
+                        $destino = $val01->stop1;
+                        $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
+                        $hora = date('H:i', strtotime($G6202_load_date_1));
+                        $email = env('MAIL_SEND');
+                            Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                            Log::info('Correo de Cancelacion enviado!!');
+                        //buscamos en tabla 990 si existe actualizar(si respodieron)
+                        $data990 = DB::connection('sqlsrv')->table("edi_daimler_990")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
+                        if (empty($data990)) { }//si es null no hacer nada
+                        else { //si existe actualizar el purpose_code a 01
+                            $update990 = DB::connection('sqlsrv')->table("edi_daimler_990")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '01']);
+                            //validar update990
+                            if (empty($data990)) { Log::warning('Fallo actualizacion edi_daimler_990 ');}
+                            else { Log::info('Se actualizo edi_daimler_990 con exito!'); }
+                        }
+                    }
+                }
             }
         }
+        else { //No hay nuevo archivos fromRyder/RYD204
+            Log::info('No se encontraron archivos RYD204');
+            }
         }
-    
+    }
     }//if ftp
-    
-        else {
-            Log::error('No se pudo conectar al FTP');
-        }
-        // cerrar la conexión ftp
-        ftp_close($conn_id);
-    
+    else {
+        Log::error('No se pudo conectar al FTP');
+    }
+    ftp_close($conn_id); // cerrar la conexión ftp
     }
 
 }
