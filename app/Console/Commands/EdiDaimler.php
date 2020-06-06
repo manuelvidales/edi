@@ -60,7 +60,7 @@ class EdiDaimler extends Command
             $cantidad = count($files);
         for($i=0; $i<$cantidad; $i++){
             $filename = $files[$i];
-            //validar Solo archivos .txt y nombre incial RYD204
+//validar formato archivos .txt y con codigo #204
         if ( substr($filename,-4)==".txt" and substr($filename, 0, 16) == "fromRyder/RYD204") {
                 //Validar si ya existe el archivo
                 $buscar = DB::table('edidaimlers')->where('filename', $filename)->first();
@@ -70,7 +70,6 @@ class EdiDaimler extends Command
                 $local = 'public/storage/'.$filename; //ruta para almacenar
                     if (ftp_get($conn_id, $local, $filename, FTP_BINARY)) { //descarga
                         Log::info('Descarga archivo exitoso');
-                        //////////////////////////////////////////////////////////
                             //elimina el archivo del directorio ftp
                             if (ftp_delete($conn_id, $filename)) {
                                 Log::info($filename .' se elimino satisfactoriamente');                
@@ -84,7 +83,6 @@ class EdiDaimler extends Command
                 $array = explode("~", $path); //array inicial
                     Log::info('Archivo separado en array ~');
                 $finalcount = count($array);
-            //////////////////////////////////////////////////////////////
                 for($i = 0; $i<$finalcount; $i++) {
                     $data_item=explode("*",$array[$i]); // explode the segment into an array of data_items
                     switch($i) { //Encabezado 204
@@ -399,7 +397,75 @@ class EdiDaimler extends Command
         else { //No hay nuevo archivos fromRyder/RYD204
             Log::info('No se encontraron archivos RYD204');
             }
-        }
+        }//Code #204
+//validar formato archivos .txt y con Codigo #824
+    elseif ( substr($filename,-4)==".txt" and substr($filename, 0, 16) == "fromRyder/RYD824") {
+            //Validar si ya existe el archivo
+            $buscar824 = DB::table('edidaimlers')->where('filename', $filename)->first();
+            if (empty($buscar824)) {
+                Log::info('Archivo:'.$filename);
+                // Se procede a descargar archivo
+                $local = 'public/storage/'.$filename; //ruta para almacenar
+                    if (ftp_get($conn_id, $local, $filename, FTP_BINARY)) { //descarga
+                        Log::info('Descarga archivo exitoso');
+                            //elimina el archivo del directorio ftp
+                            if (ftp_delete($conn_id, $filename)) {
+                                Log::info($filename.': se elimino satisfactoriamente');                
+                            } else {
+                                Log::warning('No se pudo eliminar: '.$filename);
+                            }
+                        $path824 = file::get('public/storage/'.$filename);//lectura local
+                        $array824 = explode("~", $path824); //array inicial
+                            Log::info('Archivo separado en array ~');
+                        $txt824count = count($array824);
+                        for($i = 0; $i<$txt824count; $i++) {
+                            $data824=explode("*",$array824[$i]);
+                            switch(substr($array824[$i],0,3)) {
+                                case 'GS*':
+                                    $GS_date=$data824[4];
+                                    $GS_time=$data824[5];
+                                break;
+                                case 'OTI':
+                                    $OTI_reference_identification=$data824[3];
+                                break;
+                                case 'REF':
+                                    $REF_shipment_identification_number=$data824[2];
+                                break;
+                                case 'TED':
+                                    $TED_error_code=$data824[1];
+                                    $TED_message=$data824[2];
+                                break;
+                            }
+                        }
+                        //almacenar en mysql
+                        $savefile824 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => 'Code824','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                        if (empty($savefile824)) { Log::warning('Archivo  Daimler 824 no se almaceno Mysql'); }
+                        else { Log::info('Archivo Daimler 824 Almacenado Mysql'); }
+                        //almacenar en SqlSrv
+                        $save824 = DB::connection('sqlsrv')->table("edi_daimler_824_")->insert([
+                                'shipment_identification_number' => $REF_shipment_identification_number,
+                                'reference_identification' => $OTI_reference_identification,
+                                'error_code' => $TED_error_code,
+                                'message' => $TED_message,
+                                'date' => $GS_date,
+                                'time' => $GS_time,
+                                'send_txt' => '1' ]);
+                            if (empty($save824)) { Log::warning('No se guardaron datos de Daimler 824 SqlSrv'); } 
+                            else { Log::info('Datos Daimler 824 almacenados en SqlSrv!'); }
+                        $code = '824'; //es para usar la plantilla correo con markdown
+                        $id = $REF_shipment_identification_number;
+                        $origen = $TED_error_code;
+                        $destino = $TED_message;
+                        $fecha = 'null'; //date('d/M/Y', strtotime($G6202_load_date_1));
+                        $hora = 'null'; //date('H:i', strtotime($G6204_load_time_1));
+                        $email = env('MAIL_SEND');
+                        Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                            Log::info('Correo enviado!');
+                    } else {
+                        Log::error('Ha ocurrido un problema al descargar');
+                    }
+            }
+        }//Code #824
     }
     }//if ftp
     else {
