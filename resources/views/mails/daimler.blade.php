@@ -43,15 +43,14 @@ Hora de carga: **{{ $hora}}**
 | {{ $origen }} | - | {{ $destino }} |
 
 <br>
-@endif
 
-<br>
+
 @elseif($code == 824)
 # Falta de informacion en orden de DAIMLER:
 
 Identificacion de orden: **{{ $id}}**<br>
-Codigo error: **{{ $fecha}}**<br>
-Mensaje: **{{ $hora}}**
+Codigo error: **{{ $origen}}**<br>
+Mensaje: **{{ $destino}}**
 
 
 <br>
