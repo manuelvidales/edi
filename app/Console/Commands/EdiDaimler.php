@@ -341,7 +341,7 @@ class EdiDaimler extends Command
                     else {
                         Log::info('pedido actualizado purpose:05');
                     //graba el nombre de archivo para no volver a leerlo
-                        $save204_05 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => '','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                        $save204_05 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $B204_shipment_identification_number.'-05','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                         if (empty($save204_05)) { Log::warning('No se almaceno archivo txt204 Mysql'); } 
                             else { Log::info('Datos almacenados en MySql'); }
                     //Notificar por correo
@@ -368,7 +368,7 @@ class EdiDaimler extends Command
                     else {
                         Log::info('pedido actualizado purpose:05');
                     //graba el nombre de archivo para no volver a leerlo
-                        $save204_01 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => 'cancelado','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                        $save204_01 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $B204_shipment_identification_number.'-01','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                         if (empty($save204_01)) { Log::warning('No se almaceno archivo txt204 Mysql'); } 
                         else { Log::info('Datos almacenados en MySql'); }
                     //Notificar por correo
@@ -437,20 +437,21 @@ class EdiDaimler extends Command
                                 break;
                             }
                         }
+                        $datetime = date('Ymd H:i:s', strtotime($GS_date.$GS_time));
                         //almacenar en mysql
                         $savefile824 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => 'Code824','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                         if (empty($savefile824)) { Log::warning('Archivo  Daimler 824 no se almaceno Mysql'); }
                         else { Log::info('Archivo Daimler 824 Almacenado Mysql'); }
                         //almacenar en SqlSrv
                         $save824 = DB::connection('sqlsrv')->table("edi_daimler_824_")->insert([
-                                'shipment_identification_number' => $REF_shipment_identification_number,
-                                'reference_identification' => $OTI_reference_identification,
-                                'error_code' => $TED_error_code,
-                                'message' => $TED_message,
-                                'date' => $GS_date,
-                                'time' => $GS_time,
-                                'send_txt' => '1' ]);
-                            if (empty($save824)) { Log::warning('No se guardaron datos de Daimler 824 SqlSrv'); } 
+                            'shipment_identification_number' => $REF_shipment_identification_number,
+                            'reference_identification' => $OTI_reference_identification,
+                            'error_code' => $TED_error_code,
+                            'message' => $TED_message,
+                            'date' => $datetime,
+                            'time' => $datetime,
+                            'send_txt' => '1' ]);
+                            if (empty($save824)) { Log::warning('No se guardaron datos de Daimler 824 SqlSrv'); }
                             else { Log::info('Datos Daimler 824 almacenados en SqlSrv!'); }
                         $code = '824'; //es para usar la plantilla correo con markdown
                         $id = $REF_shipment_identification_number;
