@@ -40,7 +40,7 @@ class Edi214DaimlerGps extends Command
      */
     public function handle()
     {
-        $sql214gps = DB::connection('sqlsrv')->table("edi_daimler_214_gps")->where('send_txt', '=', '1')->get();
+        $sql214gps = DB::connection('sqlsrv')->table("edi_daimler_214_gps")->where('send_txt', '=', '2')->get();
         if (count($sql214gps) !== 0) {
             foreach ($sql214gps as $data){
                 $unidad = $data->unidad;
