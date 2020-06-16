@@ -69,9 +69,9 @@ class Edi214DaimlerGps extends Command
                             Log::warning('json sin datos de unidad: '. $unidad);
                         }
                     //Preprar TxT 214 GPS
-                    $i = strlen($id);
-                    if     ($i == 1) { $idnew = '00000000'.$id; }
-                    elseif ($i == 2) { $idnew = '0000000'.$id; }
+                    $i = strlen($id); //se requiere id de 9 digitos por eso se cuentan los caracteres
+                    if     ($i == 1) { $idnew = '00000000'.$id; } // si tiene un caracter se le agregan 8 ceros
+                    elseif ($i == 2) { $idnew = '0000000'.$id; } //sucesivamente
                     elseif ($i == 3) { $idnew = '000000'.$id; }
                     elseif ($i == 4) { $idnew = '00000'.$id; }
                     elseif ($i == 5) { $idnew = '0000'.$id; }
