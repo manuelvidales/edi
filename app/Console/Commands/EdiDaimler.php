@@ -85,7 +85,8 @@ class EdiDaimler extends Command
                 $finalcount = count($array);
                 for($i = 0; $i<$finalcount; $i++) {
                     $data_item=explode("*",$array[$i]); // explode the segment into an array of data_items
-                    switch($i) { //Encabezado 204
+                    switch($i) { 
+                    //Encabezado 204
                         case 0: //ISA
                             $ISA05_id_qualifier_sender=$data_item[5];
                             $ISA06_id_sender=$data_item[6];
@@ -114,46 +115,47 @@ class EdiDaimler extends Command
                             $L1103_reference_identification=$data_item[1];
                             $L1103_reference_identification_qualifier=$data_item[2];
                         break;
-                    //s5 inicial
-                        case 9://S5
-                            $S501_stop_number_load=$data_item[1];
-                            $S502_stop_reason_code_load=$data_item[2];
-                            $S503_weight_load=$data_item[3];
-                            $S504_weight_units_load=$data_item[4];
-                            $S505_quantity_load=$data_item[5];
-                            $S506_unit_for_measurement_load=$data_item[6];
-                        break;
-                        case 12://G62
-                            $G6202_load_date_1=$data_item[2];
-                            $G6204_load_time_1=$data_item[4];
-                            $G6205_load_time_code_1=$data_item[5];
-                        break;
-                        case 13://G62
-                            $G6201_load_date_qualifier_2=$data_item[1];
-                            $G6202_load_date_2=$data_item[2];
-                            $G6203_load_time_qualifier_2=$data_item[3];
-                            $G6204load_time_2=$data_item[4];
-                            $G6205_load_time_code_2=$data_item[5];
-                        break;
-                        case 14://N1
-                            $N102_origin=$data_item[2];
-                        break;
-                        case 15://N3
-                            $N301_addres_origin=$data_item[1];
-                        break;
-                        case 16://N4
-                            $N401_city_origin=$data_item[1];
-                            $N402_state_origin=$data_item[2];
-                            $N403_postal_code_origin=$data_item[3];
-                            $N404_country_origin=$data_item[4];
-                        break;
                     }
                 }
         //Condicionales por lineas totales
                 if ($finalcount == 32) {
                     for($i = 0; $i<$finalcount; $i++) {
                         $data_item=explode("*",$array[$i]);
-                        switch($i) {   //s5 Final
+                        switch($i) {   
+                        //s5 inicial
+                            case 9://S5
+                                $S501_stop_number_load=$data_item[1];
+                                $S502_stop_reason_code_load=$data_item[2];
+                                $S503_weight_load=$data_item[3];
+                                $S504_weight_units_load=$data_item[4];
+                                $S505_quantity_load=$data_item[5];
+                                $S506_unit_for_measurement_load=$data_item[6];
+                            break;
+                            case 12://G62
+                                $G6202_load_date_1=$data_item[2];
+                                $G6204_load_time_1=$data_item[4];
+                                $G6205_load_time_code_1=$data_item[5];
+                            break;
+                            case 13://G62
+                                $G6201_load_date_qualifier_2=$data_item[1];
+                                $G6202_load_date_2=$data_item[2];
+                                $G6203_load_time_qualifier_2=$data_item[3];
+                                $G6204load_time_2=$data_item[4];
+                                $G6205_load_time_code_2=$data_item[5];
+                            break;
+                            case 14://N1
+                                $N102_origin=$data_item[2];
+                            break;
+                            case 15://N3
+                                $N301_addres_origin=$data_item[1];
+                            break;
+                            case 16://N4
+                                $N401_city_origin=$data_item[1];
+                                $N402_state_origin=$data_item[2];
+                                $N403_postal_code_origin=$data_item[3];
+                                $N404_country_origin=$data_item[4];
+                            break;
+                        //s5 Final
                             case 18://S5
                                 $S501_stop_number_stop1=$data_item[1];
                                 $S502_stop_reason_code_stop1=$data_item[2];
@@ -188,18 +190,44 @@ class EdiDaimler extends Command
                 } elseif($finalcount == 48) {
                     for($i = 0; $i<$finalcount; $i++) {
                         $data_item=explode("*",$array[$i]);
-                        switch($i) {   //s5 Final
+                        switch($i) {   
+                        //s5 inicial
+                            case 9://S5
+                                $S501_stop_number_load=$data_item[1];
+                                $S502_stop_reason_code_load=$data_item[2];
+                                $S503_weight_load=$data_item[3];
+                                $S504_weight_units_load=$data_item[4];
+                                $S505_quantity_load=$data_item[5];
+                                $S506_unit_for_measurement_load=$data_item[6];
+                            break;
+                            case 12://G62
+                                $G6202_load_date_1=$data_item[2];
+                                $G6204_load_time_1=$data_item[4];
+                                $G6205_load_time_code_1=$data_item[5];
+                            break;
+                            case 13://G62
+                                $G6201_load_date_qualifier_2=$data_item[1];
+                                $G6202_load_date_2=$data_item[2];
+                                $G6203_load_time_qualifier_2=$data_item[3];
+                                $G6204load_time_2=$data_item[4];
+                                $G6205_load_time_code_2=$data_item[5];
+                            break;
+                            case 14://N1
+                                $N102_origin=$data_item[2];
+                            break;
+                            case 15://N3
+                                $N301_addres_origin=$data_item[1];
+                            break;
+                            case 16://N4
+                                $N401_city_origin=$data_item[1];
+                                $N402_state_origin=$data_item[2];
+                                $N403_postal_code_origin=$data_item[3];
+                                $N404_country_origin=$data_item[4];
+                            break;
+                        //s5 Final
                             case 34://S5
                                 $S501_stop_number_stop1=$data_item[1];
                                 $S502_stop_reason_code_stop1=$data_item[2];
-                                $S503_weight_stop1=$data_item[3];
-                                $S504_weight_units_stop1=$data_item[4];
-                                $S505_quantity_stop1=$data_item[5];
-                                $S506_unit_for_measurement_stop1=$data_item[6];
-                            break;
-                            case 35://L11
-                                $L1101_tracking_number=$data_item[1];
-                                $l1102_id_tracking_number=$data_item[2];
                             break;
                             case 37://G62
                                 $G6202_stop1_date=$data_item[2];
@@ -220,9 +248,70 @@ class EdiDaimler extends Command
                             break;
                         }
                     }
+                } elseif($finalcount == 60) {
+                    for($i = 0; $i<$finalcount; $i++) {
+                        $data_item=explode("*",$array[$i]);
+                        switch($i) {
+                        //s5 inicial
+                            case 11://S5
+                                $S501_stop_number_load=$data_item[1];
+                                $S502_stop_reason_code_load=$data_item[2];
+                                $S503_weight_load=$data_item[3];
+                                $S504_weight_units_load=$data_item[4];
+                                $S505_quantity_load=$data_item[5];
+                                $S506_unit_for_measurement_load=$data_item[6];
+                            break;
+                            case 14://G62
+                                $G6202_load_date_1=$data_item[2];
+                                $G6204_load_time_1=$data_item[4];
+                                $G6205_load_time_code_1=$data_item[5];
+                            break;
+                            case 15://G62
+                                $G6201_load_date_qualifier_2=$data_item[1];
+                                $G6202_load_date_2=$data_item[2];
+                                $G6203_load_time_qualifier_2=$data_item[3];
+                                $G6204load_time_2=$data_item[4];
+                                $G6205_load_time_code_2=$data_item[5];
+                            break;
+                            case 16://N1
+                                $N102_origin=$data_item[2];
+                            break;
+                            case 17://N3
+                                $N301_addres_origin=$data_item[1];
+                            break;
+                            case 18://N4
+                                $N401_city_origin=$data_item[1];
+                                $N402_state_origin=$data_item[2];
+                                $N403_postal_code_origin=$data_item[3];
+                                $N404_country_origin=$data_item[4];
+                            break;
+                        //s5 Final
+                            case 46://S5
+                                $S501_stop_number_stop1=$data_item[1];
+                                $S502_stop_reason_code_stop1=$data_item[2];
+                            break;
+                            case 49://G62
+                                $G6202_stop1_date=$data_item[2];
+                                $G6204_stop1_time=$data_item[4];
+                                $G6205_stop1_time_code=$data_item[5];
+                            break;
+                            case 51://N1
+                                $N102_stop1=$data_item[2];
+                            break;
+                            case 52://N3
+                                $N301_addres_stop1=$data_item[1];
+                            break;
+                            case 53://N4
+                                $N401_city_stop1=$data_item[1];
+                                $N402_state_stop1=$data_item[2];
+                                $N403_postal_code_stop1=$data_item[3];
+                                $N404_country_stop1=$data_item[4];
+                            break;
+                        }
+                    }
                 }
                 else {
-                    Log::error('No hubo coincidencias en Array(32 o 48)');
+                    Log::error('No hubo coincidencias en Array(32, 48 y 60)');
                 }
         // Validar si existe el shipment_id para procesar el purpose_code
             $shipm = DB::table('edidaimlers')->where('shipment_id', $B204_shipment_identification_number)->first();
@@ -443,7 +532,7 @@ class EdiDaimler extends Command
                         if (empty($savefile824)) { Log::warning('Archivo  Daimler 824 no se almaceno Mysql'); }
                         else { Log::info('Archivo Daimler 824 Almacenado Mysql'); }
                         //almacenar en SqlSrv
-                        $save824 = DB::connection('sqlsrv')->table("edi_daimler_824_")->insert([
+                        $save824 = DB::connection('sqlsrv')->table("edi_daimler_824")->insert([
                             'shipment_identification_number' => $REF_shipment_identification_number,
                             'reference_identification' => $OTI_reference_identification,
                             'error_code' => $TED_error_code,
