@@ -229,6 +229,10 @@ class EdiDaimler extends Command
                                 $S501_stop_number_stop1=$data_item[1];
                                 $S502_stop_reason_code_stop1=$data_item[2];
                             break;
+                            case 35://L11
+                                $L1101_tracking_number=$data_item[1];
+                                $l1102_id_tracking_number=$data_item[2];
+                            break;
                             case 37://G62
                                 $G6202_stop1_date=$data_item[2];
                                 $G6204_stop1_time=$data_item[4];
@@ -290,6 +294,10 @@ class EdiDaimler extends Command
                                 $S501_stop_number_stop1=$data_item[1];
                                 $S502_stop_reason_code_stop1=$data_item[2];
                             break;
+                            case 47://L11
+                                $L1101_tracking_number=$data_item[1];
+                                $l1102_id_tracking_number=$data_item[2];
+                            break;
                             case 49://G62
                                 $G6202_stop1_date=$data_item[2];
                                 $G6204_stop1_time=$data_item[4];
@@ -318,8 +326,8 @@ class EdiDaimler extends Command
             if (empty($shipm)) { //si es null se procesa por primera vez Codigo
         //almacenar en mysql
             $savefile = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $B204_shipment_identification_number,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
-                    if (empty($savefile)) { Log::warning('Nombre de archivo no se almaceno Mysql'); }
-                    else { Log::info('Archivo Almacenado Mysql'); }
+                if (empty($savefile)) { Log::warning('Nombre de archivo no se almaceno Mysql'); }
+                else { Log::info('Archivo Almacenado Mysql'); }
         //almacenar en SqlSrv
             $save204 = DB::connection('sqlsrv')->table("edi_daimler")->insert([
                     'id_qualifier_sender' => $ISA05_id_qualifier_sender,
@@ -375,44 +383,45 @@ class EdiDaimler extends Command
                     'state_stop1' => $N402_state_stop1,
                     'postal_code_stop1' => $N403_postal_code_stop1,
                     'country_stop1' => $N404_country_stop1, ]);
-                    if (empty($save204)) { Log::warning('No se guardaron datos de txt204 SqlSrv'); } 
-                    else { Log::info('Datos almacenados en SqlSrv!'); }
-                $code = '0'; //es para usar la plantilla correo con markdown
-                $id = $B204_shipment_identification_number;
-                $origen = $N102_origin;
-                $destino = $N102_stop1;
-                $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
-                $hora = date('H:i', strtotime($G6204_load_time_1));
-                $email = env('MAIL_SEND');
-                Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
-                    Log::info('Correo enviado!');
-                //inicia confirmacion de recibido 997
-                $data997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $ST02_control_number_sender)->first();
-                if (empty($file997)) { Log::critical('No existen datos edi_daimler_997_send'); }
-                else {
-                    $id = $data997->id_incremental;
-                    $i = strlen($id);//convertir en 9 digitos
-                    if     ($i == 1) { $idnew = '00000000'.$id; }
-                    elseif ($i == 2) { $idnew = '0000000'.$id; } 
-                    elseif ($i == 3) { $idnew = '000000'.$id; }
-                    elseif ($i == 4) { $idnew = '00000'.$id; }
-                    elseif ($i == 5) { $idnew = '0000'.$id; }
-                    elseif ($i == 6) { $idnew = '000'.$id; }
-                    elseif ($i == 7) { $idnew = '00'.$id; }
-                    elseif ($i == 8) { $idnew = '0'.$id; }
-                    elseif ($i == 9) { $idnew = $id; }
-                    else { $idnew = 'null'; }
-                        $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
-                        //Crear archivo TxT 997
-                        $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
-                    if (empty($file997)) {
-                        Log::error('Hubo fallos al crear archivo 997');
-                    } else {
-                        Log::info('Archivo 997 creado');
-                        // cambiar valor a 0 para no volverlo a leer
-                        $up997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
-                        if (empty($up997)) { Log::warning('Hubo fallos al actualizar edi_daimler_997_send');
-                        } else { Log::info('tabla edi_daimler_997_send actualizada'); }
+                if (empty($save204)) { Log::warning('No se guardaron datos de txt204 SqlSrv'); } 
+                else { // Log::info('Datos almacenados en SqlSrv!'); }
+                    $code = '0'; //es para usar la plantilla correo con markdown
+                    $id = $B204_shipment_identification_number;
+                    $origen = $N102_origin;
+                    $destino = $N102_stop1;
+                    $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
+                    $hora = date('H:i', strtotime($G6204_load_time_1));
+                    $email = env('MAIL_SEND');
+                    Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                        Log::info('Correo enviado!');
+                    //inicia confirmacion de recibido 997
+                    $data997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $ST02_control_number_sender)->first();
+                    if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
+                    else {
+                        $id = $data997->id_incremental;
+                        $i = strlen($id);//convertir en 9 digitos
+                        if     ($i == 1) { $idnew = '00000000'.$id; }
+                        elseif ($i == 2) { $idnew = '0000000'.$id; } 
+                        elseif ($i == 3) { $idnew = '000000'.$id; }
+                        elseif ($i == 4) { $idnew = '00000'.$id; }
+                        elseif ($i == 5) { $idnew = '0000'.$id; }
+                        elseif ($i == 6) { $idnew = '000'.$id; }
+                        elseif ($i == 7) { $idnew = '00'.$id; }
+                        elseif ($i == 8) { $idnew = '0'.$id; }
+                        elseif ($i == 9) { $idnew = $id; }
+                        else { $idnew = 'null'; }
+                            $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
+                            //Crear archivo TxT 997
+                            $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$idnew."*0*T*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*0001*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*0001~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$id."*".$id."*".$id."~SE*4*0001~GE*1*".$id."~IEA*1*".$idnew."~");
+                        if (empty($file997)) {
+                            Log::error('Hubo fallos al crear archivo 997');
+                        } else {
+                            Log::info('Archivo 997 creado');
+                            // cambiar valor a 0 para no volverlo a leer
+                            $up997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
+                            if (empty($up997)) { Log::warning('Hubo fallos al actualizar edi_daimler_997_send');
+                            } else { Log::info('tabla edi_daimler_997_send actualizada'); }
+                        }
                     }
                 }
             }
@@ -432,7 +441,7 @@ class EdiDaimler extends Command
                     //graba el nombre de archivo para no volver a leerlo
                         $save204_05 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $B204_shipment_identification_number.'-05','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                         if (empty($save204_05)) { Log::warning('No se almaceno archivo txt204 Mysql'); } 
-                            else { Log::info('Datos almacenados en MySql'); }
+                        else { Log::info('Datos almacenados en MySql'); }
                     //Notificar por correo
                         $code = '5';
                         $id = $val->shipment_identification_number;
@@ -481,6 +490,9 @@ class EdiDaimler extends Command
                         }
                     }
                 }
+            }
+            else{
+                Log::info('Archivo 204: No se proceso con exito!');
             }
         }
         else { //No hay nuevo archivos fromRyder/RYD204
@@ -540,17 +552,18 @@ class EdiDaimler extends Command
                             'date' => $datetime,
                             'time' => $datetime,
                             'send_txt' => '1' ]);
-                            if (empty($save824)) { Log::warning('No se guardaron datos de Daimler 824 SqlSrv'); }
-                            else { Log::info('Datos Daimler 824 almacenados en SqlSrv!'); }
-                        $code = '824'; //es para usar la plantilla correo con markdown
-                        $id = $REF_shipment_identification_number;
-                        $origen = $TED_error_code;
-                        $destino = $TED_message;
-                        $fecha = 'null'; //date('d/M/Y', strtotime($G6202_load_date_1));
-                        $hora = 'null'; //date('H:i', strtotime($G6204_load_time_1));
-                        $email = env('MAIL_SEND');
-                        Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
-                            Log::info('Correo enviado!');
+                        if (empty($save824)) { Log::warning('No se guardaron datos de Daimler 824 SqlSrv'); }
+                        else { //Log::info('Datos Daimler 824 almacenados en SqlSrv!'); }
+                            $code = '824'; //es para usar la plantilla correo con markdown
+                            $id = $REF_shipment_identification_number;
+                            $origen = $TED_error_code;
+                            $destino = $TED_message;
+                            $fecha = 'null'; //date('d/M/Y', strtotime($G6202_load_date_1));
+                            $hora = 'null'; //date('H:i', strtotime($G6204_load_time_1));
+                            $email = env('MAIL_SEND');
+                            Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                                Log::info('Correo enviado!');
+                        }
                     } else {
                         Log::error('Ha ocurrido un problema al descargar');
                     }
