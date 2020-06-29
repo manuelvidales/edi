@@ -42,7 +42,7 @@ class EdiVisteon extends Command
      */
     public function handle()
     {
-        $sql = DB::connection('sqlsrvpro')->table("edi_210")->get();
+        $sql = DB::connection('sqlsrvpro')->table("edi_210")->where('send_txt','=', '1')->orwhere('send_txt','=','2')->orWhere('send_txt','=','3')->get();
         if (empty($sql)) {
             Log::error('problemas con sqlsrv tabla edi_210');
         }else{
