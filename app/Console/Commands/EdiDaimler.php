@@ -61,7 +61,8 @@ class EdiDaimler extends Command
         for($i=0; $i<$cantidad; $i++){
             $filename = $files[$i];
 //validar formato archivos .txt y con codigo #204
-        if ( substr($filename,-4)==".txt" and substr($filename, 0, 16) == "fromRyder/RYD204") {
+        //if ( substr($filename,-4)==".txt" and substr($filename, 0, 16) == "fromRyder/RYD204") {
+        if ( $filename == "fromRyder/RYD204ATIH.20200622170014925.1204606966.txt") {
                 //Validar si ya existe el archivo
                 $buscar = DB::table('edidaimlers')->where('filename', $filename)->first();
             if (empty($buscar)) {
@@ -80,246 +81,239 @@ class EdiDaimler extends Command
                         Log::error('Ha ocurrido un problema al descargar');
                     }
                 $path = file::get('public/storage/'.$filename);//lectura local
-                $array = explode("~", $path); //array inicial
-                    Log::info('Archivo separado en array ~');
-                $finalcount = count($array);
-                for($i = 0; $i<$finalcount; $i++) {
-                    $data_item=explode("*",$array[$i]); // explode the segment into an array of data_items
-                    switch($i) { 
-                    //Encabezado 204
-                        case 0: //ISA
-                            $ISA05_id_qualifier_sender=$data_item[5];
-                            $ISA06_id_sender=$data_item[6];
-                            $ISA07_id_qualifier_receiver=$data_item[7];
-                            $ISA08_id_receiver=$data_item[8];
-                            $ISA11_version_number=$data_item[11];
-                            $ISA12_control_number=$data_item[12];
+                $array = explode("S5",$path);
+                    Log::info('Archivo separado en array S5');
+                $count = count($array);
+        //parte inicial
+                for($i = 0; $i<$count; $i++){
+                    switch(substr($array[$i],0,3))
+                    {
+                        case "ISA":
+                            $header = explode("~",$array[$i]);// Encabezado
+                            //Campos selecionados
+                            $ISA = explode("*",$header[0]);
+                            $GS = explode("*",$header[1]);
+                            $ST = explode("*",$header[2]);
+                            $B2 = explode("*",$header[3]);
+                            $B2A = explode("*",$header[4]);
+                            $L11 = explode("*",$header[5]);
+                            //ISA
+                                $ISA05_id_qualifier_sender=$ISA[5];
+                                $ISA06_id_sender=$ISA[6];
+                                $ISA07_id_qualifier_receiver=$ISA[7];
+                                $ISA08_id_receiver=$ISA[8];
+                                $ISA11_version_number=$ISA[11];
+                                $ISA12_control_number=$ISA[12];
+                            //GS
+                                $GS02_sender_code=$GS[2];
+                                $GS07_agency_code=$GS[7];
+                                $GS08_industry_identifier=$GS[8];
+                            //ST
+                                $ST02_control_number_sender=$ST[2];
+                            //B2
+                                $B202_alpha_code=$B2[2];
+                                $B204_shipment_identification_number=$B2[4];
+                                $B206_method_payment=$B2[6];
+                            //B2A
+                                $B2A01_purpose_code = $B2A[1];
+                            //L11
+                                $L1103_reference_identification=$L11[1];
+                                $L1103_reference_identification_qualifier=$L11[2];
                         break;
-                        case 1://GS
-                            $GS02_sender_code=$data_item[2];
-                            $GS07_agency_code=$data_item[7];
-                            $GS08_industry_identifier=$data_item[8];
-                        break;
-                        case 2://ST
-                            $ST02_control_number_sender=$data_item[2];
-                        break;
-                        case 3://B2
-                            $B202_alpha_code=$data_item[2];
-                            $B204_shipment_identification_number=$data_item[4];
-                            $B206_method_payment=$data_item[6];
-                        break;
-                        case 4://B2A
-                            $B2A01_purpose_code = $data_item[1];
-                        break;
-                        case 7://L11
-                            $L1103_reference_identification=$data_item[1];
-                            $L1103_reference_identification_qualifier=$data_item[2];
+                        
+                        case "*1*":
+                            $S5inicio = explode("~",$array[$i]); // S5 inicial
+                            //Campos selecionados
+                            $S5_1 = explode("*",$S5inicio[0]);
+                            $G62_101 = explode("*",$S5inicio[3]);
+                            $G62_102 = explode("*",$S5inicio[4]);
+                            $N1_1 = explode("*",$S5inicio[5]);
+                            $N3_1 = explode("*",$S5inicio[6]);
+                            $N4_1 = explode("*",$S5inicio[7]);
+                            //S5
+                                $S501_stop_number_load=$S5_1[1];
+                                $S502_stop_reason_code_load=$S5_1[2];
+                                $S503_weight_load=$S5_1[3];
+                                $S504_weight_units_load=$S5_1[4];
+                                $S505_quantity_load=$S5_1[5];
+                                $S506_unit_for_measurement_load=$S5_1[6];
+                            //G62
+                                $G6202_load_date_1=$G62_101[2];
+                                $G6204_load_time_1=$G62_101[4];
+                                $G6205_load_time_code_1=$G62_101[5];
+                            //G62
+                                $G6201_load_date_qualifier_2=$G62_102[1];
+                                $G6202_load_date_2=$G62_102[2];
+                                $G6203_load_time_qualifier_2=$G62_102[3];
+                                $G6204load_time_2=$G62_102[4];
+                                $G6205_load_time_code_2=$G62_102[5];
+                            //N1
+                                $N102_origin=$N1_1[2];
+                            //N3
+                                $N301_addres_origin=$N3_1[1];
+                            //N4
+                                $N401_city_origin=$N4_1[1];
+                                $N402_state_origin=$N4_1[2];
+                                $N403_postal_code_origin=$N4_1[3];
+                                $N404_country_origin=$N4_1[4];
                         break;
                     }
                 }
-        //Condicionales por lineas totales
-                if ($finalcount == 32) {
-                    for($i = 0; $i<$finalcount; $i++) {
-                        $data_item=explode("*",$array[$i]);
-                        switch($i) {   
-                        //s5 inicial
-                            case 9://S5
-                                $S501_stop_number_load=$data_item[1];
-                                $S502_stop_reason_code_load=$data_item[2];
-                                $S503_weight_load=$data_item[3];
-                                $S504_weight_units_load=$data_item[4];
-                                $S505_quantity_load=$data_item[5];
-                                $S506_unit_for_measurement_load=$data_item[6];
-                            break;
-                            case 12://G62
-                                $G6202_load_date_1=$data_item[2];
-                                $G6204_load_time_1=$data_item[4];
-                                $G6205_load_time_code_1=$data_item[5];
-                            break;
-                            case 13://G62
-                                $G6201_load_date_qualifier_2=$data_item[1];
-                                $G6202_load_date_2=$data_item[2];
-                                $G6203_load_time_qualifier_2=$data_item[3];
-                                $G6204load_time_2=$data_item[4];
-                                $G6205_load_time_code_2=$data_item[5];
-                            break;
-                            case 14://N1
-                                $N102_origin=$data_item[2];
-                            break;
-                            case 15://N3
-                                $N301_addres_origin=$data_item[1];
-                            break;
-                            case 16://N4
-                                $N401_city_origin=$data_item[1];
-                                $N402_state_origin=$data_item[2];
-                                $N403_postal_code_origin=$data_item[3];
-                                $N404_country_origin=$data_item[4];
-                            break;
-                        //s5 Final
-                            case 18://S5
-                                $S501_stop_number_stop1=$data_item[1];
-                                $S502_stop_reason_code_stop1=$data_item[2];
-                                $S503_weight_stop1=$data_item[3];
-                                $S504_weight_units_stop1=$data_item[4];
-                                $S505_quantity_stop1=$data_item[5];
-                                $S506_unit_for_measurement_stop1=$data_item[6];
-                            break;
-                            case 19://L11
-                                $L1101_tracking_number=$data_item[1];
-                                $l1102_id_tracking_number=$data_item[2];
-                            break;
-                            case 21://G62
-                                $G6202_stop1_date=$data_item[2];
-                                $G6204_stop1_time=$data_item[4];
-                                $G6205_stop1_time_code=$data_item[5];
-                            break;
-                            case 23://N1
-                                $N102_stop1=$data_item[2];
-                            break;
-                            case 24://N3
-                                $N301_addres_stop1=$data_item[1];
-                            break;
-                            case 25://N4
-                                $N401_city_stop1=$data_item[1];
-                                $N402_state_stop1=$data_item[2];
-                                $N403_postal_code_stop1=$data_item[3];
-                                $N404_country_stop1=$data_item[4];
+        // Parte final
+                if ($count == 3) {
+                    for($i = 0; $i<$count; $i++){
+                        switch(substr($array[$i],0,3))
+                        {
+                            case "*2*":
+                                $S5final = explode("~",$array[$i]); // S5 final
+                                $S5_2 = explode("*",$S5final[0]);
+                                $L11_2 = explode("*",$S5final[1]);
+                                $G62_2 = explode("*",$S5final[3]);
+                                $N1_2 = explode("*",$S5final[5]);
+                                $N3_2 = explode("*",$S5final[6]);
+                                $N4_2 = explode("*",$S5final[7]);
+                            //S5
+                                $S501_stop_number_stop1=$S5_2[1];
+                                $S502_stop_reason_code_stop1=$S5_2[2];
+                                $S503_weight_stop1=$S5_2[3];
+                                $S504_weight_units_stop1=$S5_2[4];
+                                $S505_quantity_stop1=$S5_2[5];
+                                $S506_unit_for_measurement_stop1=$S5_2[6];
+                            //L11
+                                $L1101_tracking_number=$L11_2[1];
+                                $l1102_id_tracking_number=$L11_2[2];
+                            //G62
+                                $G6202_stop1_date=$G62_2[2];
+                                $G6204_stop1_time=$G62_2[4];
+                                $G6205_stop1_time_code=$G62_2[5];
+                            //N1
+                                $N102_stop1=$N1_2[2];
+                            //N3
+                                $N301_addres_stop1=$N3_2[1];
+                            //N4
+                                $N401_city_stop1=$N4_2[1];
+                                $N402_state_stop1=$N4_2[2];
+                                $N403_postal_code_stop1=$N4_2[3];
+                                $N404_country_stop1=$N4_2[4];                        
                             break;
                         }
                     }
-                } elseif($finalcount == 48) {
-                    for($i = 0; $i<$finalcount; $i++) {
-                        $data_item=explode("*",$array[$i]);
-                        switch($i) {   
-                        //s5 inicial
-                            case 9://S5
-                                $S501_stop_number_load=$data_item[1];
-                                $S502_stop_reason_code_load=$data_item[2];
-                                $S503_weight_load=$data_item[3];
-                                $S504_weight_units_load=$data_item[4];
-                                $S505_quantity_load=$data_item[5];
-                                $S506_unit_for_measurement_load=$data_item[6];
-                            break;
-                            case 12://G62
-                                $G6202_load_date_1=$data_item[2];
-                                $G6204_load_time_1=$data_item[4];
-                                $G6205_load_time_code_1=$data_item[5];
-                            break;
-                            case 13://G62
-                                $G6201_load_date_qualifier_2=$data_item[1];
-                                $G6202_load_date_2=$data_item[2];
-                                $G6203_load_time_qualifier_2=$data_item[3];
-                                $G6204load_time_2=$data_item[4];
-                                $G6205_load_time_code_2=$data_item[5];
-                            break;
-                            case 14://N1
-                                $N102_origin=$data_item[2];
-                            break;
-                            case 15://N3
-                                $N301_addres_origin=$data_item[1];
-                            break;
-                            case 16://N4
-                                $N401_city_origin=$data_item[1];
-                                $N402_state_origin=$data_item[2];
-                                $N403_postal_code_origin=$data_item[3];
-                                $N404_country_origin=$data_item[4];
-                            break;
-                        //s5 Final
-                            case 34://S5
-                                $S501_stop_number_stop1=$data_item[1];
-                                $S502_stop_reason_code_stop1=$data_item[2];
-                            break;
-                            case 35://L11
-                                $L1101_tracking_number=$data_item[1];
-                                $l1102_id_tracking_number=$data_item[2];
-                            break;
-                            case 37://G62
-                                $G6202_stop1_date=$data_item[2];
-                                $G6204_stop1_time=$data_item[4];
-                                $G6205_stop1_time_code=$data_item[5];
-                            break;
-                            case 39://N1
-                                $N102_stop1=$data_item[2];
-                            break;
-                            case 40://N3
-                                $N301_addres_stop1=$data_item[1];
-                            break;
-                            case 41://N4
-                                $N401_city_stop1=$data_item[1];
-                                $N402_state_stop1=$data_item[2];
-                                $N403_postal_code_stop1=$data_item[3];
-                                $N404_country_stop1=$data_item[4];
+                } elseif($count == 4) {
+                    for($i = 0; $i<$count; $i++){
+                        switch(substr($array[$i],0,3))
+                        {
+                            case "*3*":
+                                $S5final = explode("~",$array[$i]); // S5 final
+                                $S5_2 = explode("*",$S5final[0]);
+                                $L11_2 = explode("*",$S5final[1]);
+                                $G62_2 = explode("*",$S5final[3]);
+                                $N1_2 = explode("*",$S5final[5]);
+                                $N3_2 = explode("*",$S5final[6]);
+                                $N4_2 = explode("*",$S5final[7]);
+                            //S5
+                                $S501_stop_number_stop1=$S5_2[1];
+                                $S502_stop_reason_code_stop1=$S5_2[2];
+                                $S503_weight_stop1=$S5_2[3];
+                                $S504_weight_units_stop1=$S5_2[4];
+                                $S505_quantity_stop1=$S5_2[5];
+                                $S506_unit_for_measurement_stop1=$S5_2[6];
+                            //L11
+                                $L1101_tracking_number=$L11_2[1];
+                                $l1102_id_tracking_number=$L11_2[2];
+                            //G62
+                                $G6202_stop1_date=$G62_2[2];
+                                $G6204_stop1_time=$G62_2[4];
+                                $G6205_stop1_time_code=$G62_2[5];
+                            //N1
+                                $N102_stop1=$N1_2[2];
+                            //N3
+                                $N301_addres_stop1=$N3_2[1];
+                            //N4
+                                $N401_city_stop1=$N4_2[1];
+                                $N402_state_stop1=$N4_2[2];
+                                $N403_postal_code_stop1=$N4_2[3];
+                                $N404_country_stop1=$N4_2[4];                        
                             break;
                         }
                     }
-                } elseif($finalcount == 60) {
-                    for($i = 0; $i<$finalcount; $i++) {
-                        $data_item=explode("*",$array[$i]);
-                        switch($i) {
-                        //s5 inicial
-                            case 11://S5
-                                $S501_stop_number_load=$data_item[1];
-                                $S502_stop_reason_code_load=$data_item[2];
-                                $S503_weight_load=$data_item[3];
-                                $S504_weight_units_load=$data_item[4];
-                                $S505_quantity_load=$data_item[5];
-                                $S506_unit_for_measurement_load=$data_item[6];
-                            break;
-                            case 14://G62
-                                $G6202_load_date_1=$data_item[2];
-                                $G6204_load_time_1=$data_item[4];
-                                $G6205_load_time_code_1=$data_item[5];
-                            break;
-                            case 15://G62
-                                $G6201_load_date_qualifier_2=$data_item[1];
-                                $G6202_load_date_2=$data_item[2];
-                                $G6203_load_time_qualifier_2=$data_item[3];
-                                $G6204load_time_2=$data_item[4];
-                                $G6205_load_time_code_2=$data_item[5];
-                            break;
-                            case 16://N1
-                                $N102_origin=$data_item[2];
-                            break;
-                            case 17://N3
-                                $N301_addres_origin=$data_item[1];
-                            break;
-                            case 18://N4
-                                $N401_city_origin=$data_item[1];
-                                $N402_state_origin=$data_item[2];
-                                $N403_postal_code_origin=$data_item[3];
-                                $N404_country_origin=$data_item[4];
-                            break;
-                        //s5 Final
-                            case 46://S5
-                                $S501_stop_number_stop1=$data_item[1];
-                                $S502_stop_reason_code_stop1=$data_item[2];
-                            break;
-                            case 47://L11
-                                $L1101_tracking_number=$data_item[1];
-                                $l1102_id_tracking_number=$data_item[2];
-                            break;
-                            case 49://G62
-                                $G6202_stop1_date=$data_item[2];
-                                $G6204_stop1_time=$data_item[4];
-                                $G6205_stop1_time_code=$data_item[5];
-                            break;
-                            case 51://N1
-                                $N102_stop1=$data_item[2];
-                            break;
-                            case 52://N3
-                                $N301_addres_stop1=$data_item[1];
-                            break;
-                            case 53://N4
-                                $N401_city_stop1=$data_item[1];
-                                $N402_state_stop1=$data_item[2];
-                                $N403_postal_code_stop1=$data_item[3];
-                                $N404_country_stop1=$data_item[4];
+                } elseif($count == 5) {
+                    for($i = 0; $i<$count; $i++){
+                        switch(substr($array[$i],0,3))
+                        {
+                            case "*4*":
+                                $S5final = explode("~",$array[$i]); // S5 final
+                                $S5_2 = explode("*",$S5final[0]);
+                                $L11_2 = explode("*",$S5final[1]);
+                                $G62_2 = explode("*",$S5final[3]);
+                                $N1_2 = explode("*",$S5final[5]);
+                                $N3_2 = explode("*",$S5final[6]);
+                                $N4_2 = explode("*",$S5final[7]);
+                            //S5
+                                $S501_stop_number_stop1=$S5_2[1];
+                                $S502_stop_reason_code_stop1=$S5_2[2];
+                                $S503_weight_stop1=$S5_2[3];
+                                $S504_weight_units_stop1=$S5_2[4];
+                                $S505_quantity_stop1=$S5_2[5];
+                                $S506_unit_for_measurement_stop1=$S5_2[6];
+                            //L11
+                                $L1101_tracking_number=$L11_2[1];
+                                $l1102_id_tracking_number=$L11_2[2];
+                            //G62
+                                $G6202_stop1_date=$G62_2[2];
+                                $G6204_stop1_time=$G62_2[4];
+                                $G6205_stop1_time_code=$G62_2[5];
+                            //N1
+                                $N102_stop1=$N1_2[2];
+                            //N3
+                                $N301_addres_stop1=$N3_2[1];
+                            //N4
+                                $N401_city_stop1=$N4_2[1];
+                                $N402_state_stop1=$N4_2[2];
+                                $N403_postal_code_stop1=$N4_2[3];
+                                $N404_country_stop1=$N4_2[4];                        
                             break;
                         }
                     }
-                }
-                else {
-                    Log::error('No hubo coincidencias en Array(32, 48 y 60)');
+                } elseif($count == 6) {
+                    for($i = 0; $i<$count; $i++){
+                        switch(substr($array[$i],0,3))
+                        {
+                            case "*5*":
+                                $S5final = explode("~",$array[$i]); // S5 final
+                                $S5_2 = explode("*",$S5final[0]);
+                                $L11_2 = explode("*",$S5final[1]);
+                                $G62_2 = explode("*",$S5final[3]);
+                                $N1_2 = explode("*",$S5final[5]);
+                                $N3_2 = explode("*",$S5final[6]);
+                                $N4_2 = explode("*",$S5final[7]);
+                            //S5
+                                $S501_stop_number_stop1=$S5_2[1];
+                                $S502_stop_reason_code_stop1=$S5_2[2];
+                                $S503_weight_stop1=$S5_2[3];
+                                $S504_weight_units_stop1=$S5_2[4];
+                                $S505_quantity_stop1=$S5_2[5];
+                                $S506_unit_for_measurement_stop1=$S5_2[6];
+                            //L11
+                                $L1101_tracking_number=$L11_2[1];
+                                $l1102_id_tracking_number=$L11_2[2];
+                            //G62
+                                $G6202_stop1_date=$G62_2[2];
+                                $G6204_stop1_time=$G62_2[4];
+                                $G6205_stop1_time_code=$G62_2[5];
+                            //N1
+                                $N102_stop1=$N1_2[2];
+                            //N3
+                                $N301_addres_stop1=$N3_2[1];
+                            //N4
+                                $N401_city_stop1=$N4_2[1];
+                                $N402_state_stop1=$N4_2[2];
+                                $N403_postal_code_stop1=$N4_2[3];
+                                $N404_country_stop1=$N4_2[4];                        
+                            break;
+                        }
+                    }
+                } else {
+                    Log::error('No hubo coincidencias en Array Count(3, 4, 5 y 6)');
                 }
         // Validar si existe el shipment_id para procesar el purpose_code
             $shipm = DB::table('edidaimlers')->where('shipment_id', $B204_shipment_identification_number)->first();
