@@ -61,8 +61,7 @@ class EdiDaimler extends Command
         for($i=0; $i<$cantidad; $i++){
             $filename = $files[$i];
 //validar formato archivos .txt y con codigo #204
-        //if ( substr($filename,-4)==".txt" and substr($filename, 0, 16) == "fromRyder/RYD204") {
-        if ( $filename == "fromRyder/RYD204ATIH.20200622170014925.1204606966.txt") {
+        if ( substr($filename,-4)==".txt" and substr($filename, 0, 16) == "fromRyder/RYD204") {
                 //Validar si ya existe el archivo
                 $buscar = DB::table('edidaimlers')->where('filename', $filename)->first();
             if (empty($buscar)) {
