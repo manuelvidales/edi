@@ -40,7 +40,7 @@ class Edi214DaimlerGps extends Command
      */
     public function handle()
     {
-        $sql214gps = DB::connection('sqlsrv')->table("edi_daimler_214_gps")->where('send_txt', '=', '2')->get();
+        $sql214gps = DB::connection('sqlsrv')->table("edi_daimler_214_gps")->where('send_txt', '=', '1')->get();
         if (count($sql214gps) !== 0) {
             foreach ($sql214gps as $data){
                 $unidad = $data->unidad;
@@ -59,7 +59,7 @@ class Edi214DaimlerGps extends Command
                             $Latitud = substr($datajson[0]['GPSPoint_lat'], 0, -1);
                             $Longuitud = substr($datajson[0]['GPSPoint_lon'], 1,-1);
                     //Actualizar campos de gps en tabla sqlsrv
-                            $updategps = DB::connection('sqlsrv')->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longuitud, 'latitude'=> $Latitud, 'send_txt' => '1']);
+                            $updategps = DB::connection('sqlsrv')->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longuitud, 'latitude'=> $Latitud, 'send_txt' => '3']);
                                 if (empty($updategps)) {
                                     Log::warning('Fallo actualizacion tabla edi_daimler_214_gps');
                                 } else {
@@ -80,7 +80,7 @@ class Edi214DaimlerGps extends Command
                     elseif ($i == 8) { $idnew = '0'.$id; }
                     elseif ($i == 9) { $idnew = $id; }
                     else { $idnew = 'null'; }
-                    $name214gps = $data->alpha_code.'_'.$data->sender_code.'_214_(testing)_'.date('Ymd', strtotime($data->date_time)).'_'.$idnew;
+                    $name214gps = $data->alpha_code.'_'.$data->sender_code.'_214_'.date('Ymd', strtotime($data->date_time)).'_'.$idnew;
                     $ISA = "ISA*00*          *00*          *".$data->id_qualifier_receiver."*".$data->id_receiver."*".$data->id_qualifier_sender."*".$data->id_sender."*".date('ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->version_number."*".$data->control_number."*".$idnew."*0*T*^";
                     $GS = "GS*QM*".trim($data->id_receiver)."*".$data->sender_code."  *".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->id_incremental."*".$data->agency_code."*".$data->industry_identifier;
                     $ST = "ST*214*0001";
