@@ -16,7 +16,7 @@ class ClientesController extends Controller
      */
     public function index()
     {
-        $clientes = \DB::connection('sqlsrvpro')->table("edi_clientes")->paginate(5);
+        $clientes = DB::connection(env('DB_VISTEON'))->table("edi_clientes")->paginate(5);
         return \view('visteon.clientes', \compact('clientes'));
     }
 
@@ -64,7 +64,7 @@ class ClientesController extends Controller
             return back()->withInput()->with('error','La informacion NO fue enviada')->withErrors($validacion->errors());
             }
             else{
-                DB::connection('sqlsrvpro')->table("edi_clientes")->insert([
+                DB::connection(env('DB_VISTEON'))->table("edi_clientes")->insert([
                     'id_cliente' => $request->idhalcon,
                     'cliente' => $request->idvisteon,
                     'nombre' => $request->cliente,
@@ -98,7 +98,7 @@ class ClientesController extends Controller
      */
     public function edit($id)
     {
-        $data = \DB::connection('sqlsrv')->table("edi_clientes")->where('id_cliente', $id)->first();
+        $data = DB::connection(env('DB_VISTEON'))->table("edi_clientes")->where('id_cliente', $id)->first();
 
         return response()->json($data);
     }
@@ -112,7 +112,7 @@ class ClientesController extends Controller
      */
     public function update(Request $request)
     {
-        $update = DB::connection('sqlsrv')->table("edi_clientes")->where('id_cliente', '=', $request->idhalcon)->update([
+        $update = DB::connection(env('DB_VISTEON'))->table("edi_clientes")->where('id_cliente', '=', $request->idhalcon)->update([
             'id_cliente' => $request->idhalcon,
             'cliente' => $request->idvisteon,
             'nombre' => $request->cliente,
