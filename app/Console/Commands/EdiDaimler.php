@@ -322,7 +322,7 @@ class EdiDaimler extends Command
                 if (empty($savefile)) { Log::warning('Nombre de archivo no se almaceno Mysql'); }
                 else { Log::info('Archivo Almacenado Mysql'); }
         //almacenar en SqlSrv
-            $save204 = DB::connection('sqlsrv')->table("edi_daimler")->insert([
+            $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler")->insert([
                     'id_qualifier_sender' => $ISA05_id_qualifier_sender,
                     'id_sender' => $ISA06_id_sender,
                     'id_qualifier_receiver' => $ISA07_id_qualifier_receiver,
@@ -388,7 +388,7 @@ class EdiDaimler extends Command
                     Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                         Log::info('Correo enviado!');
                     //inicia confirmacion de recibido 997
-                    $data997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where('control_number_sender', '=', $ST02_control_number_sender)->first();
+                    $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $ST02_control_number_sender)->first();
                     if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
                     else {
                         $id = $data997->id_incremental;
@@ -411,7 +411,7 @@ class EdiDaimler extends Command
                         } else {
                             Log::info('Archivo 997 creado');
                             // cambiar valor a 0 para no volverlo a leer
-                            $up997 = DB::connection('sqlsrv')->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
+                            $up997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
                             if (empty($up997)) { Log::warning('Hubo fallos al actualizar edi_daimler_997_send');
                             } else { Log::info('tabla edi_daimler_997_send actualizada'); }
                         }
@@ -420,14 +420,14 @@ class EdiDaimler extends Command
             }
 //Validacion segun el purpose_code
             elseif ($B2A01_purpose_code == '05') { //Si es 05 Actualizar Fechas y notificar
-                $val = DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
+                $val = DB::connection(env('DB_DAIMLER'))->table("edi_daimler")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
                 if (empty($val)) { Log::warning('No existen datos edi_daimler'); } 
                 else {
                     if ($val->load_date_1 === $G6202_load_date_1 and $val->load_time_1 === $G6204_load_time_1) {
                     }//Log::info('validacion 05 fecha/hora con iguales'); //No hacer nada
                     else {
                     //actualizar SqlSrv tabla edi_daimler txt204
-                    $update05 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '05','load_date_1' => $G6202_load_date_1,'load_time_1' => $G6204_load_time_1,'load_date_2' => $G6202_load_date_2,'load_time_2' => $G6204load_time_2,'stop1_date' => $G6202_stop1_date,'stop1_time' => $G6204_stop1_time]);
+                    $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '05','load_date_1' => $G6202_load_date_1,'load_time_1' => $G6204_load_time_1,'load_date_2' => $G6202_load_date_2,'load_time_2' => $G6204load_time_2,'stop1_date' => $G6202_stop1_date,'stop1_time' => $G6204_stop1_time]);
                     if (empty($update05)) { Log::critical('Fallo al actualizar datos purpose:05 de txt204'); }
                     else {
                         Log::info('pedido actualizado purpose:05');
@@ -450,11 +450,11 @@ class EdiDaimler extends Command
                 }
             }
             elseif ($B2A01_purpose_code == '01') { //Si es 01 se Cancela pedido, actualizar y Notificar
-                $val01 = DB::connection('sqlsrv')->table("edi_daimler")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
+                $val01 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
                 if ($val01->purpose_code === '01') {
                     //Log::info('validacion 01 ya fue actualizado');//No hacer nada
                 } else {
-                    $update01 = DB::connection('sqlsrv')->table("edi_daimler")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '01']);
+                    $update01 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '01']);
                     if (empty($update01)) { Log::critical('Fallo al actualizar datos purpose:01 de txt204'); }
                     else {
                         Log::info('pedido actualizado purpose:05');
@@ -473,10 +473,10 @@ class EdiDaimler extends Command
                             Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                             Log::info('Correo de Cancelacion enviado!!');
                         //buscamos en tabla 990 si existe actualizar(si respodieron)
-                        $data990 = DB::connection('sqlsrv')->table("edi_daimler_990")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
+                        $data990 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_990")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
                         if (empty($data990)) { }//si es null no hacer nada
                         else { //si existe actualizar el purpose_code a 01
-                            $update990 = DB::connection('sqlsrv')->table("edi_daimler_990")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '01']);
+                            $update990 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_990")->where([ ['shipment_identification_number', '=', $B204_shipment_identification_number] ])->update(['purpose_code' => '01']);
                             //validar update990
                             if (empty($data990)) { Log::warning('Fallo actualizacion edi_daimler_990 ');}
                             else { Log::info('Se actualizo edi_daimler_990 con exito!'); }
@@ -537,7 +537,7 @@ class EdiDaimler extends Command
                         if (empty($savefile824)) { Log::warning('Archivo  Daimler 824 no se almaceno Mysql'); }
                         else { Log::info('Archivo Daimler 824 Almacenado Mysql'); }
                         //almacenar en SqlSrv
-                        $save824 = DB::connection('sqlsrv')->table("edi_daimler_824")->insert([
+                        $save824 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_824")->insert([
                             'shipment_identification_number' => $REF_shipment_identification_number,
                             'reference_identification' => $OTI_reference_identification,
                             'error_code' => $TED_error_code,

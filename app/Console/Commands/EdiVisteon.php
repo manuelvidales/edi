@@ -42,13 +42,13 @@ class EdiVisteon extends Command
      */
     public function handle()
     {
-        $sql = DB::connection('sqlsrvpro')->table("edi_210")->where('send_txt','=', '1')->orwhere('send_txt','=','2')->orWhere('send_txt','=','3')->get();
+        $sql = DB::connection(env('DB_VISTEON'))->table("edi_210")->where('send_txt','=', '1')->orwhere('send_txt','=','2')->orWhere('send_txt','=','3')->get();
         if (empty($sql)) {
             Log::error('problemas con sqlsrv tabla edi_210');
         }else{
             foreach ($sql as $row) {
                 if ($row->send_txt == '0') { //no hacer nada...
-                    Log::info('No existen nuevos registros de Visteon!');
+                    //Log::info('No existen nuevos registros de Visteon!');
                 }elseif ($row->send_txt == '1') {
                     $id = $row->id_incremental;
                     $i = strlen($id);//cantidad de caracteres
@@ -77,7 +77,7 @@ class EdiVisteon extends Command
                         Mail::to($email)->cc([$cc[0],$cc[1],$cc[2],$cc[3],$cc[4]])->send(new NotificaVisteon($id, $fecha));
                         Log::info('Correo enviado!!');
                         //Actualizar Send_txt Valor a 0
-                        $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
+                        $update = DB::connection(env('DB_VISTEON'))->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
                             if (empty($update)) {
                                 Log::error('Error al Actualizar tabla edi_210 con Send_txt a 0');
                             } else {
@@ -112,7 +112,7 @@ class EdiVisteon extends Command
                         Mail::to($email)->cc([$cc[0],$cc[1],$cc[2],$cc[3],$cc[4]])->send(new NotificaVisteon($id, $fecha));
                         Log::info('Correo enviado!!');
                         //Actualizar Send_txt Valor a 0
-                        $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
+                        $update = DB::connection(env('DB_VISTEON'))->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
                             if (empty($update)) {
                                 Log::error('Error al Actualizar tabla edi_210 con Send_txt a 0');
                             } else {
@@ -147,7 +147,7 @@ class EdiVisteon extends Command
                             Mail::to($email)->cc([$cc[0],$cc[1],$cc[2],$cc[3],$cc[4]])->send(new NotificaVisteon($id, $fecha));
                             Log::info('Correo enviado!!');
                             //Actualizar Send_txt Valor a 0
-                            $update = DB::connection('sqlsrvpro')->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
+                            $update = DB::connection(env('DB_VISTEON'))->table("edi_210")->where('id_incremental',$row->id_incremental)->update(['send_txt' => '0']);
                                 if (empty($update)) {
                                     Log::error('Error al Actualizar tabla edi_210 con Send_txt a 0');
                                 } else {
