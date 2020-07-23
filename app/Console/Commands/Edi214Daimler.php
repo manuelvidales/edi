@@ -40,7 +40,7 @@ class Edi214Daimler extends Command
      */
     public function handle()
     {
-        $sql214 = DB::connection('sqlsrv')->table("edi_daimler_214")->where('send_txt', '=', '1')->get();
+        $sql214 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214")->where('send_txt', '=', '1')->get();
             foreach ($sql214 as $data214) {
             if ($data214 == true) { //si obtiene datos se preparan para el archivo
                 $id = $data214->id_incremental;
@@ -63,7 +63,7 @@ class Edi214Daimler extends Command
                         } else {
                             Log::info('Archivo 214 creado');
                             // cambiar valor a 0 para no volverlo a leer
-                            $up = DB::connection('sqlsrv')->table("edi_daimler_214")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
+                            $up = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214")->where([ ['id_incremental', '=', $id] ])->update(['send_txt' => '0']);
                                 if (empty($up)) {
                                     Log::warning('Fallo actualizacion tabla edi_daimler_214');
                                 } else {
