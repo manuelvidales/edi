@@ -59,7 +59,7 @@ class Edi214DaimlerGps extends Command
                             $Latitud = substr($datajson[0]['GPSPoint_lat'], 0, -1);
                             $Longuitud = substr($datajson[0]['GPSPoint_lon'], 1,-1);
                     //Actualizar campos de gps en tabla sqlsrv
-                            $updategps = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longuitud, 'latitude'=> $Latitud, 'send_txt' => '3']);
+                            $updategps = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longuitud, 'latitude'=> $Latitud]);
                                 if (empty($updategps)) {
                                     Log::warning('Fallo actualizacion tabla edi_daimler_214_gps');
                                 } else {
