@@ -9,6 +9,12 @@ use Illuminate\Support\Facades\DB;
 
 class EdidaimlerController extends Controller
 {
+    public function index()
+    {
+        $ships = edidaimler::all();
+        return \view('daimler.index', compact('ships'));
+    }
+    
     public function show($id)
     {
         $valida = DB::table('edidaimlers')->where('shipment_id', $id)->first();
