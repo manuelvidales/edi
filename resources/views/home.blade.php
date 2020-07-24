@@ -25,35 +25,6 @@
         </div>
     </div>
 <hr>
-<!--
-        <div class="row justify-content-center">
-            <div class="col-sm-8">
-                <div class="card">
-                    <div class="card-header">Emerson Codigo: 204</div>
-                    <div class="card-body">
-                        <a type="button" class="btn btn-primary" href="{{ url('ediemerson/path') }}"> <i class="fas fa-folder-open"></i> :// Separar por * </a>
-                        |<a type="button" class="btn btn-secondary" href="{{ url('ediemerson/insertar') }}"><i class="fas fa-database"></i> Insertar</a>
-                        |<a type="button" class="btn btn-success" href="{{ route('ediemerson.creartxt') }}"><i class="fas fa-file-export"></i> TxT 990</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-<hr>
-<div class="row justify-content-center">
-    <div class="col-sm-8">
-        <div class="card">
-            <div class="card-header">Daimler Codigo: 204</div>
-            <div class="card-body">
-                <a type="button" class="btn btn-primary" href="{{ url('edidaimler/path') }}"> <i class="fas fa-folder-open"></i> :// Separar por * </a>
-                |<a type="button" class="btn btn-secondary" href="{{ url('edidaimler/insertar') }}"><i class="fas fa-database"></i> Insertar</a>
-                |<a type="button" class="btn btn-success" href="{{ route('edidaimler.creartxt') }}"><i class="fas fa-file-export"></i> TxT 990</a>
-            </div>
-        </div>
-    </div>
-</div>
-
--->
-
     </div>
 </div>
 @endsection
