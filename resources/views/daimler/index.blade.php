@@ -1,7 +1,6 @@
 @extends('layouts.app')
 @section('content')
 <div class="jumbotron">
-
     <div class="card shadow p-3 mb-5 bg-white rounded">
         <div class="card-header text-center">
         <h4>  Ordenes recibidas de Daimler</h4>
@@ -23,9 +22,8 @@
                   @foreach ($ships as $data)  
                   <tr>
                     <td>
-                      {{$data->filename}}
+                      <?php $files = "$data->filename"; echo substr($files, 10); ?> 
                     </td>
-
                     <td>{{$data->shipment_id}}</td>
                     @if ( $data->response == 'A')
                     <td><span class="badge badge-pill badge-success">aceptada</span></td>
@@ -34,28 +32,16 @@
                     @else
                     <td><span class="badge badge-pill badge-secondary">sin respuesta</span></td>
                     @endif
-
-                    <td>{{$data->created_at}}
-                  </tr>
+                    <td>{{$data->created_at}}</tr>
                     @endforeach
               </tbody>
             </table>
           </div>
-
-
-
-
-
-
-        </div>
-   
-
+        </div> 
 <br>
     <div class="card-footer text-muted">
       Autofletes Internacionales Halcon S.C.
     </div>
-
-
 </div>
 <!-- Datatable -->
 <script type="text/javascript">
