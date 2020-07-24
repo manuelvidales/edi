@@ -384,8 +384,9 @@ class EdiDaimler extends Command
                     $destino = $N102_stop1;
                     $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
                     $hora = date('H:i', strtotime($G6204_load_time_1));
-                    $email = env('MAIL_SEND');
-                    Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                    $email = env('MAIL_SEND_DAIMLER');
+                    $ccmails = env('CCMAIL_SEND_DAIMLER');
+                    Mail::to($email)->cc($ccmails)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                         Log::info('Correo enviado!');
                     //inicia confirmacion de recibido 997
                     $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $ST02_control_number_sender)->first();
@@ -442,8 +443,9 @@ class EdiDaimler extends Command
                         $destino = $val->stop1;
                         $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
                         $hora = date('H:i', strtotime($G6204_load_time_1));
-                        $email = env('MAIL_SEND');
-                        Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                        $email = env('MAIL_SEND_DAIMLER');
+                        $ccmails = env('CCMAIL_SEND_DAIMLER');
+                        Mail::to($email)->cc($ccmails)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                             Log::info('Correo de Actualizacion fue enviado!!');
                         }
                     }
@@ -469,8 +471,9 @@ class EdiDaimler extends Command
                         $destino = $val01->stop1;
                         $fecha = date('d/M/Y', strtotime($G6202_load_date_1));
                         $hora = date('H:i', strtotime($G6202_load_date_1));
-                        $email = env('MAIL_SEND');
-                            Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                        $email = env('MAIL_SEND_DAIMLER');
+                        $ccmails = env('CCMAIL_SEND_DAIMLER');
+                            Mail::to($email)->cc($ccmails)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                             Log::info('Correo de Cancelacion enviado!!');
                         //buscamos en tabla 990 si existe actualizar(si respodieron)
                         $data990 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_990")->where('shipment_identification_number', '=', $B204_shipment_identification_number)->first();
@@ -553,8 +556,9 @@ class EdiDaimler extends Command
                             $destino = $TED_message;
                             $fecha = 'null'; //date('d/M/Y', strtotime($G6202_load_date_1));
                             $hora = 'null'; //date('H:i', strtotime($G6204_load_time_1));
-                            $email = env('MAIL_SEND');
-                            Mail::to($email)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+                            $email = env('MAIL_SEND_DAIMLER');
+                            $ccmails = env('CCMAIL_SEND_DAIMLER');
+                            Mail::to($email)->cc($ccmails)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                                 Log::info('Correo enviado!');
                         }
                     } else {
