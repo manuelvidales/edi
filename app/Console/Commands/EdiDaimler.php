@@ -346,9 +346,6 @@ class EdiDaimler extends Command
                         break;
                     }
                 }
-        // Validar si existe el shipment_id o bien procesar con el purpose_code
-        //$shipm = DB::table('edidaimlers')->where('shipment_id', $shipment_identification_number)->first();
-        //if (empty($shipm)) { //si es null se procesa por primera vez Codigo
         if ($purpose_code == '00'){ //se procesa por primera vez
         //almacenar en mysql
             $savefile = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $shipment_identification_number,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
