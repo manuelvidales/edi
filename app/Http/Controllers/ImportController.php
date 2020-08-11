@@ -9,7 +9,8 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\messagesend;
-
+use Illuminate\Support\Facades\Log;
+use App\edidaimler;
 
 class ImportController extends Controller
 {
@@ -21,182 +22,46 @@ class ImportController extends Controller
     public function index()
 
     {
-        $data210 = DB::connection('sqlsrvpro')->table("edi_daimler_214")->get();
-        dd($data210);
+        // $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('shipment_identification_number', '=', '34389334')->first();
+        // dd($data997);
+       
+        $control_number_sender = '101625428';
+        //inicia confirmacion de recibido 997
+        $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $control_number_sender)->first();
+        if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
+        else {
+            $id = $data997->id_incremental;
+            $i = strlen($id);//convertir en 9 digitos
+            if     ($i == 1) { $idnew = '00000000'.$id; }
+            elseif ($i == 2) { $idnew = '0000000'.$id; } 
+            elseif ($i == 3) { $idnew = '000000'.$id; }
+            elseif ($i == 4) { $idnew = '00000'.$id; }
+            elseif ($i == 5) { $idnew = '0000'.$id; }
+            elseif ($i == 6) { $idnew = '000'.$id; }
+            elseif ($i == 7) { $idnew = '00'.$id; }
+            elseif ($i == 8) { $idnew = '0'.$id; }
+            elseif ($i == 9) { $idnew = $id; }
+            else { $idnew = 'null'; }
+                $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
+                
+                $datafile = "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->control_number_sender."~IEA*1*".$data997->control_number_sender."~";
+            //dd($datafile);
 
-        $filename= 'RYD204ATIH.20200521173144410.1197409127.txt';
-        $dir = 'app/public/'.$filename;
-        $path = file::get(storage_path($dir));
-        $array = explode("~", $path);
-        dd($array);
-        $finalcount = count($array);
-        //dd($finalcount);
-
-        if ($finalcount == 32) {
-            for($i = 0; $i<$finalcount; $i++)
-            {
-                // explode the segment into an array of data_items
-                $data_item=explode("*",$array[$i]);
-                //switch(substr($array[$i],0,3))
-                switch($i)
-                {
-                    case 0: //ISA
-                        $ISA05_id_qualifier_sender=$data_item[5];
-                        $ISA06_id_sender=$data_item[6];
-                        $ISA07_id_qualifier_receiver=$data_item[7];
-                        $ISA08_id_receiver=$data_item[8];
-                        $ISA11_version_number=$data_item[11];
-                        $ISA12_control_number=$data_item[12];
-                    break;
-                    case 1://GS
-                        $GS02_sender_code=$data_item[2];
-                        $GS07_agency_code=$data_item[7];
-                        $GS08_industry_identifier=$data_item[8];
-                    break;
-                    case 2://ST
-                        $ST02_control_number_sender=$data_item[2];
-                    break;
-                    case 3://B2
-                        $B202_alpha_code=$data_item[2];
-                        $B204_shipment_identification_number=$data_item[4];
-                        $B206_method_payment=$data_item[6];
-                    break;
-                    case 4://B2A
-                        $B2A01_purpose_code = $data_item[1];
-                    break;
-                    case 7://L11
-                        $L1103_reference_identification=$data_item[1];
-                        $L1103_reference_identification_qualifier=$data_item[2];
-                    break;
-                    case 9://S5
-                        $S501_stop_number_load=$data_item[1];
-                        $S502_stop_reason_code_load=$data_item[2];
-                        $S503_weight_load=$data_item[3];
-                        $S504_weight_units_load=$data_item[4];
-                        $S505_quantity_load=$data_item[5];
-                        $S506_unit_for_measurement_load=$data_item[6];
-                    break;
-                    case 12://G62
-                        $G6202_load_date_1=$data_item[2];
-                        $G6204_load_time_1=$data_item[4];
-                        $G6205_load_time_code_1=$data_item[5];
-                    break;
-                    case 13://G62
-                        $G6201_load_date_qualifier_2=$data_item[1];
-                        $G6202_load_date_2=$data_item[2];
-                        $G6203_load_time_qualifier_2=$data_item[3];
-                        $G6204load_time_2=$data_item[4];
-                        $G6205_load_time_code_2=$data_item[5];
-                    break;
-                    case 14://N1
-                        $N102_origin=$data_item[2];
-                    break;
-                    case 15://N3
-                        $N301_addres_origin=$data_item[1];
-                    break;
-                    case 16://N4
-                        $N401_city_origin=$data_item[1];
-                        $N402_state_origin=$data_item[2];
-                        $N403_postal_code_origin=$data_item[3];
-                        $N404_country_origin=$data_item[4];
-                    break;
-                    case 18://S5
-                        $S501_stop_number_stop1=$data_item[1];
-                        $S502_stop_reason_code_stop1=$data_item[2];
-                        $S503_weight_stop1=$data_item[3];
-                        $S504_weight_units_stop1=$data_item[4];
-                        $S505_quantity_stop1=$data_item[5];
-                        $S506_unit_for_measurement_stop1=$data_item[6];
-                    break;
-                    case 19://L11
-                        $L1101_tracking_number=$data_item[1];
-                        $l1102_id_tracking_number=$data_item[2];
-                    break;
-                    case 21://G62
-                        $G6202_stop1_date=$data_item[2];
-                        $G6204_stop1_time=$data_item[4];
-                        $G6205_stop1_time_code=$data_item[5];
-                    break;
-                    case 23://N1
-                        $N102_stop1=$data_item[2];
-                    break;
-                    case 24://N3
-                        $N301_addres_stop1=$data_item[1];
-                    break;
-                    case 25://N4
-                        $N401_city_stop1=$data_item[1];
-                        $N402_state_stop1=$data_item[2];
-                        $N403_postal_code_stop1=$data_item[3];
-                        $N404_country_stop1=$data_item[4];
-                    break;
-                }
-
+                //Crear archivo TxT 997
+                $file997 = Storage::disk('public')->put('toRyder997/'.$filename.'.txt', $datafile);
+            if (empty($file997)) {
+                Log::error('Hubo fallos al crear archivo 997');
+            } else {
+                dd('finalizado');
             }
-            //GrabaR datos selecionados del TxT
-            DB::connection('sqlsrv')->table("edi_daimler")->insert([
-                'id_qualifier_sender' => $ISA05_id_qualifier_sender,
-                'id_sender' => $ISA06_id_sender,
-                'id_qualifier_receiver' => $ISA07_id_qualifier_receiver,
-                'id_receiver' => $ISA08_id_receiver,
-                'version_number' => $ISA11_version_number,
-                'control_number' => $ISA12_control_number,
-                'sender_code' => $GS02_sender_code,
-                'agency_code' => $GS07_agency_code,
-                'industry_identifier' => $GS08_industry_identifier,
-                'control_number_sender' => $ST02_control_number_sender,
-                'alpha_code' => $B202_alpha_code,
-                'shipment_identification_number' => $B204_shipment_identification_number,
-                'method_payment' => $B206_method_payment,
-                'purpose_code' => $B2A01_purpose_code,
-                'reference_identification' => $L1103_reference_identification,
-                'reference_identification_qualifier' => $L1103_reference_identification_qualifier,
-                'stop_number_load' => $S501_stop_number_load,
-                'stop_reason_code_load' => $S502_stop_reason_code_load,
-                'weight_load' => $S503_weight_load,
-                'weight_units_load' => $S504_weight_units_load,
-                'quantity_load' => $S505_quantity_load,
-                'unit_for_measurement_load' => $S506_unit_for_measurement_load,
-                'load_date_1' => $G6202_load_date_1,
-                'load_time_1' => $G6204_load_time_1,
-                'load_time_code_1' => $G6205_load_time_code_1,
-                'load_date_qualifier_2' => $G6201_load_date_qualifier_2,
-                'load_date_2' => $G6202_load_date_2,
-                'load_time_qualifier_2' => $G6203_load_time_qualifier_2,
-                'load_time_2' => $G6204load_time_2,
-                'load_time_code_2' => $G6205_load_time_code_2,
-                'origin' => $N102_origin,
-                'addres_origin' => $N301_addres_origin,
-                'city_origin' => $N401_city_origin,
-                'state_origin' => $N402_state_origin,
-                'postal_code_origin' => $N403_postal_code_origin,
-                'country_origin' => $N404_country_origin,
-                'stop_number_stop1' => $S501_stop_number_stop1,
-                'stop_reason_code_stop1' => $S502_stop_reason_code_stop1,
-                'weight_stop1' => $S503_weight_stop1,
-                'weight_units_stop1' => $S504_weight_units_stop1,
-                'quantity_stop1' => $S505_quantity_stop1,
-                'unit_for_measurement_stop1' => $S506_unit_for_measurement_stop1,
-                'tracking_number' => $L1101_tracking_number,
-                'id_tracking_number' => $l1102_id_tracking_number,
-                'stop1_date' => $G6202_stop1_date,
-                'stop1_time' => $G6204_stop1_time,
-                'stop1_time_code' => $G6205_stop1_time_code,
-                'stop1' => $N102_stop1,
-                'addres_stop1' => $N301_addres_stop1,
-                'city_stop1' => $N401_city_stop1,
-                'state_stop1' => $N402_state_stop1,
-                'postal_code_stop1' => $N403_postal_code_stop1,
-                'country_stop1' => $N404_country_stop1,
-            ]);
 
-
-        } elseif($finalcount == 48) {
-            dd('Hola 48');
+           // dd('finalizado muy bien');
         }
-        
-        
-        
-        
+
+        dd('finalizado muy bien');
+
+
+
 
 
     }
