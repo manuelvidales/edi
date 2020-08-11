@@ -33,8 +33,13 @@ class EdidaimlerController extends Controller
         $ships = DB::table('edidaimlers')->latest()->get();
         
         ftp_close($conn_id); // cerrar la conexión ftp
-        
+
         return \view('daimler.index', compact('ships','filesnew','filessend'));
+    }
+
+    public function filesdown($file)
+    {
+        return Storage::disk('public')->download($file);
     }
     
     public function show($id)
