@@ -95,7 +95,7 @@ class EdiDaimler extends Command
                             $ST = explode("*",$header[2]);
                             $B2 = explode("*",$header[3]);
                             $B2A = explode("*",$header[4]);
-                            $L11 = explode("*",$header[5]);
+                            $L11 = explode("*",$header[7]);
                             //ISA
                                 $id_qualifier_sender=$ISA[5];
                                 $id_sender=$ISA[6];
