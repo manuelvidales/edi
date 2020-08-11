@@ -18,30 +18,28 @@ class EdidaimlerController extends Controller
         // establecer una conexión o finalizarla
         $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server");
         $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
-        //validar conexion FTP
-
-        
+        //validar conexion FTP        
 
         if ( @$login ) {
         // Obtener los archivos del directorio ftp
             $filesnew = ftp_nlist($conn_id, 'fromRyder');
-            $filesall = ftp_nlist($conn_id, 'fromRyder_arch');
             $filessend = ftp_nlist($conn_id, 'toRyder_arch');
         }else{
             Log::warning('Error en conexion ftp');
             $filesnew = '0';
-            $filesall = '0';
             $filessend = '0';
         }
-
+        
         $ships = DB::table('edidaimlers')->latest()->get();
-
-        return \view('daimler.index', compact('ships','filesnew','filesall','filessend'));
+        
+        ftp_close($conn_id); // cerrar la conexión ftp
+        
+        return \view('daimler.index', compact('ships','filesnew','filessend'));
     }
     
     public function show($id)
     {
-        $valida = DB::table('edidaimlers')->where('shipment_id', $id)->first();
+        $valida = edidaimler::where('shipment_id', $id)->where('purpose_code', '00')->Orwhere('purpose_code', '05')->first();
         if (empty($valida)) {
             return \view('daimler.alert'); //no continuar
         } else {
