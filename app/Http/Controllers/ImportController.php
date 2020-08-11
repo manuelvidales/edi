@@ -22,10 +22,12 @@ class ImportController extends Controller
     public function index()
 
     {
-        // $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('shipment_identification_number', '=', '34389334')->first();
+
+        // $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('shipment_identification_number', '=', '34389707')->first();
         // dd($data997);
-       
-        $control_number_sender = '101625428';
+
+        //101625442
+        $control_number_sender = '101625437';
                 //inicia confirmacion de recibido 997
                 $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $control_number_sender)->first();
                 if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
@@ -58,7 +60,7 @@ class ImportController extends Controller
                     }
                 }
 
-        dd('finalizado muy bien');
+        dd('finalizado muy bien code: '.$control_number_sender);
 
 
 
