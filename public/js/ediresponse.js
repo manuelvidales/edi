@@ -38,8 +38,8 @@ $('#denyform').submit(function(e){
     let input2 = $('#denyform input[name="deny"]');
 
     let formData = {
-        order: $(input1).val(),
-        deny: $(input2).val(),
+        orderid: $(input1).val(),
+        response: $(input2).val(),
     }
     $.ajax({
         type: 'POST',
