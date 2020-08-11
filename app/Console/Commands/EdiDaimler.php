@@ -347,7 +347,7 @@ class EdiDaimler extends Command
                 }
         if ($purpose_code == '00'){ //se procesa por primera vez
         //almacenar en mysql
-            $savefile = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $shipment_identification_number,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+            $savefile = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $shipment_identification_number,'purpose_code' => $purpose_code,'s5total' => $count-1,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                 if (empty($savefile)) { Log::warning('Nombre de archivo no se almaceno Mysql'); }
                 else { Log::info('Archivo Almacenado Mysql'); }
                 // almacenar en BD Sqlsrv segun la cantidad de S5 contenida en txt
@@ -1119,7 +1119,7 @@ class EdiDaimler extends Command
                     else {
                         Log::info('pedido actualizado purpose:05');
                     //graba el nombre de archivo para no volver a leerlo
-                        $save204_05 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $shipment_identification_number.'-05','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                        $save204_05 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $shipment_identification_number,'purpose_code' => $purpose_code,'s5total' => $count-1,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                             if (empty($save204_05)) { Log::warning('No se almaceno archivo txt204 Mysql'); } 
                             else { Log::info('Datos almacenados en MySql'); }
                     //Notificar por correo
@@ -1175,7 +1175,7 @@ class EdiDaimler extends Command
                     else {
                         Log::info('pedido actualizado purpose:05');
                     //graba el nombre de archivo para no volver a leerlo
-                        $save204_01 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $shipment_identification_number.'-01','created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
+                        $save204_01 = DB::table('edidaimlers')->insert(['filename' => $filename, 'shipment_id' => $shipment_identification_number,'purpose_code' => $purpose_code,'s5total' => $count-1,'created_at' => $today->format('Y-m-d H:i:s'),'updated_at' => $today->format('Y-m-d H:i:s')]);
                         if (empty($save204_01)) { Log::warning('No se almaceno archivo txt204 Mysql'); } 
                         else { Log::info('Datos almacenados en MySql'); }
                     //Notificar por correo
