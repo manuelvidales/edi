@@ -23,47 +23,7 @@ class ImportController extends Controller
 
     {
 
-        // $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('shipment_identification_number', '=', '34389707')->first();
-        // dd($data997);
-
-        //101625442
-        $control_number_sender = '101625442';
-                //inicia confirmacion de recibido 997
-                $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $control_number_sender)->first();
-                if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
-                else {
-                    $id = $data997->id_incremental;
-                    $i = strlen($id);//convertir en 9 digitos
-                    if     ($i == 1) { $idnew = '00000000'.$id; }
-                    elseif ($i == 2) { $idnew = '0000000'.$id; } 
-                    elseif ($i == 3) { $idnew = '000000'.$id; }
-                    elseif ($i == 4) { $idnew = '00000'.$id; }
-                    elseif ($i == 5) { $idnew = '0000'.$id; }
-                    elseif ($i == 6) { $idnew = '000'.$id; }
-                    elseif ($i == 7) { $idnew = '00'.$id; }
-                    elseif ($i == 8) { $idnew = '0'.$id; }
-                    elseif ($i == 9) { $idnew = $id; }
-                    else { $idnew = 'null'; }
-                        $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
-                        $datafile = "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->control_number_sender."~IEA*1*".$data997->control_number_sender."~";                        
-                        //Crear archivo TxT 997
-                        $file997local = Storage::disk('public')->put('toRyder997/'.$filename.'.txt', $datafile);
-                        $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', $datafile);
-                    if (empty($file997) ||  empty($file997local)) {
-                        Log::error('Hubo fallos al crear archivo 997');
-                    } else {
-                        Log::info('Archivo 997 creado');
-                        // cambiar valor a 0 para no volverlo a leer
-                        $up997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where([ ['id_incremental', '=', $data997->id_incremental] ])->update(['send_txt' => '0']);
-                        if (empty($up997)) { Log::warning('Hubo fallos al actualizar edi_daimler_997_send');
-                        } else { Log::info('tabla edi_daimler_997_send actualizada'); }
-                    }
-                }
-
-        dd('finalizado muy bien code: '.$control_number_sender);
-
-
-
+dd('testing');
 
 
     }
