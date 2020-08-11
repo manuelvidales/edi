@@ -17,6 +17,8 @@ class CreateEdidaimlersTable extends Migration
             $table->id();
             $table->string('filename',121)->nullable();
             $table->string('shipment_id',25)->nullable();
+            $table->string('purpose_code',10)->nullable();
+            $table->string('s5total',10)->nullable();
             $table->string('response',25)->nullable();
             $table->timestamps();
         });
