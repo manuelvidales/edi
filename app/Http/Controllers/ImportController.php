@@ -27,7 +27,7 @@ class ImportController extends Controller
         // dd($data997);
 
         //101625442
-        $control_number_sender = '101625437';
+        $control_number_sender = '101625442';
                 //inicia confirmacion de recibido 997
                 $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $control_number_sender)->first();
                 if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
