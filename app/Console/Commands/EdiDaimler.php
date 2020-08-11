@@ -965,9 +965,11 @@ class EdiDaimler extends Command
                     elseif ($i == 9) { $idnew = $id; }
                     else { $idnew = 'null'; }
                         $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
+                        $datafile = "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->control_number_sender."~IEA*1*".$data997->control_number_sender."~";                        
                         //Crear archivo TxT 997
-                        $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->$control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->$control_number_sender."~IEA*1*".$data997->$control_number_sender."~");
-                    if (empty($file997)) {
+                        $file997local = Storage::disk('public')->put('toRyder997/'.$filename.'.txt', $datafile);
+                        $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', $datafile);
+                    if (empty($file997) ||  empty($file997local)) {
                         Log::error('Hubo fallos al crear archivo 997');
                     } else {
                         Log::info('Archivo 997 creado');
@@ -1151,9 +1153,11 @@ class EdiDaimler extends Command
                             elseif ($i == 9) { $idnew = $id; }
                             else { $idnew = 'null'; }
                                 $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
+                                $datafile = "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->control_number_sender."~IEA*1*".$data997->control_number_sender."~";                        
                                 //Crear archivo TxT 997
-                                $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->$control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->$control_number_sender."~IEA*1*".$data997->$control_number_sender."~");
-                            if (empty($file997)) {
+                                $file997local = Storage::disk('public')->put('toRyder997/'.$filename.'.txt', $datafile);
+                                $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', $datafile);
+                            if (empty($file997) ||  empty($file997local)) {
                                 Log::error('Hubo fallos al crear archivo 997');
                             } else {
                                 Log::info('Archivo 997 creado');
@@ -1195,7 +1199,7 @@ class EdiDaimler extends Command
                         else { //si existe actualizar el purpose_code a 01
                             $update990 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_990")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update(['purpose_code' => '01']);
                             //validar update990
-                            if (empty($data990)) { Log::warning('Fallo actualizacion edi_daimler_990 ');}
+                            if (empty($update990)) { Log::warning('Fallo actualizacion edi_daimler_990 ');}
                             else { Log::info('Se actualizo edi_daimler_990 con exito!'); }
                         }
                     //inicia confirmacion de recibido 997
@@ -1215,9 +1219,11 @@ class EdiDaimler extends Command
                             elseif ($i == 9) { $idnew = $id; }
                             else { $idnew = 'null'; }
                                 $filename = trim($data997->id_receiver).'_'.$data997->sender_code.'_997_'.date('Ymd', strtotime($data997->date_time)).'_'.$idnew;
+                                $datafile = "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->control_number_sender."~IEA*1*".$data997->control_number_sender."~";                        
                                 //Crear archivo TxT 997
-                                $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', "ISA*00*          *00*          *".$data997->id_qualifier_receiver."*".$data997->id_receiver."*".$data997->id_qualifier_sender."*".$data997->id_sender."*".date('ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$data997->version_number."*".$data997->control_number."*".$data997->$control_number_sender."*0*P*^~GS*FA*".trim($data997->id_receiver)."*".$data997->sender_code."*".date('Ymd', strtotime($data997->date_time))."*".date('Hi', strtotime($data997->date_time))."*".$idnew."*".$data997->agency_code."*".$data997->industry_identifier."~ST*997*".$idnew."~AK1*SM*".$data997->control_number_sender."~AK9*".$data997->code."*".$idnew."*".$idnew."*".$idnew."~SE*4*".$idnew."~GE*1*".$data997->$control_number_sender."~IEA*1*".$data997->$control_number_sender."~");
-                            if (empty($file997)) {
+                                $file997local = Storage::disk('public')->put('toRyder997/'.$filename.'.txt', $datafile);
+                                $file997 = Storage::disk('ftp')->put('toRyder/'.$filename.'.txt', $datafile);
+                            if (empty($file997) ||  empty($file997local)) {
                                 Log::error('Hubo fallos al crear archivo 997');
                             } else {
                                 Log::info('Archivo 997 creado');
