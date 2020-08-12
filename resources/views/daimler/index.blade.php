@@ -81,16 +81,16 @@
                   <tr>
                       <th></th>
                       <th>archivo</th>
-                      <th>Id orden</th>
+                      <th>Embarque</th>
                       <th>Respuesta</th>
                       <th>Fecha recepcion</th>
                   </tr>
               </thead>
               <tbody>
                   @foreach ($ships as $data)
-                  <?php $file = substr($data->filename, 10); ?>
+                  
                   <tr>
-                    <td><a href="{{url ('getfile/'.$file)}}" ><i class="fas fa-download"></i></a></td>
+                    <td><a href="{{url ($data->filename)}}" class="btn btn-outline-primary btn-sm"><i class="fas fa-download"></i></a></td>
                     <td>
                       <?php $files = "$data->filename"; echo substr($files, 10); ?>
                     </td>
