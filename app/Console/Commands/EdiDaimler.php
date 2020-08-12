@@ -352,6 +352,7 @@ class EdiDaimler extends Command
                 else { Log::info('Archivo Almacenado Mysql'); }
                 // almacenar en BD Sqlsrv segun la cantidad de S5 contenida en txt
                         if ($count == 3) {
+                            $destino = $stop2;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
                                 'id_qualifier_sender' => $id_qualifier_sender,
                                 'id_sender' => $id_sender,
@@ -396,6 +397,7 @@ class EdiDaimler extends Command
                                 'stop2_time' => $stop2_time,
                                 'stop2_time_code' => $stop2_time_code]);
                         } elseif($count == 4) {
+                            $destino = $stop3;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
                                 'id_qualifier_sender' => $id_qualifier_sender,
                                 'id_sender' => $id_sender,
@@ -453,6 +455,7 @@ class EdiDaimler extends Command
                                 'stop3_time' => $stop3_time,
                                 'stop3_time_code' => $stop3_time_code]);
                         } elseif($count == 5) {
+                            $destino = $stop4;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
                                 'id_qualifier_sender' => $id_qualifier_sender,
                                 'id_sender' => $id_sender,
@@ -523,6 +526,7 @@ class EdiDaimler extends Command
                                 'stop4_time' => $stop4_time,
                                 'stop4_time_code' => $stop4_time_code]);
                         } elseif($count == 6) {
+                            $destino = $stop5;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
                                 'id_qualifier_sender' => $id_qualifier_sender,
                                 'id_sender' => $id_sender,
@@ -606,6 +610,7 @@ class EdiDaimler extends Command
                                 'stop5_time' => $stop5_time,
                                 'stop5_time_code' => $stop5_time_code]);
                         } elseif($count == 7) {
+                            $destino = $stop6;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
                                 'id_qualifier_sender' => $id_qualifier_sender,
                                 'id_sender' => $id_sender,
@@ -702,6 +707,7 @@ class EdiDaimler extends Command
                                 'stop6_time' => $stop6_time,
                                 'stop6_time_code' => $stop6_time_code]);
                         } elseif($count == 8) {
+                            $destino = $stop7;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
                                 'id_qualifier_sender' => $id_qualifier_sender,
                                 'id_sender' => $id_sender,
@@ -811,6 +817,7 @@ class EdiDaimler extends Command
                                 'stop7_time' => $stop7_time,
                                 'stop7_time_code' => $stop7_time_code]);
                         } elseif($count == 9) {
+                            $destino = $stop8;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
                                 'id_qualifier_sender' => $id_qualifier_sender,
                                 'id_sender' => $id_sender,
@@ -941,7 +948,7 @@ class EdiDaimler extends Command
                 $code = '0'; //es para usar la plantilla correo con markdown
                 $id = $shipment_identification_number;
                 $origen = $stop1;
-                $destino = $stop2;
+                //$destino = $stop2;
                 $fecha = date('d/M/Y', strtotime($stop1_date));
                 $hora = date('H:i', strtotime($stop1_time));
                 $email = env('MAIL_SEND_DAIMLER');
@@ -988,6 +995,7 @@ class EdiDaimler extends Command
                 else {
                 //actualizar fechas SqlSrv tabla edi_daimler_204 txt204
                     if ($count == 3) {
+                        $destino = $stop2;
                         $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update([
                             'purpose_code' => '05',
                             'stop1_date' => $stop1_date,
@@ -997,6 +1005,7 @@ class EdiDaimler extends Command
                             'stop2_time' => $stop2_time,
                             'stop2_time_code' => $stop2_time_code]);
                     } elseif($count == 4) {
+                        $destino = $stop3;
                         $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update([
                             'purpose_code' => '05',
                             'stop1_date' => $stop1_date,
@@ -1009,6 +1018,7 @@ class EdiDaimler extends Command
                             'stop3_time' => $stop3_time,
                             'stop3_time_code' => $stop3_time_code]);                        
                     } elseif($count == 5) {
+                        $destino = $stop4;
                         $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update([
                             'purpose_code' => '05',
                             'stop1_date' => $stop1_date,
@@ -1024,6 +1034,7 @@ class EdiDaimler extends Command
                             'stop4_time' => $stop4_time,
                             'stop4_time_code' => $stop4_time_code]);
                     } elseif($count == 6) {
+                        $destino = $stop5;
                         $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update([
                             'purpose_code' => '05',
                             'stop1_date' => $stop1_date,
@@ -1042,6 +1053,7 @@ class EdiDaimler extends Command
                             'stop5_time' => $stop5_time,
                             'stop5_time_code' => $stop5_time_code]);
                     } elseif($count == 7) {
+                        $destino = $stop6;
                         $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update([
                             'purpose_code' => '05',
                             'stop1_date' => $stop1_date,
@@ -1063,6 +1075,7 @@ class EdiDaimler extends Command
                             'stop6_time' => $stop6_time,
                             'stop6_time_code' => $stop6_time_code]);
                     } elseif($count == 8) {
+                        $destino = $stop7;
                         $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update([
                             'purpose_code' => '05',
                             'stop1_date' => $stop1_date,
@@ -1087,6 +1100,7 @@ class EdiDaimler extends Command
                             'stop7_time' => $stop7_time,
                             'stop7_time_code' => $stop7_time_code]);
                     } elseif($count == 9) {
+                        $destino = $stop8;
                         $update05 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_identification_number] ])->update([
                             'purpose_code' => '05',
                             'stop1_date' => $stop1_date,
@@ -1127,8 +1141,8 @@ class EdiDaimler extends Command
                     //Notificar por correo
                         $code = '5';
                         $id = $val->shipment_identification_number;
-                        $origen = $val->origin;
-                        $destino = $val->stop1;
+                        $origen = $stop1;
+                        //$destino = $destino;
                         $fecha = date('d/M/Y', strtotime($stop1_date));
                         $hora = date('H:i', strtotime($stop1_time));
                         $email = env('MAIL_SEND_DAIMLER');
@@ -1185,8 +1199,8 @@ class EdiDaimler extends Command
                     //Notificar por correo
                         $code = '1';
                         $id = $val01->shipment_identification_number;
-                        $origen = $val01->origin;
-                        $destino = $val01->stop1;
+                        $origen = $val01->stop1;
+                        $destino = $val01->stop2;
                         $fecha = date('d/M/Y', strtotime($stop1_date));
                         $hora = date('H:i', strtotime($stop1_time));
                         $email = env('MAIL_SEND_DAIMLER');
