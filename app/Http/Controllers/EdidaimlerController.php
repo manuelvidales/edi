@@ -39,7 +39,10 @@ class EdidaimlerController extends Controller
 
     public function filesdown($file)
     {
-        return response()->download(storage_path("app/public/{$file}"));
+        //return Storage::disk('public')->download($file);
+        //return response()->download(storage_path('app/public/'.$file));
+        $down = Storage::disk('public')->get($file);
+        return response()->download($down);
     }
     
     public function show($id)
