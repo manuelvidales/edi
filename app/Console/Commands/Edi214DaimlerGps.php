@@ -81,7 +81,7 @@ class Edi214DaimlerGps extends Command
                     elseif ($i == 9) { $idnew = $id; }
                     else { $idnew = 'null'; }
                     $name214gps = $data->alpha_code.'_'.$data->sender_code.'_214_'.date('Ymd', strtotime($data->date_time)).'_'.$idnew;
-                    $ISA = "ISA*00*          *00*          *".$data->id_qualifier_receiver."*".$data->id_receiver."*".$data->id_qualifier_sender."*".$data->id_sender."*".date('ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->version_number."*".$data->control_number."*".$idnew."*0*T*^";
+                    $ISA = "ISA*00*          *00*          *".$data->id_qualifier_receiver."*".$data->id_receiver."*".$data->id_qualifier_sender."*".$data->id_sender."*".date('ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->version_number."*".$data->control_number."*".$idnew."*0*P*^";
                     $GS = "GS*QM*".trim($data->id_receiver)."*".$data->sender_code."  *".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->id_incremental."*".$data->agency_code."*".$data->industry_identifier;
                     $ST = "ST*214*0001";
                     $B10 = "B10*".$data->reference_identification."*".$data->shipment_identification_number."*".$data->alpha_code;
