@@ -89,7 +89,7 @@
               <tbody>
                   @foreach ($ships as $data)  
                   <tr>
-                    <td><a href="{{$data->filename}}" ><i class="fas fa-download"></i></a></td>
+                    <td><a href="{{url ('edidaimler/'.$data->filename)}}" ><i class="fas fa-download"></i></a></td>
                     <td>
                       <?php $files = "$data->filename"; echo substr($files, 10); ?>
                     </td>
