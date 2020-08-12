@@ -37,9 +37,13 @@ class EdidaimlerController extends Controller
         return \view('daimler.index', compact('ships','filesnew','filessend'));
     }
 
-    public function filesdown($file)
+    public function getfile($file)
     {
-        return response()->download(storage_path('app/public/'.$file));
+       
+        $file= storage_path().'/app/public/fromRyder/'.$file;
+
+        return response()->download($file);
+
     }
     
     public function show($id)
