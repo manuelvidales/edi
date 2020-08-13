@@ -15,6 +15,7 @@ class CreateEdidaimlersTable extends Migration
     {
         Schema::create('edidaimlers', function (Blueprint $table) {
             $table->id();
+            $table->string('code',10)->nullable();
             $table->string('filename',121)->nullable();
             $table->string('shipment_id',25)->nullable();
             $table->string('purpose_code',10)->nullable();
