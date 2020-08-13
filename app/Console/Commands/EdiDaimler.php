@@ -956,7 +956,7 @@ class EdiDaimler extends Command
                 Mail::to($email)->cc($ccmails)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
                     Log::info('Correo enviado!');
                 //inicia confirmacion de recibido 997
-                $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $control_number_sender)->first();
+                $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('shipment_identification_number', '=', $shipment_identification_number)->first();
                 if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
                 else {
                     $id = $data997->id_incremental;
@@ -1151,7 +1151,7 @@ class EdiDaimler extends Command
                             Log::info('Correo de Actualizacion fue enviado!!');
                         }
                     //inicia confirmacion de recibido 997
-                    $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $control_number_sender)->first();
+                    $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('shipment_identification_number', '=', $shipment_identification_number)->first();
                     if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
                         else {
                             $id = $data997->id_incremental;
@@ -1217,7 +1217,7 @@ class EdiDaimler extends Command
                             else { Log::info('Se actualizo edi_daimler_990 con exito!'); }
                         }
                     //inicia confirmacion de recibido 997
-                        $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('control_number_sender', '=', $control_number_sender)->first();
+                        $data997 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_997_send")->where('shipment_identification_number', '=', $shipment_identification_number)->first();
                         if (empty($data997)) { Log::critical('No existen datos edi_daimler_997_send'); }
                         else {
                             $id = $data997->id_incremental;
