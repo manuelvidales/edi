@@ -39,7 +39,7 @@ class EdidaimlerController extends Controller
 
     public function getfile($file)
     {
-       
+
         $file= storage_path().'/app/public/fromRyder/'.$file;
 
         return response()->download($file);
@@ -48,7 +48,7 @@ class EdidaimlerController extends Controller
     
     public function show($id)
     {
-        $valida = edidaimler::where('shipment_id', $id)->where('purpose_code', '00')->Orwhere('purpose_code', '05')->first();
+        $valida = edidaimler::where('shipment_id', $id)->where('purpose_code', '00')->first();
         if (empty($valida)) {
             return \view('daimler.alert'); //no continuar
         } else {
