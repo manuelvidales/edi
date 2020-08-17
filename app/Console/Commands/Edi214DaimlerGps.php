@@ -56,12 +56,8 @@ class Edi214DaimlerGps extends Command
                         if (count($webservice) == 4) {
                             $listjson = $webservice['DeviceList'];
                             $datajson = $listjson[0]['EventData'];
-                            $Latitud = substr($datajson[0]['GPSPoint_lat'], 0, -1);
-                            $Long = $datajson[0]['GPSPoint_lon'];
-                            $charcount = strlen($Long); // contar los caracteres
-                            if ($charcount == 10) { $Longuitud = substr($datajson[0]['GPSPoint_lon'], 1,-2); }
-                            elseif ($charcount == 9) { $Longuitud = substr($datajson[0]['GPSPoint_lon'], 1,-1); }
-                            else { $Longuitud = substr($datajson[0]['GPSPoint_lon'], 1,7); }
+                            $Latitud = substr($datajson[0]['GPSPoint_lat'], 0, 7);
+                            $Longuitud = substr($datajson[0]['GPSPoint_lon'], 1, 7);
                         //Actualizar campos de gps en tabla sqlsrv
                             $updategps = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longuitud, 'latitude'=> $Latitud]);
                                 if (empty($updategps)) {
