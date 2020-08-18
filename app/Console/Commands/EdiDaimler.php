@@ -395,7 +395,8 @@ class EdiDaimler extends Command
                                 'stop2_country' => $stop2_country,
                                 'stop2_date' => $stop2_date,
                                 'stop2_time' => $stop2_time,
-                                'stop2_time_code' => $stop2_time_code]);
+                                'stop2_time_code' => $stop2_time_code,
+                                'stops' => $count-1]);
                         } elseif($count == 4) {
                             $destino = $stop3;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
@@ -453,7 +454,8 @@ class EdiDaimler extends Command
                                 'stop3_country' => $stop3_country,
                                 'stop3_date' => $stop3_date,
                                 'stop3_time' => $stop3_time,
-                                'stop3_time_code' => $stop3_time_code]);
+                                'stop3_time_code' => $stop3_time_code,
+                                'stops' => $count-1]);
                         } elseif($count == 5) {
                             $destino = $stop4;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
@@ -524,7 +526,8 @@ class EdiDaimler extends Command
                                 'stop4_country' => $stop4_country,
                                 'stop4_date' => $stop4_date,
                                 'stop4_time' => $stop4_time,
-                                'stop4_time_code' => $stop4_time_code]);
+                                'stop4_time_code' => $stop4_time_code,
+                                'stops' => $count-1]);
                         } elseif($count == 6) {
                             $destino = $stop5;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
@@ -608,7 +611,8 @@ class EdiDaimler extends Command
                                 'stop5_country' => $stop5_country,
                                 'stop5_date' => $stop5_date,
                                 'stop5_time' => $stop5_time,
-                                'stop5_time_code' => $stop5_time_code]);
+                                'stop5_time_code' => $stop5_time_code,
+                                'stops' => $count-1]);
                         } elseif($count == 7) {
                             $destino = $stop6;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
@@ -705,7 +709,8 @@ class EdiDaimler extends Command
                                 'stop6_country' => $stop6_country,
                                 'stop6_date' => $stop6_date,
                                 'stop6_time' => $stop6_time,
-                                'stop6_time_code' => $stop6_time_code]);
+                                'stop6_time_code' => $stop6_time_code,
+                                'stops' => $count-1]);
                         } elseif($count == 8) {
                             $destino = $stop7;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
@@ -815,7 +820,8 @@ class EdiDaimler extends Command
                                 'stop7_country' => $stop7_country,
                                 'stop7_date' => $stop7_date,
                                 'stop7_time' => $stop7_time,
-                                'stop7_time_code' => $stop7_time_code]);
+                                'stop7_time_code' => $stop7_time_code,
+                                'stops' => $count-1]);
                         } elseif($count == 9) {
                             $destino = $stop8;
                             $save204 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->insert([
@@ -938,7 +944,8 @@ class EdiDaimler extends Command
                                 'stop8_country' => $stop8_country,
                                 'stop8_date' => $stop8_date,
                                 'stop8_time' => $stop8_time,
-                                'stop8_time_code' => $stop8_time_code]);
+                                'stop8_time_code' => $stop8_time_code,
+                                'stops' => $count-1]);
                         }
                         else {
                             Log::error('No hubo coincidencias en Array Count(3,4,5,6,7,8)');
