@@ -83,7 +83,7 @@
               <thead class="thead-light">
                   <tr>
                       <th>Archivo</th>
-                      <th>Tender</th>
+                      <th>Id tender</th>
                       <th>Tipo</th>
                       <th>Propósito</th>
                       <th>Confirmacion</th>
@@ -94,7 +94,7 @@
                   @foreach ($files204 as $data)
 
                   <tr>
-                    <td><i class="fas fa-download"></i></td>
+                    <td><a href="{{ url('getfile/'.$data->id) }}"><i class="fas fa-download"></i></a></td>
                     <td>{{$data->shipment_id}}</td>
                     <td>{{$data->code}}</td>
                     
