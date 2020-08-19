@@ -402,4 +402,16 @@ class edidaimler extends Model
             }
         }
     }
+
+    public function update990($shipment_id) {
+        //buscamos en tabla 990 si existe actualizar(si respodieron)
+        $data990 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_990")->where('shipment_identification_number', '=', $shipment_id)->first();
+        if (empty($data990)) { }//si es null no hacer nada
+        else { //si existe actualizar el purpose_code a 01
+            $update990 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_990")->where([ ['shipment_identification_number', '=', $shipment_id] ])->update(['purpose_code' => '01']);
+            //validar update990
+            if (empty($update990)) { Log::warning('Fallo actualizacion 01 edi_daimler_990 ');}
+            else { Log::info('Se actualizo edi_daimler_990 01 con exito!'); }
+        }
+    }
 }
