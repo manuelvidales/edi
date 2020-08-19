@@ -92,8 +92,10 @@
                       @if ($data->purpose_code == '00')
                       <td> Nueva orden </td>
                       <td>
-                        @if ($data->response == 'A' || $data->response == 'D')
-                          <span class="badge badge-pill badge-success">Realizada</span>
+                        @if ($data->response == 'A')
+                          <span class="badge badge-pill badge-success">Realizada <i class="fas fa-check fa-xs"></i></span>
+                        @elseif ($data->response == 'D')
+                          <span class="badge badge-pill badge-success">Realizada <i class="fas fa-times fa-xs"></i></span>
                         @else
                           <span class="badge badge-pill badge-light">Pendiente</span>
                         @endif
