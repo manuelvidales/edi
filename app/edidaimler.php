@@ -295,4 +295,41 @@ class edidaimler extends Model
         }
     }
 
+    public function code01($fileid, $shipment_id, $filename) {
+        $valida01 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where('shipment_identification_number', '=', $shipment_id)->first();
+        if (empty($valida01)) {
+            Log::warning('No existen datos edi_daimler_204 con id: '.$shipment_id);
+        } else {
+                //almacenar en mysql
+                $data204 = EdiDaimler::findOrFail($fileid);
+                $data204->status = '2';
+                if ($data204->save()) {
+                Log::info('Archivo actualizado Mysql');
+                $update01 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where([ ['shipment_identification_number', '=', $shipment_id] ])->update(['purpose_code' => '01']);
+                if (empty($update01)) { 
+                    Log::critical('Fallo actualizar Sqlsrv purpose:01 tabla edi_daimler_204');
+                } else {
+                    Log::info('pedido actualizado purpose:01');
+
+                    $code = '1'; //para plantilla correo con markdown
+                    $origen = $valida01->stop1;
+                    $destino = $valida01->stop2;
+                    $fecha = date('d/M/Y', strtotime($valida01->stop1_date));
+                    $hora = date('H:i', strtotime($valida01->stop1_time));
+
+                    //para envio de notificacion
+                    $code05 = new edidaimler();
+                    $code05->Notificacion($code, $shipment_id, $origen, $destino, $fecha, $hora);
+
+                    // para confirmacion con el txt 997
+                    $txt997 = new edidaimler();
+                    $txt997->create997($shipment_id, $fileid, $filename);
+
+                    // update tabla 990 si existe el tender
+                    $update990 = new edidaimler();
+                    $update990->update990($shipment_id);
+                }
+            } //mysql
+        }
+    }
 }
