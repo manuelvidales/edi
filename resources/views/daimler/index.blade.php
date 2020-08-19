@@ -32,26 +32,26 @@
 
   <div class="card text-white text-center bg-dark">
     <div class="row justify-content-md-center">
-      <div class="col-2"><i class="fas fa-file-upload fa-5x"></i></div>
+      <div class="col-2"><i class="fas fa-hourglass-half fa-5x"></i></div>
       <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-          {{ $confirmados }}
+          {{ $fileprocess }}
       </span></h2></div>
     </div>
     <div class="card-body">
-      <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion confirmadas</button></h5>
+      <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
       <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
     </div>
   </div>
 
   <div class="card text-white text-center bg-dark">
     <div class="row justify-content-md-center">
-      <div class="col-2"><i class="fas fa-file-alt fa-5x"></i></div>
-      <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">X
-        
+      <div class="col-2"><i class="fas fa-exclamation-triangle fa-5x"></i></div>
+      <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+        {{ $warning }}
       </span></h2></div>
     </div>
     <div class="card-body">
-      <h5 class="card-title"><button type="button" class="btn btn-outline-light">Ordenes confirmadas</button> </h5>
+      <h5 class="card-title"><button type="button" class="btn btn-outline-light">Advertencias</button> </h5>
       <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
     </div>
   </div>
@@ -82,7 +82,7 @@
                   </tr>
               </thead>
               <tbody>
-                  @foreach ($ships as $data)
+                  @foreach ($files204 as $data)
                   
                   <tr>
                     <td><i class="fas fa-download"></i></td>
