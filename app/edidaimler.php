@@ -332,4 +332,22 @@ class edidaimler extends Model
             } //mysql
         }
     }
+
+    public function Notificacion($code, $shipment_id, $destino, $origen, $fecha, $hora) {
+        //Notificar por correo
+        $id = $shipment_id;
+        $email = env('MAIL_SEND_DAIMLER');
+        $ccmails = env('CCMAIL_SEND_DAIMLER');
+        Mail::to($email)->cc($ccmails)->send(new NotificaDaimler($code, $id, $origen, $destino, $fecha, $hora));
+            // informar cual fue la notificacion
+            if ($code == 5) {
+                Log::info('Correo de Actualizacion enviado!!');
+            } elseif($code == 1) {
+                Log::info('Correo de Cancelacion enviado!!');
+            } else {
+                Log::info('Correo nuevo tender enviado!');
+            }
+    }
+
+    
 }
