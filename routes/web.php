@@ -26,7 +26,7 @@ Route::post('import/show', 'ImportController@show')->name('import.filetxt');
 Route::get('edidaimler/index', 'EdidaimlerController@index')->name('edidaimler');
 Route::get('edidaimler/{id}', 'EdidaimlerController@show')->name('edidaimler.id');
 Route::post('/edidaimler/respuesta', 'EdidaimlerController@respuesta')->name('respuesta');
-Route::get('fromRyder/{file}', 'EdidaimlerController@getfile')->name('getfile');
+Route::get('getfile/{file}', 'EdidaimlerController@getfile')->name('getfile');
 //visteon
 Route::get('clientes', 'ClientesController@index')->name('clientes');
 Route::post('clientes/visteon', 'ClientesController@store')->name('visteon.clientes');
