@@ -17,7 +17,11 @@
     </div>
   </div>
 
-  <div class="card text-white text-center bg-dark">
+  @if ( $filesnew == 0)
+  <div class="card text-white text-center bg-dark">    
+  @else
+  <div class="card text-success text-center bg-dark">
+  @endif
     <div class="row justify-content-md-center">
       <div class="col-2"><i class="fas fa-file-download fa-5x"></i></div>
       <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
@@ -43,7 +47,11 @@
     </div>
   </div>
 
-  <div class="card text-white text-center bg-dark">
+  @if ($warning == 0)
+  <div class="card text-white text-center bg-dark">    
+  @else
+  <div class="card text-warning text-center bg-dark">
+  @endif
     <div class="row justify-content-md-center">
       <div class="col-2"><i class="fas fa-exclamation-triangle fa-5x"></i></div>
       <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
@@ -56,6 +64,7 @@
     </div>
   </div>
   
+
 </div>
 </div>
 
@@ -83,7 +92,7 @@
               </thead>
               <tbody>
                   @foreach ($files204 as $data)
-                  
+
                   <tr>
                     <td><i class="fas fa-download"></i></td>
                     <td>{{$data->shipment_id}}</td>
@@ -97,7 +106,7 @@
                         @elseif ($data->response == 'D')
                           <span class="badge badge-pill badge-success">Realizada <i class="fas fa-times fa-xs"></i></span>
                         @else
-                          <span class="badge badge-pill badge-light">Pendiente</span>
+                          <span class="badge badge-pill badge-light">Pendiente <i class="fas fa-exclamation-triangle fa-xs"></i></span>
                         @endif
                       </td>
 
@@ -113,7 +122,7 @@
                       @endif
 
 
-                    <td>{{$data->created_at}}</tr>
+                    <td>{{ date ('d-m-Y H:s', strtotime($data->created_at))}}</tr>
                     @endforeach
               </tbody>
             </table>
