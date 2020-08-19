@@ -30,49 +30,19 @@ class EdidaimlerController extends Controller
 
     public function getfile($file)
     {
-        $path_file = 'Daimler/fromRyder/';
-        $path_process = 'Daimler/fromRyder_process/';
-        $path_store = 'Daimler/fromRyder_arch/';
+        $path_filesnew = 'app/Daimler/fromRyder/';
+        $path_process = 'app/Daimler/fromRyder_process/';
+        $path_store = 'app/Daimler/fromRyder_arch/';
 
         $findtxt = EdiDaimler::findOrFail($file);
 
-        //dd($findtxt->status);
-        $read_file = Storage::disk('local')->get($path_process.$findtxt->filename);
-        $array = explode("S5",$read_file);
-
-        dd($array);
-
-
-        /* testing */
-
-
-        //$file= storage_path().'storage/app/Daimler/fromRyder_arch/'.$findtxt->filename;
-/*
         if ($findtxt->status == 0) {
-            
-            $read_file = Storage::disk('local')->get($path_process.$findtxt->filename);
-
-            //$file = Storage::download('file.jpg');
-
-
-        } else {
-            # code...
+            return response()->download(storage_path($path_store.$findtxt->filename));
+        } elseif ($findtxt->status == 2 || $findtxt->status == 3) {
+            return response()->download(storage_path($path_process.$findtxt->filename));
+        } elseif ($findtxt->status == 1 ){
+            return response()->download(storage_path($path_filesnew.$findtxt->filename));
         }
-*/ 
-
-        //leer
-        //$read_file = Storage::disk('local')->get($path_process.$filename);//lectura local del archivo 204
-
-
-
-
-
-        //descargar
-        // $file= storage_path().'/app/public/fromRyder/'.$file;
-        // return response()->download($file);
-
-       // return response($file);
-
 
     }
     
@@ -84,9 +54,6 @@ class EdidaimlerController extends Controller
         } else {
             if (empty($valida->response)) { //valor null
                 $sql = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where('shipment_identification_number', '=', $id)->first();
-
-            //dd($sql);
-
                     if($sql->stop8 ==! null){ //no es null
                         $last = $sql->stop8;
                         $addres_last = $sql->stop8_addres;
@@ -173,16 +140,6 @@ class EdidaimlerController extends Controller
                     'reservation_action_code' => $Request->response,
                     'reference_identification_qualifier' => $datos->reference_identification_qualifier,
                     'reference_identification' => $datos->reference_identification,
-                    // no se guardaron
-                        //'weight_units_load' => $datos->weight_units_load,
-                        //'weight_load' => $datos->weight_load,
-                        //'quantity_load' => $datos->quantity_load,
-                    //esta en G62 solo guardamos fecha, hora y code
-                        // 'load_date_qualifier_2' => $datos->load_date_qualifier_2,
-                        // 'load_date_2' => $datos->load_date_2,
-                        // 'load_time_qualifier_2' => $datos->load_time_qualifier_2,
-                        // 'load_time_2' => $datos->load_time_2,
-                        // 'load_time_code_2' => $datos->load_time_code_2,
                     'id_qualifier_sender' => $datos->id_qualifier_sender,
                     'id_sender' => $datos->id_sender,
                     'id_qualifier_receiver' => $datos->id_qualifier_receiver,
@@ -193,14 +150,7 @@ class EdidaimlerController extends Controller
                     'agency_code' => $datos->agency_code,
                     'industry_identifier' => $datos->industry_identifier,
                     'date_time' => $today->format('Ymd H:i:s.000'),
-                // no se guardaron 
-                    // 'volume_unit_qualifier_load' => '',
-                    // 'volume_load' => '',
-                    'tracking_number_origin' => $datos->stop1_tracking_number,
-                    // esta en L11[2] solo se guarda el L11[1]
-                    //'id_tracking_number' => $datos->id_tracking_number,
-                    'purpose_code' => $datos->purpose_code,
-                    'tracking_number_stop1' => $datos->stop2_tracking_number //varia los stop debera ser el ultimo se deja el stop2
+                    'purpose_code' => $datos->purpose_code
                 ]);
                 if (empty($update990)) { Log::critical('Fallo al actualizar tabla: edi_daimler_990'); }
                 else {
