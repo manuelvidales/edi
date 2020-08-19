@@ -8,9 +8,7 @@
     <div class="row justify-content-md-center">
       <div class="col-3"><i class="fas fa-inbox fa-5x"></i></div>
       <div class="col-3"><h1 class="font-weight-bold"><span class="badge badge-primary">
-        @php
-             echo count($ships);
-        @endphp
+          {{ $filestore }}
       </span></h1></div>
     </div>
     <div class="card-body">
@@ -23,9 +21,7 @@
     <div class="row justify-content-md-center">
       <div class="col-2"><i class="fas fa-file-download fa-5x"></i></div>
       <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-        @php
-        echo count($filesnew);
-        @endphp
+          {{ $filesnew }}
       </span></h2></div>
     </div>
     <div class="card-body">
@@ -38,9 +34,7 @@
     <div class="row justify-content-md-center">
       <div class="col-2"><i class="fas fa-file-upload fa-5x"></i></div>
       <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-        @php
-        echo count($filessend);
-        @endphp  
+          {{ $confirmados }}
       </span></h2></div>
     </div>
     <div class="card-body">
@@ -79,10 +73,11 @@
             <table class="table table-sm table-striped table-hover" id="pedidos">
               <thead class="thead-light">
                   <tr>
-                      <th></th>
-                      <th>archivo</th>
-                      <th>Embarque</th>
-                      <th>Respuesta</th>
+                      <th>Archivo</th>
+                      <th>Tender</th>
+                      <th>Tipo</th>
+                      <th>Propósito</th>
+                      <th>Confirmacion</th>
                       <th>Fecha recepcion</th>
                   </tr>
               </thead>
@@ -90,18 +85,32 @@
                   @foreach ($ships as $data)
                   
                   <tr>
-                    <td><a href="{{url ($data->filename)}}" class="btn btn-outline-primary btn-sm"><i class="fas fa-download"></i></a></td>
-                    <td>
-                      <?php $files = "$data->filename"; echo substr($files, 10); ?>
-                    </td>
+                    <td><i class="fas fa-download"></i></td>
                     <td>{{$data->shipment_id}}</td>
-                    @if ( $data->response == 'A')
-                    <td><span class="badge badge-pill badge-success">aceptada</span></td>
-                    @elseif( $data->response == 'D')
-                    <td><span class="badge badge-pill badge-danger">rechazada</span></td>
-                    @else
-                    <td><span class="badge badge-pill badge-secondary">sin respuesta</span></td>
-                    @endif
+                    <td>{{$data->code}}</td>
+                    
+                      @if ($data->purpose_code == '00')
+                      <td> Nueva orden </td>
+                      <td>
+                        @if ($data->response == 'A' || $data->response == 'D')
+                          <span class="badge badge-pill badge-success">Realizada</span>
+                        @else
+                          <span class="badge badge-pill badge-light">Pendiente</span>
+                        @endif
+                      </td>
+
+                      @elseif(($data->purpose_code == '05'))
+                      <td> Actualizar orden </td>
+                      <td> no aplica </td>
+                      @elseif(($data->purpose_code == '01'))
+                      <td> Cancelar orden </td>
+                      <td> no aplica </td>
+                      @else
+                      <td> sin procesar </td>
+                      <td> sin procesar </td>
+                      @endif
+
+
                     <td>{{$data->created_at}}</tr>
                     @endforeach
               </tbody>
