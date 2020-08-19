@@ -92,7 +92,7 @@ class EdiDaimlerFtp extends Command
                         if (empty($buscar)) {
                             Log::info('Archivo nuevo: '.$filename);
                             // Se procede a descargar archivo
-                            $local = 'public/storage/fromRyderTest/'.$filename; //ruta para almacenar
+                            $local = 'storage/app/Daimler/fromRyder/'.$filename; //ruta para almacenar
                                 if (ftp_get($conn_id, $local, 'fromRyder/'.$filename, FTP_BINARY)) {
                                     Log::info('Descarga exitosa: '.$filename);
                                         //almacenar info en mysql
