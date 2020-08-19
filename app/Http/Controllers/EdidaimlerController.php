@@ -12,37 +12,66 @@ class EdidaimlerController extends Controller
 {
     public function index()
     {
-        $ftp_server = env('FTP_HOST');
-        $ftp_user = env('FTP_USERNAME');
-        $ftp_pass = env('FTP_PASSWORD');
-        // establecer una conexión o finalizarla
-        $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server");
-        $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
-        //validar conexion FTP        
+        $recepcion = Storage::disk('local')->files('Daimler/fromRyder/');
+        $enproceso = Storage::disk('local')->files('Daimler/fromRyder_process/');
+        $almacen = Storage::disk('local')->files('Daimler/fromRyder_arch/');
+        $confirmacion = Storage::disk('local')->files('Daimler/toRyder997/');
 
-        if ( @$login ) {
-        // Obtener los archivos del directorio ftp
-            $filesnew = ftp_nlist($conn_id, 'fromRyder');
-            $filessend = ftp_nlist($conn_id, 'toRyder_arch');
-        }else{
-            Log::warning('Error en conexion ftp');
-            $filesnew = '0';
-            $filessend = '0';
-        }
+        $filesnew = count($recepcion);
+        $fileprocess = count($enproceso);
+        $filestore = count($almacen);
+        $confirmados = count($confirmacion);
         
-        $ships = DB::table('edidaimlers')->latest()->get();
-        
-        ftp_close($conn_id); // cerrar la conexión ftp
+        $ships = DB::table('edidaimlers')->where('code', '204')->latest()->get();
 
-        return \view('daimler.index', compact('ships','filesnew','filessend'));
+        return \view('daimler.index', compact('ships','filesnew','fileprocess', 'filestore', 'confirmados' ));
     }
 
     public function getfile($file)
     {
+        $path_file = 'Daimler/fromRyder/';
+        $path_process = 'Daimler/fromRyder_process/';
+        $path_store = 'Daimler/fromRyder_arch/';
 
-        $file= storage_path().'/app/public/fromRyder/'.$file;
+        $findtxt = EdiDaimler::findOrFail($file);
 
-        return response()->download($file);
+        //dd($findtxt->status);
+        $read_file = Storage::disk('local')->get($path_process.$findtxt->filename);
+        $array = explode("S5",$read_file);
+
+        dd($array);
+
+
+        /* testing */
+
+
+        //$file= storage_path().'storage/app/Daimler/fromRyder_arch/'.$findtxt->filename;
+/*
+        if ($findtxt->status == 0) {
+            
+            $read_file = Storage::disk('local')->get($path_process.$findtxt->filename);
+
+            //$file = Storage::download('file.jpg');
+
+
+        } else {
+            # code...
+        }
+*/ 
+
+        //leer
+        //$read_file = Storage::disk('local')->get($path_process.$filename);//lectura local del archivo 204
+
+
+
+
+
+        //descargar
+        // $file= storage_path().'/app/public/fromRyder/'.$file;
+        // return response()->download($file);
+
+       // return response($file);
+
 
     }
     
