@@ -14,7 +14,7 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         Commands\EdiDaimlerFtp::class,
-        Commands\EdiDaimler::class,
+        Commands\EdiDaimlerPro::class,
         Commands\Edi214Daimler::class,
         Commands\Edi214DaimlerGps::class,
         Commands\EdiVisteon::class,
