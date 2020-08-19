@@ -31,7 +31,7 @@ class Kernel extends ConsoleKernel
     {
         $schedule->command('edi:daimlerFtp')->everyMinute();
         $schedule->command('edi:daimler')->everyFourMinutes();
-        //$schedule->command('edi214:daimler')->everyMinute();
+        $schedule->command('edi214:daimler')->everyMinute();
         $schedule->command('edi214gps:daimler')->hourly();
         $schedule->command('edi210:visteon')->everyMinute();
         $schedule->command('log:laravel')->daily();
