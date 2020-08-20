@@ -1224,7 +1224,7 @@ class EdiDaimlerPro extends Command
                 if (count($status2) == 0) { //No hay ninguno para procesar
                 } else {
                     foreach ($status2 as $data) {
-                        Log::info('Archivo en proceso: '.$data->shipment_id); //mostrar los procesados
+                        Log::info('Archivo en proceso: '.$data->id); //mostrar los procesados
                     }
                 }
             } else {
