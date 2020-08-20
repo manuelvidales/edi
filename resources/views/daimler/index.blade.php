@@ -99,26 +99,25 @@
                     <td>{{$data->code}}</td>
                     
                       @if ($data->purpose_code == '00')
-                      <td> Nueva orden </td>
-                      <td>
-                        @if ($data->response == 'A')
-                          <span class="badge badge-pill badge-success">Realizada <i class="fas fa-check fa-xs"></i></span>
-                        @elseif ($data->response == 'D')
-                          <span class="badge badge-pill badge-success">Realizada <i class="fas fa-times fa-xs"></i></span>
-                        @else
-                          <span class="badge badge-pill badge-light">Pendiente <i class="fas fa-exclamation-triangle fa-xs"></i></span>
-                        @endif
-                      </td>
-
+                        <td> Nueva orden </td>
+                        <td>
+                          @if ($data->response == 'A')
+                            <span class="badge badge-pill badge-success">Realizada <i class="fas fa-check fa-xs"></i></span>
+                          @elseif ($data->response == 'D')
+                            <span class="badge badge-pill badge-success">Realizada <i class="fas fa-times fa-xs"></i></span>
+                          @else
+                            <span class="badge badge-pill badge-light">Pendiente <i class="fas fa-exclamation-triangle fa-xs"></i></span>
+                          @endif
+                        </td>
                       @elseif(($data->purpose_code == '05'))
-                      <td> Actualizar orden </td>
-                      <td> no aplica </td>
+                        <td> Actualizar orden </td>
+                        <td> no aplica </td>
                       @elseif(($data->purpose_code == '01'))
-                      <td> Cancelar orden </td>
-                      <td> no aplica </td>
+                        <td> Cancelar orden </td>
+                        <td> no aplica </td>
                       @else
-                      <td> sin procesar </td>
-                      <td> sin procesar </td>
+                        <td> sin procesar </td>
+                        <td> sin procesar </td>
                       @endif
 
 
