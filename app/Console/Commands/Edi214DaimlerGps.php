@@ -89,6 +89,7 @@ class Edi214DaimlerGps extends Command
                                 }
                             //Actualizar campos de gps en tabla sqlsrv
                             $updategps = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longitud, 'latitude'=> $Latitud]);
+                                //validar el update
                                 if (empty($updategps)) {
                                     Log::warning('Fallo actualizacion tabla edi_daimler_214_gps');
                                 } else {
@@ -108,7 +109,7 @@ class Edi214DaimlerGps extends Command
                             else { $idnew = 'null'; }
                             //nombre para el archivo 214
                             $name214gps = $data->alpha_code.'_'.$data->sender_code.'_214_'.date('Ymd', strtotime($data->date_time)).'_'.$idnew;
-                            //preparacion campos para el txt
+                            //preparacion campos para el archivo
                             $ISA = "ISA*00*          *00*          *".$data->id_qualifier_receiver."*".$data->id_receiver."*".$data->id_qualifier_sender."*".$data->id_sender."*".date('ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->version_number."*".$data->control_number."*".$idnew."*0*P*^";
                             $GS = "GS*QM*".trim($data->id_receiver)."*".$data->sender_code."  *".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->id_incremental."*".$data->agency_code."*".$data->industry_identifier;
                             $ST = "ST*214*0001";
@@ -120,10 +121,18 @@ class Edi214DaimlerGps extends Command
                             $SE = "SE*7*0001";
                             $GE = "GE*1*".$data->id_incremental;
                             $IEA = "IEA*1*".$idnew;
-                            //Almacenar txt 214 en ftp Daimler
-                            $filenew = Storage::disk('ftp')->put('toRyder/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
-                                if (empty($filenew)) { Log::error('Hubo fallos al crear archivo 214 GPS'); }
-                                else { Log::info('Archivo 214 GPS creado'); }
+                            //Crear archivo 214 Ftp del Cliente
+                            $file214ftp = Storage::disk('ftp')->put('toRyder/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
+                            //Crear archivo 214 Local
+                            $file214local = Storage::disk('local')->put('Daimler/toRyder214/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
+                            //Validar la creacion
+                                if (empty($file214ftp)) {
+                                    Log::error('fallos al crear archivo 214 GPS Ftp');
+                                } elseif (empty($file214local)){
+                                    Log::error('fallos al crear archivo 214 GPS Local');
+                                } else {
+                                    Log::info('Archivo 214 GPS creado');
+                                }
                         } else {
                             Log::warning('json sin datos de unidad: '. $unidad);
                         }
