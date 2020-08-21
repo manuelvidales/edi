@@ -124,7 +124,7 @@ class Edi214DaimlerGps extends Command
                             //Crear archivo 214 Ftp del Cliente
                             $file214ftp = Storage::disk('ftp')->put('toRyder/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
                             //Crear archivo 214 Local
-                            $file214local = Storage::disk('local')->put('Daimler/toRyder214/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
+                            $file214local = Storage::disk('local')->put('Daimler/toRyder214gps/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
                             //Validar la creacion
                                 if (empty($file214ftp)) {
                                     Log::error('fallos al crear archivo 214 GPS Ftp');
