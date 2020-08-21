@@ -121,7 +121,7 @@
                       @endif
 
 
-                    <td>{{ date ('d-m-Y H:s', strtotime($data->created_at))}}</tr>
+                    <td>{{ date ('d-m-Y H:i', strtotime($data->created_at))}}</tr>
                     @endforeach
               </tbody>
             </table>
