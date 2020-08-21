@@ -56,10 +56,39 @@ class Edi214DaimlerGps extends Command
                         if (count($webservice) == 4) {
                             $listjson = $webservice['DeviceList'];
                             $datajson = $listjson[0]['EventData'];
-                            $Latitud = substr($datajson[0]['GPSPoint_lat'], 0, 7);
-                            $Longuitud = substr($datajson[0]['GPSPoint_lon'], 1, 7);
+                            $Lat1 = substr($datajson[0]['GPSPoint_lat'], 0, 7); //tomar hasta 7 caracteres
+                            $Lon1 = substr($datajson[0]['GPSPoint_lon'], 1, 7); //tomar hasta 7 caracteres y quitar (-)
+                                //contar caracteres
+                                $Lat = strlen($Lat1);
+                                $Lon = strlen($Lon1);
+                                //validar caracteres
+                                if ($Lat == 7) {
+                                    $Latitud = $Lat1;
+                                } else {
+                                    // agregar ceros para completar 7 caracteres
+                                    if     ($Lat == 0) { $Latitud = '00.0000'; }
+                                    elseif ($Lat == 1) { $Latitud = '00.0000'; }
+                                    elseif ($Lat == 2) { $Latitud = $Lat1.'.0000'; }
+                                    elseif ($Lat == 3) { $Latitud = $Lat1.'0000'; }
+                                    elseif ($Lat == 4) { $Latitud = $Lat1.'000'; }
+                                    elseif ($Lat == 5) { $Latitud = $Lat1.'00'; }
+                                    elseif ($Lat == 6) { $Latitud = $Lat1.'0'; }
+                                }
+                                //validar caracteres
+                                if ($Lon == 7) {
+                                    $Longitud = $Lon1;
+                                } else {
+                                    // agregar ceros para completar 7 caracteres
+                                    if     ($Lon == 0) { $Longitud = '00.0000'; }
+                                    elseif ($Lon == 1) { $Longitud = '00.0000'; }
+                                    elseif ($Lon == 2) { $Longitud = $Lon1.'.0000'; }
+                                    elseif ($Lon == 3) { $Longitud = $Lon1.'.000'; }
+                                    elseif ($Lon == 4) { $Longitud = $Lon1.'000'; }
+                                    elseif ($Lon == 5) { $Longitud = $Lon1.'00'; }
+                                    elseif ($Lon == 6) { $Longitud = $Lon1.'0'; }
+                                }
                         //Actualizar campos de gps en tabla sqlsrv
-                            $updategps = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longuitud, 'latitude'=> $Latitud]);
+                            $updategps = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longitud, 'latitude'=> $Latitud]);
                                 if (empty($updategps)) {
                                     Log::warning('Fallo actualizacion tabla edi_daimler_214_gps');
                                 } else {
@@ -68,7 +97,7 @@ class Edi214DaimlerGps extends Command
                         } else {
                             Log::warning('json sin datos de unidad: '. $unidad);
                         }
-                    //Preprar TxT 214 GPS
+                    //Preparar TxT 214 GPS
                     $i = strlen($id); //se requiere id de 9 digitos por eso se cuentan los caracteres
                     if     ($i == 1) { $idnew = '00000000'.$id; } // si tiene un caracter se le agregan 8 ceros
                     elseif ($i == 2) { $idnew = '0000000'.$id; } //sucesivamente
@@ -87,7 +116,7 @@ class Edi214DaimlerGps extends Command
                     $B10 = "B10*".$data->reference_identification."*".$data->shipment_identification_number."*".$data->alpha_code;
                     $LX = "LX*1";
                     $AT7 = "AT7*".$data->status_code."*".$data->reason_code."***".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*CT";
-                    $MS1 = "MS1****".$Longuitud."*".$Latitud."*".$data->code_longitude."*".$data->code_latitude."*";
+                    $MS1 = "MS1****".$Longitud."*".$Latitud."*".$data->code_longitude."*".$data->code_latitude."*";
                     $MS2 = "MS2*".$data->alpha_code."*".$data->equipment;
                     $SE = "SE*7*0001";
                     $GE = "GE*1*".$data->id_incremental;
