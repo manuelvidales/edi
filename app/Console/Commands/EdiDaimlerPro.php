@@ -316,143 +316,343 @@ class EdiDaimlerPro extends Command
                                 break;
                                 case "*4*":
                                     $S5_cuatro = explode("~",$array[$i]);
-                                    //Campos selecionados
-                                    $S5_4 = explode("*",$S5_cuatro[0]);
-                                    $L11_4 = explode("*",$S5_cuatro[1]);
-                                    $G62_4 = explode("*",$S5_cuatro[3]);
-                                    $N1_4 = explode("*",$S5_cuatro[5]);
-                                    $N3_4 = explode("*",$S5_cuatro[6]);
-                                    $N4_4 = explode("*",$S5_cuatro[7]);
+                                    $cont4 = count($S5_cuatro);
+                                    for($s=0; $s<$cont4; $s++){
+                                        $data4 = substr($S5_cuatro[$s],0,3);                    
+                                        if ($data4 == '*4*') {
+                                            $S5_4 = explode("*",$S5_cuatro[$s]);
+                                        }elseif ($data4 == 'L11') { //El primero de dos
+                                            $L11_4 = explode("*",$S5_cuatro[$s]);
+                                        }elseif ($data4 == 'G62') { //El primero de dos
+                                            $G62_4 = explode("*",$S5_cuatro[$s]);
+                                        }elseif ($data4 == 'N1*') {
+                                            $N1_4 = explode("*",$S5_cuatro[$s]);
+                                        }elseif ($data4 == 'N3*') {
+                                            $N3_4 = explode("*",$S5_cuatro[$s]);
+                                        }elseif ($data4 == 'N4*') {
+                                            $N4_4 = explode("*",$S5_cuatro[$s]);
+                                        }
+                                    }
                                     //S5
-                                        $stop4_reason_code=$S5_4[2];
+                                        if (empty($S5_4)){
+                                            $stop4_reason_code='null';
+                                        }else{
+                                            $stop4_reason_code=$S5_4[2];
+                                        }
                                     //L11
-                                        $stop4_tracking_number=$L11_4[1];
+                                        if (empty($L11_4)){
+                                            $stop4_tracking_number='null';
+                                        }else{
+                                            $stop4_tracking_number=$L11_4[1];
+                                        }
                                     //G62
-                                        $stop4_date=$G62_4[2];
-                                        $stop4_time=$G62_4[4];
-                                        $stop4_time_code=$G62_4[5];
+                                        if (empty($G62_4)){
+                                            $stop4_date='null';
+                                            $stop4_time='null';
+                                            $stop4_time_code='null';
+                                        }else{
+                                            $stop4_date=$G62_4[2];
+                                            $stop4_time=$G62_4[4];
+                                            $stop4_time_code=$G62_4[5];
+                                        }
                                     //N1
-                                        $stop4_identifier_code=$N1_4[1];
-                                        $stop4=$N1_4[2];
+                                        if (empty($N1_4)){
+                                            $stop4_identifier_code='null';
+                                            $stop4='null';
+                                        }else{
+                                            $stop4_identifier_code=$N1_4[1];
+                                            $stop4=$N1_4[2];
+                                        }
                                     //N3
-                                        $stop4_addres=$N3_4[1];
+                                        if (empty($N3_4)){
+                                            $stop4_addres='null';
+                                        }else{
+                                            $stop4_addres=$N3_4[1];
+                                        }
                                     //N4
-                                        $stop4_city=$N4_4[1];
-                                        $stop4_state=$N4_4[2];
-                                        $stop4_postal_code=$N4_4[3];
-                                        $stop4_country=$N4_4[4];
+                                        if (empty($N4_4)){
+                                            $stop4_city='null';
+                                            $stop4_state='null';
+                                            $stop4_postal_code='null';
+                                            $stop4_country='null';
+                                        }else{
+                                            $stop4_city=$N4_4[1];
+                                            $stop4_state=$N4_4[2];
+                                            $stop4_postal_code=$N4_4[3];
+                                            $stop4_country=$N4_4[4];
+                                        }
                                 break;
                                 case "*5*":
                                     $S5_cinco = explode("~",$array[$i]);
-                                    //Campos selecionados
-                                    $S5_5 = explode("*",$S5_cinco[0]);
-                                    $L11_5 = explode("*",$S5_cinco[1]);
-                                    $G62_5 = explode("*",$S5_cinco[3]);
-                                    $N1_5 = explode("*",$S5_cinco[5]);
-                                    $N3_5 = explode("*",$S5_cinco[6]);
-                                    $N4_5 = explode("*",$S5_cinco[7]);
+                                    $cont5 = count($S5_cinco);
+                                    for($s=0; $s<$cont5; $s++){
+                                        $data5 = substr($S5_cinco[$s],0,3);                    
+                                        if ($data5 == '*5*') {
+                                            $S5_5 = explode("*",$S5_cinco[$s]);
+                                        }elseif ($data5 == 'L11') { //El primero de dos
+                                            $L11_5 = explode("*",$S5_cinco[$s]);
+                                        }elseif ($data5 == 'G62') { //El primero de dos
+                                            $G62_5 = explode("*",$S5_cinco[$s]);
+                                        }elseif ($data5 == 'N1*') {
+                                            $N1_5 = explode("*",$S5_cinco[$s]);
+                                        }elseif ($data5 == 'N3*') {
+                                            $N3_5 = explode("*",$S5_cinco[$s]);
+                                        }elseif ($data5 == 'N4*') {
+                                            $N4_5 = explode("*",$S5_cinco[$s]);
+                                        }
+                                    }
                                     //S5
-                                        $stop5_reason_code=$S5_5[2];
+                                        if (empty($S5_5)){
+                                            $stop5_reason_code='null';
+                                        }else{
+                                            $stop5_reason_code=$S5_5[2];
+                                        }
                                     //L11
-                                        $stop5_tracking_number=$L11_5[1];
+                                        if (empty($L11_5)){
+                                            $stop5_tracking_number='null';
+                                        }else{
+                                            $stop5_tracking_number=$L11_5[1];
+                                        }
                                     //G62
-                                        $stop5_date=$G62_5[2];
-                                        $stop5_time=$G62_5[4];
-                                        $stop5_time_code=$G62_5[5];
+                                        if (empty($G62_5)){
+                                            $stop5_date='null';
+                                            $stop5_time='null';
+                                            $stop5_time_code='null';
+                                        }else{
+                                            $stop5_date=$G62_5[2];
+                                            $stop5_time=$G62_5[4];
+                                            $stop5_time_code=$G62_5[5];
+                                        }
                                     //N1
-                                        $stop5_identifier_code=$N1_5[1];
-                                        $stop5=$N1_5[2];
+                                        if (empty($N1_5)){
+                                            $stop5_identifier_code='null';
+                                            $stop5='null';
+                                        }else{
+                                            $stop5_identifier_code=$N1_5[1];
+                                            $stop5=$N1_5[2];
+                                        }
                                     //N3
-                                        $stop5_addres=$N3_5[1];
+                                        if (empty($N3_5)){
+                                            $stop5_addres='null';
+                                        }else{
+                                            $stop5_addres=$N3_5[1];
+                                        }
                                     //N4
-                                        $stop5_city=$N4_5[1];
-                                        $stop5_state=$N4_5[2];
-                                        $stop5_postal_code=$N4_5[3];
-                                        $stop5_country=$N4_5[4];
+                                        if (empty($N4_5)){
+                                            $stop5_city='null';
+                                            $stop5_state='null';
+                                            $stop5_postal_code='null';
+                                            $stop5_country='null';
+                                        }else{
+                                            $stop5_city=$N4_5[1];
+                                            $stop5_state=$N4_5[2];
+                                            $stop5_postal_code=$N4_5[3];
+                                            $stop5_country=$N4_5[4];
+                                        }
                                 break;
                                 case "*6*":
                                     $S5_seis = explode("~",$array[$i]);
-                                    //Campos selecionados
-                                    $S5_6 = explode("*",$S5_seis[0]);
-                                    $L11_6 = explode("*",$S5_seis[1]);
-                                    $G62_6 = explode("*",$S5_seis[3]);
-                                    $N1_6 = explode("*",$S5_seis[5]);
-                                    $N3_6 = explode("*",$S5_seis[6]);
-                                    $N4_6 = explode("*",$S5_seis[7]);
+                                    $cont6 = count($S5_seis);
+                                    for($s=0; $s<$cont6; $s++){
+                                        $data6 = substr($S5_seis[$s],0,3);                    
+                                        if ($data6 == '*6*') {
+                                            $S5_6 = explode("*",$S5_seis[$s]);
+                                        }elseif ($data6 == 'L11') { //El primero de dos
+                                            $L11_6 = explode("*",$S5_seis[$s]);
+                                        }elseif ($data6 == 'G62') { //El primero de dos
+                                            $G62_6 = explode("*",$S5_seis[$s]);
+                                        }elseif ($data6 == 'N1*') {
+                                            $N1_6 = explode("*",$S5_seis[$s]);
+                                        }elseif ($data6 == 'N3*') {
+                                            $N3_6 = explode("*",$S5_seis[$s]);
+                                        }elseif ($data6 == 'N4*') {
+                                            $N4_6 = explode("*",$S5_seis[$s]);
+                                        }
+                                    }
                                     //S5
-                                        $stop6_reason_code=$S5_6[2];
+                                        if (empty($S5_6)){
+                                            $stop6_reason_code='null';
+                                        }else{
+                                            $stop6_reason_code=$S5_6[2];
+                                        }
                                     //L11
-                                        $stop6_tracking_number=$L11_6[1];
+                                        if (empty($L11_6)){
+                                            $stop6_tracking_number='null';
+                                        }else{
+                                            $stop6_tracking_number=$L11_6[1];
+                                        }
                                     //G62
-                                        $stop6_date=$G62_6[2];
-                                        $stop6_time=$G62_6[4];
-                                        $stop6_time_code=$G62_6[5];
+                                        if (empty($G62_6)){
+                                            $stop6_date='null';
+                                            $stop6_time='null';
+                                            $stop6_time_code='null';
+                                        }else{
+                                            $stop6_date=$G62_6[2];
+                                            $stop6_time=$G62_6[4];
+                                            $stop6_time_code=$G62_6[5];
+                                        }
                                     //N1
-                                        $stop6_identifier_code=$N1_6[1];
-                                        $stop6=$N1_6[2];
+                                        if (empty($N1_6)){
+                                            $stop6_identifier_code='null';
+                                            $stop6='null';
+                                        }else{
+                                            $stop6_identifier_code=$N1_6[1];
+                                            $stop6=$N1_6[2];
+                                        }
                                     //N3
-                                        $stop6_addres=$N3_6[1];
+                                        if (empty($N3_6)){
+                                            $stop6_addres='null';
+                                        }else{
+                                            $stop6_addres=$N3_6[1];
+                                        }
                                     //N4
-                                        $stop6_city=$N4_6[1];
-                                        $stop6_state=$N4_6[2];
-                                        $stop6_postal_code=$N4_6[3];
-                                        $stop6_country=$N4_6[4];
+                                        if (empty($N4_6)){
+                                            $stop6_city='null';
+                                            $stop6_state='null';
+                                            $stop6_postal_code='null';
+                                            $stop6_country='null';
+                                        }else{
+                                            $stop6_city=$N4_6[1];
+                                            $stop6_state=$N4_6[2];
+                                            $stop6_postal_code=$N4_6[3];
+                                            $stop6_country=$N4_6[4];
+                                        }
                                 break;
                                 case "*7*":
                                     $S5_siete = explode("~",$array[$i]);
-                                    //Campos selecionados
-                                    $S5_7 = explode("*",$S5_siete[0]);
-                                    $L11_7 = explode("*",$S5_siete[1]);
-                                    $G62_7 = explode("*",$S5_siete[3]);
-                                    $N1_7 = explode("*",$S5_siete[5]);
-                                    $N3_7 = explode("*",$S5_siete[6]);
-                                    $N4_7 = explode("*",$S5_siete[7]);
+                                    $cont7 = count($S5_siete);
+                                    for($s=0; $s<$cont7; $s++){
+                                        $data7 = substr($S5_siete[$s],0,3);                    
+                                        if ($data7 == '*7*') {
+                                            $S5_7 = explode("*",$S5_siete[$s]);
+                                        }elseif ($data7 == 'L11') { //El primero de dos
+                                            $L11_7 = explode("*",$S5_siete[$s]);
+                                        }elseif ($data7 == 'G62') { //El primero de dos
+                                            $G62_7 = explode("*",$S5_siete[$s]);
+                                        }elseif ($data7 == 'N1*') {
+                                            $N1_7 = explode("*",$S5_siete[$s]);
+                                        }elseif ($data7 == 'N3*') {
+                                            $N3_7 = explode("*",$S5_siete[$s]);
+                                        }elseif ($data7 == 'N4*') {
+                                            $N4_7 = explode("*",$S5_siete[$s]);
+                                        }
+                                    }
                                     //S5
-                                        $stop7_reason_code=$S5_7[2];
+                                        if (empty($S5_7)){
+                                            $stop7_reason_code='null';
+                                        }else{
+                                            $stop7_reason_code=$S5_7[2];
+                                        }
                                     //L11
-                                        $stop7_tracking_number=$L11_7[1];
+                                        if (empty($L11_7)){
+                                            $stop7_tracking_number='null';
+                                        }else{
+                                            $stop7_tracking_number=$L11_7[1];
+                                        }
                                     //G62
-                                        $stop7_date=$G62_7[2];
-                                        $stop7_time=$G62_7[4];
-                                        $stop7_time_code=$G62_7[5];
+                                        if (empty($G62_7)){
+                                            $stop7_date='null';
+                                            $stop7_time='null';
+                                            $stop7_time_code='null';
+                                        }else{
+                                            $stop7_date=$G62_7[2];
+                                            $stop7_time=$G62_7[4];
+                                            $stop7_time_code=$G62_7[5];
+                                        }
                                     //N1
-                                        $stop7_identifier_code=$N1_7[1];
-                                        $stop7=$N1_7[2];
+                                        if (empty($N1_7)){
+                                            $stop7_identifier_code='null';
+                                            $stop7='null';
+                                        }else{
+                                            $stop7_identifier_code=$N1_7[1];
+                                            $stop7=$N1_7[2];
+                                        }
                                     //N3
-                                        $stop7_addres=$N3_7[1];
+                                        if (empty($N3_7)){
+                                            $stop7_addres='null';
+                                        }else{
+                                            $stop7_addres=$N3_7[1];
+                                        }
                                     //N4
-                                        $stop7_city=$N4_7[1];
-                                        $stop7_state=$N4_7[2];
-                                        $stop7_postal_code=$N4_7[3];
-                                        $stop7_country=$N4_7[4];
+                                        if (empty($N4_7)){
+                                            $stop7_city='null';
+                                            $stop7_state='null';
+                                            $stop7_postal_code='null';
+                                            $stop7_country='null';
+                                        }else{
+                                            $stop7_city=$N4_7[1];
+                                            $stop7_state=$N4_7[2];
+                                            $stop7_postal_code=$N4_7[3];
+                                            $stop7_country=$N4_7[4];
+                                        }
                                 break;
                                 case "*8*":
                                     $S5_ocho = explode("~",$array[$i]);
-                                    //Campos selecionados
-                                    $S5_8 = explode("*",$S5_ocho[0]);
-                                    $L11_8 = explode("*",$S5_ocho[1]);
-                                    $G62_8 = explode("*",$S5_ocho[3]);
-                                    $N1_8 = explode("*",$S5_ocho[5]);
-                                    $N3_8 = explode("*",$S5_ocho[6]);
-                                    $N4_8 = explode("*",$S5_ocho[7]);
+                                    $cont8 = count($S5_ocho);
+                                    for($s=0; $s<$cont8; $s++){
+                                        $data8 = substr($S5_ocho[$s],0,3);                    
+                                        if ($data8 == '*8*') {
+                                            $S5_8 = explode("*",$S5_ocho[$s]);
+                                        }elseif ($data8 == 'L11') { //El primero de dos
+                                            $L11_8 = explode("*",$S5_ocho[$s]);
+                                        }elseif ($data8 == 'G62') { //El primero de dos
+                                            $G62_8 = explode("*",$S5_ocho[$s]);
+                                        }elseif ($data8 == 'N1*') {
+                                            $N1_8 = explode("*",$S5_ocho[$s]);
+                                        }elseif ($data8 == 'N3*') {
+                                            $N3_8 = explode("*",$S5_ocho[$s]);
+                                        }elseif ($data8 == 'N4*') {
+                                            $N4_8 = explode("*",$S5_ocho[$s]);
+                                        }
+                                    }
                                     //S5
-                                        $stop8_reason_code=$S5_8[2];
+                                        if (empty($S5_8)){
+                                            $stop8_reason_code='null';
+                                        }else{
+                                            $stop8_reason_code=$S5_8[2];
+                                        }
                                     //L11
-                                        $stop8_tracking_number=$L11_8[1];
+                                        if (empty($L11_8)){
+                                            $stop8_tracking_number='null';
+                                        }else{
+                                            $stop8_tracking_number=$L11_8[1];
+                                        }
                                     //G62
-                                        $stop8_date=$G62_8[2];
-                                        $stop8_time=$G62_8[4];
-                                        $stop8_time_code=$G62_8[5];
+                                        if (empty($G62_8)){
+                                            $stop8_date='null';
+                                            $stop8_time='null';
+                                            $stop8_time_code='null';
+                                        }else{
+                                            $stop8_date=$G62_8[2];
+                                            $stop8_time=$G62_8[4];
+                                            $stop8_time_code=$G62_8[5];
+                                        }
                                     //N1
-                                        $stop8_identifier_code=$N1_8[1];
-                                        $stop8=$N1_8[2];
+                                        if (empty($N1_8)){
+                                            $stop8_identifier_code='null';
+                                            $stop8='null';
+                                        }else{
+                                            $stop8_identifier_code=$N1_8[1];
+                                            $stop8=$N1_8[2];
+                                        }
                                     //N3
-                                        $stop8_addres=$N3_8[1];
+                                        if (empty($N3_8)){
+                                            $stop8_addres='null';
+                                        }else{
+                                            $stop8_addres=$N3_8[1];
+                                        }
                                     //N4
-                                        $stop8_city=$N4_8[1];
-                                        $stop8_state=$N4_8[2];
-                                        $stop8_postal_code=$N4_8[3];
-                                        $stop8_country=$N4_8[4];
+                                        if (empty($N4_8)){
+                                            $stop8_city='null';
+                                            $stop8_state='null';
+                                            $stop8_postal_code='null';
+                                            $stop8_country='null';
+                                        }else{
+                                            $stop8_city=$N4_8[1];
+                                            $stop8_state=$N4_8[2];
+                                            $stop8_postal_code=$N4_8[3];
+                                            $stop8_country=$N4_8[4];
+                                        }
                                 break;
                             }
                         }
