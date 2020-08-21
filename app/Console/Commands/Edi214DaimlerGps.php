@@ -87,44 +87,47 @@ class Edi214DaimlerGps extends Command
                                     elseif ($Lon == 5) { $Longitud = $Lon1.'00'; }
                                     elseif ($Lon == 6) { $Longitud = $Lon1.'0'; }
                                 }
-                        //Actualizar campos de gps en tabla sqlsrv
+                            //Actualizar campos de gps en tabla sqlsrv
                             $updategps = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214_gps")->where([ ['id_incremental', '=', $id] ])->update(['longitude' => $Longitud, 'latitude'=> $Latitud]);
                                 if (empty($updategps)) {
                                     Log::warning('Fallo actualizacion tabla edi_daimler_214_gps');
                                 } else {
                                     Log::info('tabla edi_daimler_214_gps actualizada');
                                 }
+                            //Preparar TxT 214 GPS
+                            $i = strlen($id); //se requiere id de 9 digitos por eso se cuentan los caracteres
+                            if     ($i == 1) { $idnew = '00000000'.$id; } // si tiene un caracter se le agregan 8 ceros
+                            elseif ($i == 2) { $idnew = '0000000'.$id; } //sucesivamente
+                            elseif ($i == 3) { $idnew = '000000'.$id; }
+                            elseif ($i == 4) { $idnew = '00000'.$id; }
+                            elseif ($i == 5) { $idnew = '0000'.$id; }
+                            elseif ($i == 6) { $idnew = '000'.$id; }
+                            elseif ($i == 7) { $idnew = '00'.$id; }
+                            elseif ($i == 8) { $idnew = '0'.$id; }
+                            elseif ($i == 9) { $idnew = $id; }
+                            else { $idnew = 'null'; }
+                            //nombre para el archivo 214
+                            $name214gps = $data->alpha_code.'_'.$data->sender_code.'_214_'.date('Ymd', strtotime($data->date_time)).'_'.$idnew;
+                            //preparacion campos para el txt
+                            $ISA = "ISA*00*          *00*          *".$data->id_qualifier_receiver."*".$data->id_receiver."*".$data->id_qualifier_sender."*".$data->id_sender."*".date('ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->version_number."*".$data->control_number."*".$idnew."*0*P*^";
+                            $GS = "GS*QM*".trim($data->id_receiver)."*".$data->sender_code."  *".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->id_incremental."*".$data->agency_code."*".$data->industry_identifier;
+                            $ST = "ST*214*0001";
+                            $B10 = "B10*".$data->reference_identification."*".$data->shipment_identification_number."*".$data->alpha_code;
+                            $LX = "LX*1";
+                            $AT7 = "AT7*".$data->status_code."*".$data->reason_code."***".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*CT";
+                            $MS1 = "MS1****".$Longitud."*".$Latitud."*".$data->code_longitude."*".$data->code_latitude."*";
+                            $MS2 = "MS2*".$data->alpha_code."*".$data->equipment;
+                            $SE = "SE*7*0001";
+                            $GE = "GE*1*".$data->id_incremental;
+                            $IEA = "IEA*1*".$idnew;
+                            //Almacenar txt 214 en ftp Daimler
+                            $filenew = Storage::disk('ftp')->put('toRyder/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
+                                if (empty($filenew)) { Log::error('Hubo fallos al crear archivo 214 GPS'); }
+                                else { Log::info('Archivo 214 GPS creado'); }
                         } else {
                             Log::warning('json sin datos de unidad: '. $unidad);
                         }
-                    //Preparar TxT 214 GPS
-                    $i = strlen($id); //se requiere id de 9 digitos por eso se cuentan los caracteres
-                    if     ($i == 1) { $idnew = '00000000'.$id; } // si tiene un caracter se le agregan 8 ceros
-                    elseif ($i == 2) { $idnew = '0000000'.$id; } //sucesivamente
-                    elseif ($i == 3) { $idnew = '000000'.$id; }
-                    elseif ($i == 4) { $idnew = '00000'.$id; }
-                    elseif ($i == 5) { $idnew = '0000'.$id; }
-                    elseif ($i == 6) { $idnew = '000'.$id; }
-                    elseif ($i == 7) { $idnew = '00'.$id; }
-                    elseif ($i == 8) { $idnew = '0'.$id; }
-                    elseif ($i == 9) { $idnew = $id; }
-                    else { $idnew = 'null'; }
-                    $name214gps = $data->alpha_code.'_'.$data->sender_code.'_214_'.date('Ymd', strtotime($data->date_time)).'_'.$idnew;
-                    $ISA = "ISA*00*          *00*          *".$data->id_qualifier_receiver."*".$data->id_receiver."*".$data->id_qualifier_sender."*".$data->id_sender."*".date('ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->version_number."*".$data->control_number."*".$idnew."*0*P*^";
-                    $GS = "GS*QM*".trim($data->id_receiver)."*".$data->sender_code."  *".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*".$data->id_incremental."*".$data->agency_code."*".$data->industry_identifier;
-                    $ST = "ST*214*0001";
-                    $B10 = "B10*".$data->reference_identification."*".$data->shipment_identification_number."*".$data->alpha_code;
-                    $LX = "LX*1";
-                    $AT7 = "AT7*".$data->status_code."*".$data->reason_code."***".date('Ymd', strtotime($data->date_time))."*".date('Hi', strtotime($data->date_time))."*CT";
-                    $MS1 = "MS1****".$Longitud."*".$Latitud."*".$data->code_longitude."*".$data->code_latitude."*";
-                    $MS2 = "MS2*".$data->alpha_code."*".$data->equipment;
-                    $SE = "SE*7*0001";
-                    $GE = "GE*1*".$data->id_incremental;
-                    $IEA = "IEA*1*".$idnew;
-                    //Almacenar txt 214 en ftp Daimler
-                    $filenew = Storage::disk('ftp')->put('toRyder/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
-                        if (empty($filenew)) { Log::error('Hubo fallos al crear archivo 214 GPS'); } 
-                            else { Log::info('Archivo 214 GPS creado'); }
+
                 }
             }
         }
