@@ -45,6 +45,50 @@ class EdidaimlerController extends Controller
         }
 
     }
+
+    public function viewfile($id)
+    {
+        $buscar = EdiDaimler::findOrFail($id);
+        $file = $buscar->filename;
+        $status = $buscar->status;
+
+        $path_filesnew = 'Daimler/fromRyder/';
+        $path_process = 'Daimler/fromRyder_process/';
+        $path_store = 'Daimler/fromRyder_arch/';
+
+        if ($status == 0) {
+            $exists = Storage::disk('local')->exists($path_store.$file);
+            if ($exists == true) {
+                $contenido = Storage::disk('local')->get($path_store.$file);
+                $texto = explode("~", $contenido);
+                return response()->json($texto);
+            } else {
+                $null = 'null';
+                return response()->json($null);
+            }
+        } elseif ($status == 2 || $status == 3) {
+            $exists = Storage::disk('local')->exists($path_process.$buscar->filename);
+            if ($exists == true) {
+                $contenido = Storage::disk('local')->get($path_process.$buscar->filename);
+                $texto = explode("~", $contenido);
+                return response()->json($texto);
+            } else {
+                $null = 'null';
+                return response()->json($null);
+            }
+        } elseif ($status == 1 ) {
+            $exists = Storage::disk('local')->exists($path_filesnew.$file);
+            if ($exists == true) {
+                $contenido = Storage::disk('local')->get($path_filesnew.$file);
+                $texto = explode("~", $contenido);
+                return response()->json($texto);
+            } else {
+                $null = 'null';
+                return response()->json($null);
+            }
+        }
+
+    }
     
     public function show($id)
     {
