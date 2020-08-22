@@ -27,6 +27,7 @@ Route::get('edidaimler/index', 'EdidaimlerController@index')->name('edidaimler')
 Route::get('edidaimler/{id}', 'EdidaimlerController@show')->name('edidaimler.id');
 Route::post('/edidaimler/respuesta', 'EdidaimlerController@respuesta')->name('respuesta');
 Route::get('getfile/{file}', 'EdidaimlerController@getfile')->name('getfile');
+Route::get('viewfile/{id}', 'EdidaimlerController@viewfile')->name('viewfile');
 //visteon
 Route::get('clientes', 'ClientesController@index')->name('clientes');
 Route::post('clientes/visteon', 'ClientesController@store')->name('visteon.clientes');
