@@ -2,73 +2,66 @@
 @section('content')
 
 <div class="jumbotron p-2">
-
-<div class="card-deck p-4">
-  <div class="card text-white text-center bg-dark shadow rounded">
-    <div class="row justify-content-md-center">
-      <div class="col-3"><i class="fas fa-inbox fa-5x"></i></div>
-      <div class="col-3"><h1 class="font-weight-bold"><span class="badge badge-primary">
-          {{ $filestore }}
-      </span></h1></div>
+  <div class="card-deck p-4">
+    <div class="card text-white text-center bg-dark shadow rounded">
+      <div class="row justify-content-md-center">
+        <div class="col-3"><i class="fas fa-inbox fa-5x"></i></div>
+        <div class="col-3"><h1 class="font-weight-bold"><span class="badge badge-primary">
+            {{ $filestore }}
+        </span></h1></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"><button type="button" class="btn btn-outline-light">Documentos totales</button></h5>
+        <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
+      </div>
     </div>
-    <div class="card-body">
-      <h5 class="card-title"><button type="button" class="btn btn-outline-light">Documentos totales</button></h5>
-      <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
+
+      @if ( $filesnew == 0)
+      <div class="card text-white text-center bg-dark">    
+      @else
+      <div class="card text-success text-center bg-dark">
+      @endif
+          <div class="row justify-content-md-center">
+          <div class="col-2"><i class="fas fa-file-download fa-5x"></i></div>
+          <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+              {{ $filesnew }}
+          </span></h2></div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion archivos</button></h5>
+          <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
+        </div>
+    </div>
+      <div class="card text-white text-center bg-dark">
+        <div class="row justify-content-md-center">
+          <div class="col-2"><i class="fas fa-hourglass-half fa-5x"></i></div>
+          <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+              {{ $fileprocess }}
+          </span></h2></div>
+        </div>
+        <div class="card-body">
+          <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
+          <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
+        </div>
+      </div>
+      @if ($warning == 0)
+      <div class="card text-white text-center bg-dark">    
+      @else
+      <div class="card text-warning text-center bg-dark">
+      @endif
+      <div class="row justify-content-md-center">
+        <div class="col-2"><i class="fas fa-exclamation-triangle fa-5x"></i></div>
+        <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+          {{ $warning }}
+        </span></h2></div>
+      </div>
+      <div class="card-body">
+        <h5 class="card-title"><button type="button" class="btn btn-outline-light">Advertencias</button> </h5>
+        <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
+      </div>
     </div>
   </div>
-
-  @if ( $filesnew == 0)
-  <div class="card text-white text-center bg-dark">    
-  @else
-  <div class="card text-success text-center bg-dark">
-  @endif
-    <div class="row justify-content-md-center">
-      <div class="col-2"><i class="fas fa-file-download fa-5x"></i></div>
-      <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-          {{ $filesnew }}
-      </span></h2></div>
-    </div>
-    <div class="card-body">
-      <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion archivos</button></h5>
-      <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
-    </div>
-  </div>
-
-  <div class="card text-white text-center bg-dark">
-    <div class="row justify-content-md-center">
-      <div class="col-2"><i class="fas fa-hourglass-half fa-5x"></i></div>
-      <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-          {{ $fileprocess }}
-      </span></h2></div>
-    </div>
-    <div class="card-body">
-      <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
-      <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
-    </div>
-  </div>
-
-  @if ($warning == 0)
-  <div class="card text-white text-center bg-dark">    
-  @else
-  <div class="card text-warning text-center bg-dark">
-  @endif
-    <div class="row justify-content-md-center">
-      <div class="col-2"><i class="fas fa-exclamation-triangle fa-5x"></i></div>
-      <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-        {{ $warning }}
-      </span></h2></div>
-    </div>
-    <div class="card-body">
-      <h5 class="card-title"><button type="button" class="btn btn-outline-light">Advertencias</button> </h5>
-      <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
-    </div>
-  </div>
-  
-
 </div>
-</div>
-
-
 
 <div class="jumbotron p-4">
     <div class="card shadow p-3 mb-5 bg-white rounded">
@@ -83,7 +76,7 @@
               <thead class="thead-light">
                   <tr>
                       <th>Archivo</th>
-                      <th>Id tender</th>
+                      <th>Tender</th>
                       <th>Tipo</th>
                       <th>Propósito</th>
                       <th>Confirmacion</th>
@@ -93,11 +86,11 @@
               <tbody>
                   @foreach ($files204 as $data)
 
-                  <tr>
-                    <td><a href="{{ url('getfile/'.$data->id) }}"><i class="fas fa-download"></i></a></td>
+                <tr data-id="{{$data->id}}" data-name="{{$data->filename}}">
+                    <td><a href="{{ url('getfile/'.$data->id) }}"><i class="fas fa-download"></i></a> <a href="#" class="viewfiles" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a></td>
                     <td>{{$data->shipment_id}}</td>
                     <td>{{$data->code}}</td>
-                    
+
                       @if ($data->purpose_code == '00')
                         <td> Nueva orden </td>
                         <td>
@@ -120,18 +113,44 @@
                         <td> sin procesar </td>
                       @endif
 
-
-                    <td>{{ date ('d-m-Y H:i', strtotime($data->created_at))}}</tr>
+                    <td>{{ date ('d-m-Y H:i', strtotime($data->created_at))}}
+                    </td>
+                    </tr>
                     @endforeach
               </tbody>
             </table>
           </div>
         </div> 
-<br>
-    <div class="card-footer text-muted">
-      Autofletes Internacionales Halcon S.C.
-    </div>
+        <br>
+      <div class="card-footer text-muted">
+        Autofletes Internacionales Halcon S.C.
+      </div>
+  </div>
 </div>
+
+
+
+<!-- Modal -->
+<div class="modal fade" id="verarchivo" tabindex="-1" aria-labelledby="verarchivoLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-scrollable modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="filename"> </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+
+        <div class="modal-body">
+          <div id="noExiste"></div>
+          <div id="mostrartexto"></div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+<script src="{{ asset('js')}}/filestxt.js" ></script>
 <!-- Datatable -->
 <script type="text/javascript">
   $(document).ready(function() {
@@ -168,5 +187,4 @@
   });
 } );
 </script>
-</div>
 @endsection
