@@ -22,8 +22,15 @@
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
+    <link href="{{ asset('css/loadingscreen.css') }}" rel="stylesheet">
 </head>
 <body>
+    <!-- Loading screen -->
+    <div id="loading-screen" style="display:none">
+        <div id="spin" class="spinner-border text-success" style="width: 6rem; height: 6rem;" role="status">
+            <span class="sr-only"></span>
+        </div>
+    </div>
 <!-- Alertas -->
 @if (session('info'))
     <div class="container">
@@ -56,4 +63,5 @@
         @yield('content')
     </div>
 </body>
+<script src="{{ asset('js/loader.js') }}" defer></script>
 </html>
