@@ -7,7 +7,7 @@
       <div class="row justify-content-md-center">
         <div class="col-3"><i class="fas fa-inbox fa-5x"></i></div>
         <div class="col-3"><h1 class="font-weight-bold"><span class="badge badge-primary">
-            {{ $filestore }}
+          <div id="almacen">{{ $filestore }}</div>  
         </span></h1></div>
       </div>
       <div class="card-body">
@@ -24,7 +24,7 @@
           <div class="row justify-content-md-center">
           <div class="col-2"><i class="fas fa-file-download fa-5x"></i></div>
           <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-              {{ $filesnew }}
+            <div id="nuevos">{{ $filesnew }}</div>
           </span></h2></div>
         </div>
         <div class="card-body">
@@ -32,11 +32,15 @@
           <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
         </div>
     </div>
-      <div class="card text-white text-center bg-dark">
+      @if ($fileprocess == 0)
+      <div class="card text-white text-center bg-dark">    
+      @else
+      <div class="card text-secondary text-center bg-dark">
+      @endif
         <div class="row justify-content-md-center">
           <div class="col-2"><i class="fas fa-hourglass-half fa-5x"></i></div>
           <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-              {{ $fileprocess }}
+            <div id="proceso">{{ $fileprocess }}</div>  
           </span></h2></div>
         </div>
         <div class="card-body">
@@ -52,7 +56,7 @@
       <div class="row justify-content-md-center">
         <div class="col-2"><i class="fas fa-exclamation-triangle fa-5x"></i></div>
         <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
-          {{ $warning }}
+          <div id="warning">{{ $warning }}</div>
         </span></h2></div>
       </div>
       <div class="card-body">
@@ -62,6 +66,7 @@
     </div>
   </div>
 </div>
+
 
 <div class="jumbotron p-4">
     <div class="card shadow p-3 mb-5 bg-white rounded">
