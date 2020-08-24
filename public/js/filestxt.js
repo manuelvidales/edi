@@ -53,5 +53,5 @@ $(document).ready(function () {
         $(process).append(``+data[5]+``);
         $(warning).append(``+data[7]+``);
       });
-  }, 300000);//(5min)
+  }, 60000);//(1min)
 });
