@@ -28,6 +28,23 @@ class EdidaimlerController extends Controller
         return \view('daimler.index', compact('files204','filesnew','fileprocess', 'filestore', 'warning' ));
     }
 
+    public function header()
+    {
+        $recepcion = Storage::disk('local')->files('Daimler/fromRyder/');
+        $enproceso = Storage::disk('local')->files('Daimler/fromRyder_process/');
+        $almacen = Storage::disk('local')->files('Daimler/fromRyder_arch/');
+        $status3 = DB::table('edidaimlers')->where('status', '3')->latest()->get();
+        //contadores
+        $store = count($almacen);
+        $recent = count($recepcion);
+        $process = count($enproceso);
+        $warning = count($status3);
+        //array para JS
+        $data = array ( $store, $recent, $process, $warning);
+
+        return json_encode($data);
+    }
+    
     public function getfile($file)
     {
         $path_filesnew = 'app/Daimler/fromRyder/';
