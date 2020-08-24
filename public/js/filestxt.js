@@ -48,10 +48,10 @@ $(document).ready(function () {
         $(recent).html('');
         $(process).html('');
         $(warning).html('');
-        $(store).append(``+data[1]+``);
-        $(recent).append(``+data[3]+``);
-        $(process).append(``+data[5]+``);
-        $(warning).append(``+data[7]+``);
+        $(store).append(``+data[1]+data[2]+data[3]+``);
+        $(recent).append(``+data[5]+``);
+        $(process).append(``+data[7]+``);
+        $(warning).append(``+data[9]+``);
       });
   }, 60000);//(1min)
 });
