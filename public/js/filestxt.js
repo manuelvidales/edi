@@ -1,3 +1,4 @@
+
 /*
  * ::Archivos EDI format .txt
  */
@@ -34,3 +35,23 @@ $(document).on('click', '.viewfiles', function(){
           },
       });
   });
+  
+$(document).ready(function () {
+  let store = $('#almacen');
+  let recent = $('#nuevos');
+  let process = $('#proceso');
+  let warning = $('#warning');
+  setInterval(function() {
+      $.get("/edidaimlerheader", function (data) {
+        console.log(data);
+        $(store).html('');
+        $(recent).html('');
+        $(process).html('');
+        $(warning).html('');
+        $(store).append(``+data[1]+``);
+        $(recent).append(``+data[3]+``);
+        $(process).append(``+data[5]+``);
+        $(warning).append(``+data[7]+``);
+      });
+  }, 300000);//(5min)
+});
