@@ -25,15 +25,11 @@ class EdidaimlerController extends Controller
 
     public function header()
     {
-        $recepcion = Storage::disk('local')->files('Daimler/fromRyder/');
-        $enproceso = Storage::disk('local')->files('Daimler/fromRyder_process/');
-        $almacen = Storage::disk('local')->files('Daimler/fromRyder_arch/');
-        $status3 = DB::table('edidaimlers')->where('status', '3')->latest()->get();
         //contadores
-        $store = count($almacen);
-        $recent = count($recepcion);
-        $process = count($enproceso);
-        $warning = count($status3);
+        $store = count(Storage::disk('local')->files('Daimler/fromRyder_arch/'));
+        $recent = count(Storage::disk('local')->files('Daimler/fromRyder/'));
+        $process = count(Storage::disk('local')->files('Daimler/fromRyder_process/'));
+        $warning = DB::table('edidaimlers')->where('status', '3')->count();
         //array para JS
         $data = array ( $store, $recent, $process, $warning);
 
