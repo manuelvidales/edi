@@ -12,17 +12,12 @@ class EdidaimlerController extends Controller
 {
     public function index()
     {
-        $recepcion = Storage::disk('local')->files('Daimler/fromRyder/');
-        $enproceso = Storage::disk('local')->files('Daimler/fromRyder_process/');
-        $almacen = Storage::disk('local')->files('Daimler/fromRyder_arch/');
-
-        $status3 = DB::table('edidaimlers')->where('status', '3')->latest()->get();
         //contadores
-        $filesnew = count($recepcion);
-        $fileprocess = count($enproceso);
-        $filestore = count($almacen);
-        $warning = count($status3);
-
+        $filesnew = count(Storage::disk('local')->files('Daimler/fromRyder/'));
+        $fileprocess = count(Storage::disk('local')->files('Daimler/fromRyder_process/'));
+        $filestore = count(Storage::disk('local')->files('Daimler/fromRyder_arch/'));
+        $warning = DB::table('edidaimlers')->where('status', '3')->count();
+        //archivos de tipo 204
         $files204 = DB::table('edidaimlers')->where('code', '204')->latest()->get();
 
         return \view('daimler.index', compact('files204','filesnew','fileprocess', 'filestore', 'warning' ));
