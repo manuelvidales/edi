@@ -117,7 +117,7 @@ class EdiDaimlerFtp extends Command
                             }
                         } elseif ( substr($filename,-4)==".txt" and substr($filename, 0, 6) == "RYD997") {
                             // descargar archivo
-                            $local = 'storage/app/Daimler/fromRyder997/'.$filename; //ruta para almacenar
+                            $local = 'storage/app/Daimler/fromRyder_997/'.$filename; //ruta para almacenar
                             if (ftp_get($conn_id, $local, 'fromRyder/'.$filename, FTP_BINARY)) {
                                 Log::info('Descarga 997 exitosa: '.$filename);
                                 if (ftp_delete($conn_id, 'fromRyder/'.$filename)) {
