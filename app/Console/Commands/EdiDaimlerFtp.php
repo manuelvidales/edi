@@ -115,6 +115,17 @@ class EdiDaimlerFtp extends Command
                                 Log::error('Descarga de archivo: '.$filename);
                                 }
                             }
+                        } elseif ( substr($filename,-4)==".txt" and substr($filename, 0, 6) == "RYD997") {
+                            // descargar archivo
+                            $local = 'storage/app/Daimler/fromRyder997/'.$filename; //ruta para almacenar
+                            if (ftp_get($conn_id, $local, 'fromRyder/'.$filename, FTP_BINARY)) {
+                                Log::info('Descarga 997 exitosa: '.$filename);
+                                if (ftp_delete($conn_id, 'fromRyder/'.$filename)) {
+                                    Log::info('Archivo 997 Eliminado con exito: '.$filename);
+                                } else {
+                                    Log::warning('No se logro eliminar 997: '.$filename);
+                                }
+                            }
                         }
                     }
             } else { //if ftplogin
