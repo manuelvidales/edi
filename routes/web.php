@@ -29,6 +29,7 @@ Route::post('/edidaimler/respuesta', 'EdidaimlerController@respuesta')->name('re
 Route::get('getfile/{file}', 'EdidaimlerController@getfile')->name('getfile');
 Route::get('viewfile/{id}', 'EdidaimlerController@viewfile')->name('viewfile');
 Route::get('/edidaimlerheader', 'EdidaimlerController@header');
+Route::get('edidaimlernotifica/{shop}', 'EdidaimlerController@reenviarNoti');
 //visteon
 Route::get('clientes', 'ClientesController@index')->name('clientes');
 Route::post('clientes/visteon', 'ClientesController@store')->name('visteon.clientes');
