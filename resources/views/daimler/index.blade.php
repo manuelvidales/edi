@@ -84,18 +84,16 @@
                       <th>Tender</th>
                       <th>Tipo</th>
                       <th>Propósito</th>
-                      <th>Confirmacion</th>
+                      <th>Confirmacion</th>                      
                       <th>Fecha recepcion</th>
                   </tr>
               </thead>
               <tbody>
                   @foreach ($files204 as $data)
-
                 <tr data-id="{{$data->id}}" data-name="{{$data->filename}}">
                     <td><a href="{{ url('getfile/'.$data->id) }}"><i class="fas fa-download"></i></a> <a href="#" class="viewfiles" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a></td>
                     <td>{{$data->shipment_id}}</td>
                     <td>{{$data->code}}</td>
-
                       @if ($data->purpose_code == '00')
                         <td> Nueva orden </td>
                         <td>
@@ -104,7 +102,8 @@
                           @elseif ($data->response == 'D')
                             <span class="badge badge-pill badge-success">Realizada <i class="fas fa-times fa-xs"></i></span>
                           @else
-                            <span class="badge badge-pill badge-light">Pendiente <i class="fas fa-exclamation-triangle fa-xs"></i></span>
+                            <span class="badge badge-pill badge-light">Pendiente </span>
+                            @include('daimler.reenvio')
                           @endif
                         </td>
                       @elseif(($data->purpose_code == '05'))
@@ -117,7 +116,6 @@
                         <td> sin procesar </td>
                         <td> sin procesar </td>
                       @endif
-
                     <td>{{ date ('d-m-Y H:i', strtotime($data->created_at))}}
                     </td>
                     </tr>
@@ -132,9 +130,6 @@
       </div>
   </div>
 </div>
-
-
-
 <!-- Modal -->
 <div class="modal fade" id="verarchivo" tabindex="-1" aria-labelledby="verarchivoLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
