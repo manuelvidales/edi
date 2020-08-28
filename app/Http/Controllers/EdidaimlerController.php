@@ -214,4 +214,34 @@ class EdidaimlerController extends Controller
             return response()->json(['message'=>'successful response'], 200);
         }
     }
+    public function reenviarNoti($ship)
+    {
+        //consultar datos la orden de envio
+        $datos = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_204")->where('shipment_identification_number', '=', $ship)->first();
+        if ($datos->stop8 ==! null) {
+            $destino = $datos->stop8;
+        } elseif ($datos->stop7 ==! null) {
+            $destino = $datos->stop7;
+        } elseif ($datos->stop6 ==! null) {
+            $destino = $datos->stop6;
+        } elseif ($datos->stop5 ==! null) {
+            $destino = $datos->stop5;
+        } elseif ($datos->stop4 ==! null) {
+            $destino = $datos->stop4;
+        } elseif ($datos->stop3 ==! null) {
+            $destino = $datos->stop3;
+        } else {
+            $destino = $datos->stop2;
+        }
+        $shipment_id = $datos->shipment_identification_number;
+        $code = '0'; //para plantilla correo con markdown
+        $origen = $datos->stop1;
+        $fecha = date('d/M/Y', strtotime($datos->stop1_date));
+        $hora = date('H:i', strtotime($datos->stop1_time));
+        //envio de notificacion
+        $code00 = new edidaimler();
+        $code00->Notificacion($code, $shipment_id, $origen, $destino, $fecha, $hora);
+        //devolver al index
+        return $this->index();
+    }   
 }
