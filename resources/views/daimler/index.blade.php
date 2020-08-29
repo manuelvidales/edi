@@ -90,7 +90,7 @@
               </thead>
               <tbody>
                   @foreach ($files204 as $data)
-                <tr data-id="{{$data->id}}" data-name="{{$data->filename}}">
+                <tr data-id="{{$data->id}}" data-name="{{$data->filename}}" data-ship="{{$data->shipment_id}}">
                     <td><a href="{{ url('getfile/'.$data->id) }}"><i class="fas fa-download"></i></a> <a href="#" class="viewfiles" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a></td>
                     <td>{{$data->shipment_id}}</td>
                     <td>{{$data->code}}</td>
@@ -149,6 +149,16 @@
     </div>
   </div>
 </div>
+<!-- modal Confirmacion Reenvio correo-->
+  <div class="modal fade" id="confirmEnvio" tabindex="-1" role="dialog" aria-labelledby="confirmEnvioLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-body alert alert-dark">
+        <h4 class="modal-title center" id="confirmEnvioLabel">
+          Reenviado correo, espere..!
+        </h4>
+      </div>
+    </div>
+  </div>
 
 <script src="{{ asset('js')}}/filestxt.js" ></script>
 <!-- Datatable -->
