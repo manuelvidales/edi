@@ -7,7 +7,6 @@ $.ajaxSetup({
         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
     }
 });
-
 //mostrar archivos
 $(document).on('click', '.viewfiles', function(){
     let id = $(this).closest('tr').data('id');
@@ -32,7 +31,19 @@ $(document).on('click', '.viewfiles', function(){
                 $(texto).append(``+data[x]+`<br/>`);
               }
             }
-          },
+          }
+      });
+  });
+//reenviar correo
+  $(document).on('click', '.reenviarmail', function(){
+    let ship = $(this).closest('tr').data('ship');
+    $('#confirmEnvio').modal('show');
+      $.ajax({
+          type:'GET',
+          url:'/edidaimlernotifica/'+ship,
+          success: function(data){
+            console.log(data);
+          }
       });
   });
   
