@@ -114,7 +114,7 @@ $(document).on('click', '.code824', function(){
             if (data[i].status == 0) {
               $('#mostrarfiles824').append(`
               <tr data-id="`+data[i].id+`" data-name="`+data[i].filename+`">
-                <td> <a href="/files/`+data[i].id+`"><i class="fas fa-download"></i></a> <a href="#" class="viewfiles" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a>
+                <td> <a href="/getfile/`+data[i].id+`"><i class="fas fa-download"></i></a> <a href="#" class="viewfiles" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a>
                 </td>
                 <td>`+data[i].shipment_id+`</td>
                 <td>`+data[i].code+`</td>
@@ -125,7 +125,7 @@ $(document).on('click', '.code824', function(){
             } else {
             $('#mostrarfiles824').append(`
               <tr data-id="`+data[i].id+`">
-                <td> <a href="/files/`+data[i].id+`"><i class="fas fa-download"></i></a> <a href="#" class="viewfiles" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a>
+                <td> <a href="/getfile/`+data[i].id+`"><i class="fas fa-download"></i></a> <a href="#" class="viewfiles" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a>
                 </td>
                 <td>`+data[i].shipment_id+`</td>
                 <td>`+data[i].code+`</td>
