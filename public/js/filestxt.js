@@ -118,7 +118,7 @@ $(document).on('click', '.code824', function(){
                 </td>
                 <td>`+data[i].shipment_id+`</td>
                 <td>`+data[i].code+`</td>
-                <td>recepcion</td>
+                <td>procesado</td>
                 <td>`+fecha+`</td>
               </tr>
               `);
@@ -129,7 +129,7 @@ $(document).on('click', '.code824', function(){
                 </td>
                 <td>`+data[i].shipment_id+`</td>
                 <td>`+data[i].code+`</td>
-                <td>procesado</td>
+                <td>recepcion</td>
                 <td>`+fecha+`</td>
                 </tr>
               `);
