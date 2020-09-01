@@ -247,5 +247,10 @@ class EdidaimlerController extends Controller
                 $code00->Notificacion($code, $shipment_id, $origen, $destino, $fecha, $hora);
                 return response()->json('ok');
         }
-    }   
+    }
+    public function code824()
+    {
+        $files824 = DB::table('edidaimlers')->where('code', '824')->latest()->get();
+        return response()->json($files824);
+    }  
 }
