@@ -1,7 +1,7 @@
 @extends('layouts.app')
 @section('content')
 
-<div class="jumbotron p-2">
+<div class="jumbotron p-1">
   <div class="card-deck p-4">
     <div class="card text-white text-center bg-dark shadow rounded">
       <div class="row justify-content-md-center">
@@ -67,15 +67,23 @@
   </div>
 </div>
 
+<ul class="nav nav-tabs nav-pills mb-3" id="pills-tab" role="tablist">
+  <li class="nav-item" role="presentation">
+    <a class="nav-link active code204" id="pills-204-tab"  data-toggle="pill" href="#" role="tab" aria-controls="pills-204" aria-selected="true">204</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link code824" id="pills-824-tab" data-toggle="pill" href="#" role="tab" aria-controls="pills-824" aria-selected="false">824</a>
+  </li>
+  <li class="nav-item" role="presentation">
+    <a class="nav-link disabled" id="pills-214gps-tab" data-toggle="pill" href="#" role="tab" aria-controls="pills-214gps" aria-selected="false">214(gps)</a>
+  </li>
+</ul>
 
-<div class="jumbotron p-4">
+<div class="jumbotron p-3">
+  <div id="tablaEdicode">
     <div class="card shadow p-3 mb-5 bg-white rounded">
-        <div class="card-header text-center">
-        
-        </div>
         <div class="card-body">
         <div class="row justify-content-md-center">
-
           <div class="table-responsive">
             <table class="table table-sm table-striped table-hover" id="pedidos">
               <thead class="thead-light">
@@ -123,11 +131,12 @@
               </tbody>
             </table>
           </div>
-        </div> 
-        <br>
-      <div class="card-footer text-muted">
-        Autofletes Internacionales Halcon S.C.
+        </div>
       </div>
+      <br>
+    <div class="card-footer text-muted">
+        Autofletes Internacionales Halcon S.C.
+    </div>
   </div>
 </div>
 <!-- Modal -->
