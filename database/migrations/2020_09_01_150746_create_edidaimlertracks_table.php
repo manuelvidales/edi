@@ -39,6 +39,7 @@ class CreateEdidaimlertracksTable extends Migration
             $table->string('agency_code',10)->nullable();
             $table->string('industry_identifier',10)->nullable();
             $table->string('date_time',30)->nullable();
+            $table->string('idnew',10)->nullable();
             $table->timestamps();
         });
     }
