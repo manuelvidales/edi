@@ -31,6 +31,8 @@ Route::get('viewfile/{id}', 'EdidaimlerController@viewfile')->name('viewfile');
 Route::get('/edidaimlerheader', 'EdidaimlerController@header');
 Route::get('edidaimlernotifica/{shop}', 'EdidaimlerController@reenviarNoti');
 Route::get('files824', 'EdidaimlerController@code824')->name('files824');
+Route::get('filesgps214', 'EdidaimlerController@codegps214')->name('filesgps214');
+Route::get('getfile214/{id}', 'EdidaimlerController@getfile214')->name('getfile214');
 //visteon
 Route::get('clientes', 'ClientesController@index')->name('clientes');
 Route::post('clientes/visteon', 'ClientesController@store')->name('visteon.clientes');
