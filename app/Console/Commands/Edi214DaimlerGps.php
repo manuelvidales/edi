@@ -123,7 +123,7 @@ class Edi214DaimlerGps extends Command
                         $IEA = "IEA*1*".$idnew;
                         //Guardar datos a enviar para archivo 214 gps
                         $datatrack = new edidaimlertrack();
-                        $datatrack->save214gps($data,$name214gps,$Longitud,$Latitud);
+                        $datatrack->save214gps($data,$name214gps,$Longitud,$Latitud,$idnew);
                         //Crear archivo 214 Ftp del Cliente
                         $file214ftp = Storage::disk('ftp')->put('toRyder/'.$name214gps.'.txt', $ISA."~".$GS."~".$ST."~".$B10."~".$LX."~".$AT7."~".$MS1."~".$MS2."~".$SE."~".$GE."~".$IEA."~");
                         //Crear archivo 214 Local
