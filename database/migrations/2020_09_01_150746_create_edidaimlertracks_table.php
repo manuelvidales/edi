@@ -35,7 +35,7 @@ class CreateEdidaimlertracksTable extends Migration
             $table->string('id_receiver',20)->nullable();
             $table->string('version_number',10)->nullable();
             $table->string('control_number',10)->nullable();
-            $table->string('sender_code',10)->nullable();
+            $table->string('sender_code',15)->nullable();
             $table->string('agency_code',10)->nullable();
             $table->string('industry_identifier',10)->nullable();
             $table->string('date_time',30)->nullable();
