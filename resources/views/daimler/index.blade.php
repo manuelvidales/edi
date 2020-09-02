@@ -75,7 +75,7 @@
     <a class="nav-link code824" id="pills-824-tab" data-toggle="pill" href="#" role="tab" aria-controls="pills-824" aria-selected="false">824</a>
   </li>
   <li class="nav-item" role="presentation">
-    <a class="nav-link disabled" id="pills-214gps-tab" data-toggle="pill" href="#" role="tab" aria-controls="pills-214gps" aria-selected="false">214(gps)</a>
+    <a class="nav-link code214gps" id="pills-214gps-tab" data-toggle="pill" href="#" role="tab" aria-controls="pills-214gps" aria-selected="false">214(gps)</a>
   </li>
 </ul>
 
