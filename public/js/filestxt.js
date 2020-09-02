@@ -28,7 +28,7 @@ $(document).on('click', '.viewfiles', function(){
             } else {
               $(filename).append(`<label>`+name+`</label>`);
               for (x in data) {
-                $(texto).append(``+data[x]+`<br/>`);
+                $(texto).append(``+data[x]+`~<br/>`);
               }
             }
           }
@@ -106,7 +106,7 @@ $(document).on('click', '.code824', function(){
             let dt = new Date(data[i].created_at);
             //dar fomato fecha dd/mm/yyy HH:mm
             fecha = (`${dt.getDate().toString().padStart(2, '0')}/
-                ${(dt.getMonth()+1).toString().padStart(2, '0')}/${
+            ${(dt.getMonth()+1).toString().padStart(2, '0')}/${
                 dt.getFullYear().toString().padStart(4, '0')} ${
                 dt.getHours().toString().padStart(2, '0')}:${
                 dt.getMinutes().toString().padStart(2, '0')}`
@@ -167,5 +167,130 @@ $(document).on('click', '.code824', function(){
                 }
         });
       }
+    });
+});
+// tabla code 214 Gps
+$(document).on('click', '.code214gps', function(){
+  let tabla = $('#tablaEdicode');
+  $(tabla).html('');
+  $(tabla).append(`
+  <div class="card shadow p-3 mb-5 bg-white rounded">
+    <div class="card-body">
+      <div class="row justify-content-md-center">
+        <div class="table-responsive">
+          <table class="table table-sm table-striped table-hover" id="code214gps">
+            <thead class="thead-light">
+              <tr>
+                <th>Datos</th>
+                <th>Tender</th>
+                <th>Tipo</th>
+                <th>Longitud</th>
+                <th>Latitud</th>
+                <th>Enviado</th>
+              </tr>
+            </thead>
+            <tbody id="mostrarfiles214gps">
+
+            </tbody>
+          </table> 
+        </div>
+      </div>
+    </div>
+  </div>
+  `);
+    $.ajax({
+      type:'GET',
+      url:'/filesgps214',
+      success: function(data){
+        for (i = 0; i < data.length; i++){
+            let dt = new Date(data[i].created_at);
+            //dar fomato fecha dd/mm/yyy HH:mm
+            fecha = (`${dt.getDate().toString().padStart(2, '0')}/${(dt.getMonth()+1).toString().padStart(2, '0')}/${
+                dt.getFullYear().toString().padStart(4, '0')} ${
+                dt.getHours().toString().padStart(2, '0')}:${
+                dt.getMinutes().toString().padStart(2, '0')}`
+                );
+
+              $('#mostrarfiles214gps').append(`
+              <tr data-id="`+data[i].id+`" data-name="`+data[i].filename+`">
+                <td><a href="#" class="verdatos214" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a></td>
+                <td>`+data[i].shipment_identification_number+`</td>
+                <td>`+data[i].code+`</td>
+                <td>`+data[i].longitude+`</td>
+                <td>`+data[i].latitude+`</td>
+                <td>`+fecha+`</td>
+              </tr>
+              `);
+        }
+        $('#code214gps').DataTable({
+          ordering: false,
+            "language": {
+                "sProcessing":     "Procesando...",
+                    "sLengthMenu":     "Mostrar _MENU_ registros",
+                    "sZeroRecords":    "No se encontraron coincicendias",
+                    "sEmptyTable":     "Ningún dato disponible en esta consulta",
+                    "sInfo":           "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "sInfoEmpty":      "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "sInfoFiltered":   "(filtrado de un total de _MAX_ registros)",
+                    "sInfoPostFix":    "",
+                    "sSearch":         "Buscar:",
+                    "sUrl":            "",
+                    "sInfoThousands":  ",",
+                    "sLoadingRecords": "Cargando...",
+                    "oPaginate": {
+                        "sFirst":    "Primero",
+                        "sLast":     "Último",
+                        "sNext":     "Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "oAria": {
+                        "sSortAscending":  ": Activar para ordenar la columna de manera ascendente",
+                        "sSortDescending": ": Activar para ordenar la columna de manera descendente"
+                    },
+                    "buttons": {
+                        "copy": "Copiar",
+                        "colvis": "Visibilidad"
+                    }
+                }
+        });
+      }
+    });
+});
+//Mostrar campos del 214 gps
+$(document).on('click', '.verdatos214', function(){
+  let id = $(this).closest('tr').data('id');
+  let name = $(this).closest('tr').data('name');
+  let texto = $('#mostrartexto');
+  let fail = $('#noExiste');
+  let filename = $('#filename');
+  $(texto).html('');
+  $(fail).html('');
+  $(filename).html('');
+    $.ajax({
+        type:'GET',
+        url:'/getfile214/'+id,
+        success: function(data){
+          $(texto).html('');
+          //console.log(data);
+          if (data == 'null') {
+              $(fail).append(`<div class="alert alert-warning" role="alert">Los campos no se encuentra disponible</div>`);
+          } else {
+            $(filename).append(`<label>`+name+`</label>`);
+            let dt = new Date(data.date_time);
+            fechalg = (`${ dt.getFullYear().toString().padStart(4, '0')}${(dt.getMonth()+1).toString().padStart(2, '0')}${dt.getDate().toString().padStart(2, '0')}`);
+            fechasm = (`${ dt.getFullYear().toString().substr(-2)}${(dt.getMonth()+1).toString().padStart(2, '0')}${dt.getDate().toString().padStart(2, '0')}`);
+            hora = (`${ dt.getHours().toString().padStart(2, '0')}${dt.getMinutes().toString().padStart(2, '0')}`);
+            $(texto).append(`ISA*00*          *00*          *`+data.id_qualifier_receiver+`*`+data.id_receiver+`*`+data.id_qualifier_sender+`*`+data.id_sender+`*`+fechasm+`*`+hora+`*`+data.version_number+`*`+data.control_number+`*`+data.id_incremental+`*0*P*^~<br/>GS*QM*`+data.id_receiver+`*`+data.sender_code+`  *`+fechalg+`*`+hora+`*`+data.id_incremental+`*`+data.agency_code+`*`+data.industry_identifier+`~<br/>
+            ST*214*0001~<br/>
+            B10*`+data.reference_identification+`*`+data.shipment_identification_number+`*`+data.alpha_code+`~<br/>
+            LX*1~<br/>
+            AT7*`+data.status_code+`*`+data.reason_code+`***`+fechalg+`*`+hora+`*CT~<br/>
+            MS1****`+data.longitude+`*`+data.latitude+`*`+data.code_longitude+`*`+data.code_latitude+`~<br/>
+            MS2*`+data.alpha_code+`*`+data.equipment+`~<br/>
+            SE*7*0001~<br/>
+            GE*1*`+data.id_incremental+`~<br/>
+            IEA*1*`+data.idnew+`~<br/>`);
+            }
+        }
     });
 });
