@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use App\edidaimlertrack;
 
 class EdidaimlerController extends Controller
 {
@@ -252,5 +253,18 @@ class EdidaimlerController extends Controller
     {
         $files824 = DB::table('edidaimlers')->where('code', '824')->latest()->get();
         return response()->json($files824);
-    }  
+    }
+    public function codegps214()
+    {
+        $files214 = DB::table('edidaimlertracks')->latest()->get();
+        //dd($files214);
+        return response()->json($files214);
+    }
+    public function getfile214($id)
+    {
+        $find214 = edidaimlertrack::findOrFail($id);
+        // echo ($find214);
+        // dd($find214);
+        return response()->json($find214);
+    }
 }
