@@ -7,7 +7,7 @@ use Illuminate\Support\Facades\Log;
 
 class edidaimlertrack extends Model
 {
-    public function save214gps($data, $name214gps, $Longitud, $Latitud) {
+    public function save214gps($data, $name214gps, $Longitud, $Latitud, $idnew) {
         $datatrack = new edidaimlertrack();
         $datatrack->code = '214';
         $datatrack->filename = $name214gps.'.txt';
@@ -33,6 +33,7 @@ class edidaimlertrack extends Model
         $datatrack->agency_code = $data->agency_code;
         $datatrack->industry_identifier = $data->industry_identifier;
         $datatrack->date_time = $data->date_time;
+        $datatrack->idnew = $idnew;
         if ($datatrack->save()) {
             Log::info('datos almacenados para 214_gps');
         } else {
