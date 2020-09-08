@@ -139,6 +139,7 @@
     </div>
   </div>
 </div>
+
 <!-- Modal -->
 <div class="modal fade" id="verarchivo" tabindex="-1" aria-labelledby="verarchivoLabel" aria-hidden="true">
   <div class="modal-dialog modal-dialog-scrollable modal-lg">
@@ -168,6 +169,17 @@
       </div>
     </div>
   </div>
+<!-- Modal MApa-->
+<div class="modal fade" id="vermapa" tabindex="-1" role="dialog" aria-labelledby="vermapaLabel">
+  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-body" >
+        <div id="openmapa" ></div>
+
+      </div>
+    </div>
+  </div>
+</div>
 
 <script src="{{ asset('js')}}/filestxt.js" ></script>
 <!-- Datatable -->
@@ -206,4 +218,5 @@
   });
 } );
 </script>
+
 @endsection
