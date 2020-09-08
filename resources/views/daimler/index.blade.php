@@ -31,7 +31,7 @@
             </span></h1></div>
           </div>
           <div class="card-body">
-            <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion archivos</button></h5>
+            <h5 class="card-title"><button type="button" class="btn btn-outline-light">En recepcion</button></h5>
             <!-- <p class="card-text"><small class="">actualizado hace 3 minutos</small></p> -->
           </div>
         </div>
