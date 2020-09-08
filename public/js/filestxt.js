@@ -72,7 +72,7 @@ $(document).ready(function () {
               </div>
             </div>
             <div class="card-body">
-              <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion archivos</button></h5>
+              <h5 class="card-title"><button type="button" class="btn btn-outline-light">En recepcion</button></h5>
             </div>
           </div>
           `);
@@ -86,7 +86,7 @@ $(document).ready(function () {
                 </span></h1></div>
               </div>
               <div class="card-body">
-                <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion archivos</button></h5>
+                <h5 class="card-title"><button type="button" class="btn btn-outline-light">En recepcion</button></h5>
               </div>
             </div>
             `);
@@ -132,7 +132,7 @@ $(document).ready(function () {
               </span></h1></div>
             </div>
             <div class="card-body">
-            <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
+            <h5 class="card-title"><button type="button" class="btn btn-outline-light">Advertencias</button></h5>
             </div>
           </div>
           `);
@@ -146,7 +146,7 @@ $(document).ready(function () {
                 </span></h1></div>
               </div>
               <div class="card-body">
-              <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
+              <h5 class="card-title"><button type="button" class="btn btn-outline-light">Advertencias</button></h5>
               </div>
             </div>
             `);
@@ -397,37 +397,21 @@ $(document).on('click', '.mapa', function(){
   $('#openmapa').append(`<div id="mapid" style="width: 760px; height: 400px; position: relative;" class="leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0">
   </div>`);
 
-      /* opcion mas corta*/
-  // let mymap = L.map('mapid').setView([26.1559, -98.2673], 13);
-  let mymap =  L.map('mapid', {
-    center: [lat, -lon],
-    zoom: 13 
-    });
+  L.mapbox.accessToken = 'pk.eyJ1IjoiaGFsY29uZGV2ZWxvcGVyIiwiYSI6ImNrZXN5Mml3MDFxb3kyenBuNndpazlueHoifQ._BCjaRBr77FE6gJ7Zl1CHA';
 
-      /* opcion con el mapa de mapbox Free 25,000 */
-  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGFsY29uZGV2ZWxvcGVyIiwiYSI6ImNrZXN5Mml3MDFxb3kyenBuNndpazlueHoifQ._BCjaRBr77FE6gJ7Zl1CHA', {
-    maxZoom: 18,
-    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-    id: 'mapbox/streets-v11',
-    tileSize: 512,
-    zoomOffset: -1,
-  }).addTo(mymap);
+  let mymap = L.mapbox.map('mapid')
+    .setView([lat, -lon], 13)
+    .addLayer(L.mapbox.styleLayer('mapbox://styles/halcondeveloper/ckeuc490g9v0a19k2yi9rhaua'));
 
-      /* opcion con el mapa open street map */
-  //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-  // }).addTo(mymap);
+      // let mapboxTiles = L.tileLayer('https://api.mapbox.com/styles/v1/halcondeveloper/ckeuc490g9v0a19k2yi9rhaua/tiles/{z}/{x}/{y}?access_token=' + L.mapbox.accessToken, {
+      //     attribution: '© <a href="https://www.mapbox.com/feedback/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      //     tileSize: 512,
+      //     zoomOffset: -1
+      //   });
+      // let mymap = L.map('mapid')
+      //   .addLayer(mapboxTiles)
+      //   .setView([lat, -lon], 15);
 
       /* Mostrar icono en mapa*/
-  L.marker([lat, -lon]).addTo(mymap).bindPopup("Unidad: <b>"+unidad+"</b>").openPopup();
-
-      /* Mostrar circulo en mapa*/
-  // L.circle([26.1559, -98.2673], 500, {
-  //   color: 'blue',
-  //   fillColor: '#137',
-  //   fillOpacity: 0.6
-  // }).addTo(mymap).bindPopup("I am a circle.");
-
+  L.marker([lat, -lon]).addTo(mymap).bindPopup("<b>"+unidad+"</b>").openPopup();
 });
