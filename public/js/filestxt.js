@@ -22,7 +22,6 @@ $(document).on('click', '.viewfiles', function(){
           url:'/viewfile/'+id,
           success: function(data){
             $(texto).html('');
-            console.log(data);
             if (data == 'null') {
                 $(fail).append(`<div class="alert alert-warning" role="alert">El archivo no se encuentra disponible</div>`);
             } else {
@@ -46,7 +45,7 @@ $(document).on('click', '.viewfiles', function(){
           }
       });
   });
-//update header contadores
+//actualizar los contadores del encabezado
 $(document).ready(function () {
   let store = $('#almacen');
   let recent = $('#nuevos');
@@ -59,10 +58,99 @@ $(document).ready(function () {
         $(recent).html('');
         $(process).html('');
         $(warning).html('');
-        $(store).append(``+data[1]+data[2]+data[3]+``);
-        $(recent).append(``+data[5]+``);
-        $(process).append(``+data[7]+``);
-        $(warning).append(``+data[9]+``);
+
+        $(store).append(``+data.total+``);
+        if (data.nuevos == 0) {
+          $(recent).append(`
+          <div class="text-white text-center bg-dark shadow rounded">
+              <div class="row justify-content-md-center">
+              <div class="col-2"><i class="fas fa-file-download fa-5x"></i></div>
+              <div class="col-2">
+              <h1 class="font-weight-bold"><span class="badge badge-primary">
+                <div>`+data.nuevos+`</div>
+              </span></h1>
+              </div>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion archivos</button></h5>
+            </div>
+          </div>
+          `);
+          } else {
+            $(recent).append(`
+            <div class="text-success text-center bg-dark shadow rounded">
+                <div class="row justify-content-md-center">
+                <div class="col-2"><i class="fas fa-file-download fa-5x"></i></div>
+                <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+                  <div>`+data.nuevos+`</div>
+                </span></h1></div>
+              </div>
+              <div class="card-body">
+                <h5 class="card-title"><button type="button" class="btn btn-outline-light">Recepcion archivos</button></h5>
+              </div>
+            </div>
+            `);
+          }
+
+        if (data.proceso == 0) {
+        $(process).append(`
+        <div class="text-white text-center bg-dark shadow rounded">
+            <div class="row justify-content-md-center">
+            <div class="col-2"><i class="fas fa-hourglass-half fa-5x"></i></div>
+            <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+              <div>`+data.proceso+`</div>
+            </span></h1></div>
+          </div>
+          <div class="card-body">
+          <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
+          </div>
+        </div>
+        `);
+        } else {
+          $(process).append(`
+          <div class="text-secondary text-center bg-dark shadow rounded">
+              <div class="row justify-content-md-center">
+              <div class="col-2"><i class="fas fa-hourglass-half fa-5x"></i></div>
+              <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+                <div>`+data.proceso+`</div>
+              </span></h1></div>
+            </div>
+            <div class="card-body">
+            <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
+            </div>
+          </div>
+          `);
+        }
+
+        if (data.fallos == 0) {
+          $(warning).append(`
+            <div class="text-white text-center bg-dark shadow rounded">
+              <div class="row justify-content-md-center">
+              <div class="col-2"><i class="fas fa-exclamation-triangle fa-5x"></i></div>
+              <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+                <div>`+data.fallos+`</div>
+              </span></h1></div>
+            </div>
+            <div class="card-body">
+            <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
+            </div>
+          </div>
+          `);
+          } else {
+            $(warning).append(`
+              <div class="text-warning text-center bg-dark shadow rounded">
+                <div class="row justify-content-md-center">
+                <div class="col-2"><i class="fas fa-exclamation-triangle fa-5x"></i></div>
+                <div class="col-2"><h1 class="font-weight-bold"><span class="badge badge-primary">
+                  <div>`+data.fallos+`</div>
+                </span></h1></div>
+              </div>
+              <div class="card-body">
+              <h5 class="card-title"><button type="button" class="btn btn-outline-light">En proceso</button></h5>
+              </div>
+            </div>
+            `);
+          }
       });
   }, 60000);//(1min)
 });
@@ -211,7 +299,6 @@ $(document).on('click', '.code214gps', function(){
                 dt.getHours().toString().padStart(2, '0')}:${
                 dt.getMinutes().toString().padStart(2, '0')}`
                 );
-
               $('#mostrarfiles214gps').append(`
               <tr data-id="`+data[i].id+`" data-name="`+data[i].filename+`">
                 <td><a href="#" class="verdatos214" data-toggle="modal" data-target="#verarchivo"><i class="fas fa-eye"></i></a></td>
@@ -277,7 +364,6 @@ $(document).on('click', '.verdatos214', function(){
         url:'/getfile214/'+id,
         success: function(data){
           $(texto).html('');
-          //console.log(data);
           if (data == 'null') {
               $(fail).append(`<div class="alert alert-warning" role="alert">Los campos no se encuentra disponible</div>`);
           } else {
