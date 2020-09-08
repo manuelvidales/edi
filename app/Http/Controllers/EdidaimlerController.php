@@ -31,10 +31,8 @@ class EdidaimlerController extends Controller
         $recent = count(Storage::disk('local')->files('Daimler/fromRyder/'));
         $process = count(Storage::disk('local')->files('Daimler/fromRyder_process/'));
         $warning = DB::table('edidaimlers')->where('status', '3')->count();
-        //array para JS
-        $data = array ( $store, $recent, $process, $warning);
 
-        return json_encode($data);
+        return response()->json(['total'=>$store, 'nuevos'=>$recent, 'proceso'=>$process, 'fallos'=>$warning]);
     }
     
     public function getfile($file)
