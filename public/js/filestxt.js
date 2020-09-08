@@ -186,6 +186,7 @@ $(document).on('click', '.code214gps', function(){
                 <th>Tipo</th>
                 <th>Longitud</th>
                 <th>Latitud</th>
+                <th>Mapa</th>
                 <th>Enviado</th>
               </tr>
             </thead>
@@ -218,6 +219,11 @@ $(document).on('click', '.code214gps', function(){
                 <td>`+data[i].code+`</td>
                 <td>`+data[i].longitude+`</td>
                 <td>`+data[i].latitude+`</td>
+                <td data-lat='`+data[i].latitude+`' data-lng='`+data[i].longitude+`' data-unidad='`+data[i].unidad+`'>
+                <a href="#" class="mapa" data-toggle="modal" data-target="#vermapa" >
+                <i class="fas fa-map-marked-alt fa-lg"></i>
+                </a>
+                </td>
                 <td>`+fecha+`</td>
               </tr>
               `);
@@ -280,7 +286,7 @@ $(document).on('click', '.verdatos214', function(){
             fechalg = (`${ dt.getFullYear().toString().padStart(4, '0')}${(dt.getMonth()+1).toString().padStart(2, '0')}${dt.getDate().toString().padStart(2, '0')}`);
             fechasm = (`${ dt.getFullYear().toString().substr(-2)}${(dt.getMonth()+1).toString().padStart(2, '0')}${dt.getDate().toString().padStart(2, '0')}`);
             hora = (`${ dt.getHours().toString().padStart(2, '0')}${dt.getMinutes().toString().padStart(2, '0')}`);
-            $(texto).append(`ISA*00*          *00*          *`+data.id_qualifier_receiver+`*`+data.id_receiver+`*`+data.id_qualifier_sender+`*`+data.id_sender+`*`+fechasm+`*`+hora+`*`+data.version_number+`*`+data.control_number+`*`+data.id_incremental+`*0*P*^~<br/>GS*QM*`+data.id_receiver+`*`+data.sender_code+`  *`+fechalg+`*`+hora+`*`+data.id_incremental+`*`+data.agency_code+`*`+data.industry_identifier+`~<br/>
+            $(texto).append(`ISA*00*          *00*          *`+data.id_qualifier_receiver+`*`+data.id_receiver+`*`+data.id_qualifier_sender+`*`+data.id_sender+`*`+fechasm+`*`+hora+`*`+data.version_number+`*`+data.control_number+`*`+data.idnew+`*0*P*^~<br/>GS*QM*`+data.id_receiver+`*`+data.sender_code+`  *`+fechalg+`*`+hora+`*`+data.id_incremental+`*`+data.agency_code+`*`+data.industry_identifier+`~<br/>
             ST*214*0001~<br/>
             B10*`+data.reference_identification+`*`+data.shipment_identification_number+`*`+data.alpha_code+`~<br/>
             LX*1~<br/>
@@ -293,4 +299,49 @@ $(document).on('click', '.verdatos214', function(){
             }
         }
     });
+});
+//mapa en modal
+$(document).on('click', '.mapa', function(){
+  let lat = $(this).closest('td').data('lat');
+  let lon = $(this).closest('td').data('lng');
+  let unidad = $(this).closest('td').data('unidad');
+  let modalmap = $('#openmapa');
+  
+  $(modalmap).html('');
+  $('#openmapa').append(`<div id="mapid" style="width: 760px; height: 400px; position: relative;" class="leaflet-container leaflet-touch leaflet-fade-anim leaflet-grab leaflet-touch-drag leaflet-touch-zoom" tabindex="0">
+  </div>`);
+
+      /* opcion mas corta*/
+  // let mymap = L.map('mapid').setView([26.1559, -98.2673], 13);
+  let mymap =  L.map('mapid', {
+    center: [lat, -lon],
+    zoom: 13 
+    });
+
+      /* opcion con el mapa de mapbox Free 25,000 */
+  L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiaGFsY29uZGV2ZWxvcGVyIiwiYSI6ImNrZXN5Mml3MDFxb3kyenBuNndpazlueHoifQ._BCjaRBr77FE6gJ7Zl1CHA', {
+    maxZoom: 18,
+    attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
+      '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+      'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
+    id: 'mapbox/streets-v11',
+    tileSize: 512,
+    zoomOffset: -1,
+  }).addTo(mymap);
+
+      /* opcion con el mapa open street map */
+  //   L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+  //     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+  // }).addTo(mymap);
+
+      /* Mostrar icono en mapa*/
+  L.marker([lat, -lon]).addTo(mymap).bindPopup("Unidad: <b>"+unidad+"</b>").openPopup();
+
+      /* Mostrar circulo en mapa*/
+  // L.circle([26.1559, -98.2673], 500, {
+  //   color: 'blue',
+  //   fillColor: '#137',
+  //   fillOpacity: 0.6
+  // }).addTo(mymap).bindPopup("I am a circle.");
+
 });
