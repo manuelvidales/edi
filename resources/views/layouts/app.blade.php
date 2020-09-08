@@ -33,7 +33,7 @@
             crossorigin=""></script>
         <!-- JS Mapbox -->
             <script src='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.js'></script>
-            <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet' />
+        <!-- <link href='https://api.mapbox.com/mapbox.js/v3.3.1/mapbox.css' rel='stylesheet'/> -->
 </head>
 <body>
     <!-- Loading screen -->
