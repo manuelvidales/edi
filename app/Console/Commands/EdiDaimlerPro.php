@@ -118,7 +118,7 @@ class EdiDaimlerPro extends Command
                                         if ($data1 == '*1*') {
                                             $S5_1 = explode("*",$S5_uno[$s]);
                                         }elseif ($data1 == 'L11') { //El primero de dos
-                                            $L11_1 = explode("*",$S5_uno[$s]);
+                                            $L11_1 = explode("*",$S5_uno[1]);
                                         }elseif ($data1 == 'G62') { //El primero de dos
                                             $G62_1 = explode("*",$S5_uno[$s]);
                                         }elseif ($data1 == 'N1*') {
@@ -186,7 +186,7 @@ class EdiDaimlerPro extends Command
                                         if ($data2 == '*2*') {
                                             $S5_2 = explode("*",$S5_dos[$s]);
                                         }elseif ($data2 == 'L11') { //El primero de dos
-                                            $L11_2 = explode("*",$S5_dos[$s]);
+                                            $L11_2 = explode("*",$S5_dos[1]);
                                         }elseif ($data2 == 'G62') { //El primero de dos
                                             $G62_2 = explode("*",$S5_dos[$s]);
                                         }elseif ($data2 == 'N1*') {
@@ -254,7 +254,7 @@ class EdiDaimlerPro extends Command
                                         if ($data3 == '*3*') {
                                             $S5_3 = explode("*",$S5_tres[$s]);
                                         }elseif ($data3 == 'L11') { //El primero de dos
-                                            $L11_3 = explode("*",$S5_tres[$s]);
+                                            $L11_3 = explode("*",$S5_tres[1]);
                                         }elseif ($data3 == 'G62') { //El primero de dos
                                             $G62_3 = explode("*",$S5_tres[$s]);
                                         }elseif ($data3 == 'N1*') {
@@ -322,7 +322,7 @@ class EdiDaimlerPro extends Command
                                         if ($data4 == '*4*') {
                                             $S5_4 = explode("*",$S5_cuatro[$s]);
                                         }elseif ($data4 == 'L11') { //El primero de dos
-                                            $L11_4 = explode("*",$S5_cuatro[$s]);
+                                            $L11_4 = explode("*",$S5_cuatro[1]);
                                         }elseif ($data4 == 'G62') { //El primero de dos
                                             $G62_4 = explode("*",$S5_cuatro[$s]);
                                         }elseif ($data4 == 'N1*') {
@@ -390,7 +390,7 @@ class EdiDaimlerPro extends Command
                                         if ($data5 == '*5*') {
                                             $S5_5 = explode("*",$S5_cinco[$s]);
                                         }elseif ($data5 == 'L11') { //El primero de dos
-                                            $L11_5 = explode("*",$S5_cinco[$s]);
+                                            $L11_5 = explode("*",$S5_cinco[1]);
                                         }elseif ($data5 == 'G62') { //El primero de dos
                                             $G62_5 = explode("*",$S5_cinco[$s]);
                                         }elseif ($data5 == 'N1*') {
@@ -458,7 +458,7 @@ class EdiDaimlerPro extends Command
                                         if ($data6 == '*6*') {
                                             $S5_6 = explode("*",$S5_seis[$s]);
                                         }elseif ($data6 == 'L11') { //El primero de dos
-                                            $L11_6 = explode("*",$S5_seis[$s]);
+                                            $L11_6 = explode("*",$S5_seis[1]);
                                         }elseif ($data6 == 'G62') { //El primero de dos
                                             $G62_6 = explode("*",$S5_seis[$s]);
                                         }elseif ($data6 == 'N1*') {
@@ -526,7 +526,7 @@ class EdiDaimlerPro extends Command
                                         if ($data7 == '*7*') {
                                             $S5_7 = explode("*",$S5_siete[$s]);
                                         }elseif ($data7 == 'L11') { //El primero de dos
-                                            $L11_7 = explode("*",$S5_siete[$s]);
+                                            $L11_7 = explode("*",$S5_siete[1]);
                                         }elseif ($data7 == 'G62') { //El primero de dos
                                             $G62_7 = explode("*",$S5_siete[$s]);
                                         }elseif ($data7 == 'N1*') {
@@ -594,7 +594,7 @@ class EdiDaimlerPro extends Command
                                         if ($data8 == '*8*') {
                                             $S5_8 = explode("*",$S5_ocho[$s]);
                                         }elseif ($data8 == 'L11') { //El primero de dos
-                                            $L11_8 = explode("*",$S5_ocho[$s]);
+                                            $L11_8 = explode("*",$S5_ocho[1]);
                                         }elseif ($data8 == 'G62') { //El primero de dos
                                             $G62_8 = explode("*",$S5_ocho[$s]);
                                         }elseif ($data8 == 'N1*') {
