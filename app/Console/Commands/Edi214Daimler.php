@@ -41,8 +41,8 @@ class Edi214Daimler extends Command
     public function handle()
     {
         $sql214 = DB::connection(env('DB_DAIMLER'))->table("edi_daimler_214")->where('send_txt', '=', '1')->get();
-            foreach ($sql214 as $data214) {
-            if ($data214 == true) { //si obtiene datos se preparan para el archivo
+            if (count($sql214)) { //valida si existen datos
+                foreach ($sql214 as $data214) {
                 $id = $data214->id_incremental;
                 $i = strlen($id);
                     if     ($i == 1) { $idnew = '00000000'.$id; }
