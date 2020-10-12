@@ -48,9 +48,10 @@ class EdiDaimlerFtp extends Command
         $ftp_pass = env('FTP_PASSWORD');
         //establecer una conexión o finalizarla
         $conn_id = ftp_connect($ftp_server) or die("No se pudo conectar a $ftp_server");
-        $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
+        // $login = ftp_login($conn_id, $ftp_user, $ftp_pass);
         //validar conexion FTP
-        if ( @$login ) {
+        // if ( @$login ) {
+        if (ftp_login($conn_id, $ftp_user, $ftp_pass)) {
         // Obtener los archivos del directorio ftp
             $files = ftp_nlist($conn_id, 'fromRyder');
             $cantidad = count($files);
