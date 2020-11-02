@@ -19,7 +19,7 @@
 </style>
 <table>
     <tr style="background-color: #cdefdc"><th style="border-bottom: 1px solid #ddd;">Carrier Status Update Notification</th></tr>
-    <tr style="background-color: #cdefdc"><th style="border-bottom: 1px solid #ddd;">Customer: ALPS LOGISTICS (USA) INC.</th></tr>
+    <tr style="background-color: #cdefdc"><th style="border-bottom: 1px solid #ddd;">Customer: {{ $cliente }}.</th></tr>
     <tr><td style="border-bottom: 1px solid #fff;"><span style="font-weight: bold;">Carrier:</span> AUTOFLETES INTERNACIONALES HALCON SC</td></tr>
     <tr><td style="border-bottom: 1px solid #fff;"><img src="http://201.174.6.122:88/img/logonew.png"></td></tr>
     <tr>
@@ -58,24 +58,9 @@
         <th>Observaciones:</th>
     </tr>
     <tr>
-        <td style="text-align: left;">DISPONIBLE</td>
-        <td>17/06/2019 01:25:00 p.m.</td>
+    <td style="text-align: left;">{{ $status }}</td>
+        <td>{{ date('d/m/Y h:i:s a ', strtotime($fecha)) }}</td>
         <td></td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">CONFIRMACION DE VIAJE</td>
-        <td >17/06/2019 01:25:00 p.m.</td>
-        <td ></td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">LLEGADA A ORIGEN</td>
-        <td >17/06/2019 01:25:00 p.m.</td>
-        <td ></td>
-    </tr>
-    <tr>
-        <td style="text-align: left;">SALIDA DE ORIGEN</td>
-        <td >17/06/2019 01:25:00 p.m.</td>
-        <td ></td>
     </tr>
 </table>
 <br>
