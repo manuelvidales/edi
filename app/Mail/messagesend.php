@@ -11,17 +11,17 @@ class messagesend extends Mailable
 {
     use Queueable, SerializesModels;
 
-    //public $subject = '204 nuevo recibido';
-    //public $msg;
+    public $subject = 'AVISO: Error de correo';
+    public $cliente;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct()
+    public function __construct($cliente)
     {
-        //
+        $this->cliente = $cliente;
     }
 
     /**
@@ -31,6 +31,6 @@ class messagesend extends Mailable
      */
     public function build()
     {
-        //return $this->view('mails.messagesend'); //vista html css no usar en outlook
+        return $this->view('mails.clientesError');
     }
 }
