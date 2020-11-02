@@ -21,13 +21,15 @@ class NotificaClientes extends Mailable
     public $ruta;
     public $origen;
     public $destino;
+    public $status;
+    public $fecha;
 
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($viaje, $operador, $unidad, $placas, $remolque, $cliente, $ruta, $origen, $destino)
+    public function __construct($viaje, $operador, $unidad, $placas, $remolque, $cliente, $ruta, $origen, $destino, $status, $fecha)
     {
         $this->viaje = $viaje;
         $this->operador = $operador;
@@ -38,6 +40,8 @@ class NotificaClientes extends Mailable
         $this->ruta = $ruta;
         $this->origen = $origen;
         $this->destino = $destino;
+        $this->status = $status;
+        $this->fecha = $fecha;
     }
 
     /**
