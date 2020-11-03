@@ -20,6 +20,7 @@ class Kernel extends ConsoleKernel
         Commands\EdiVisteon::class,
         Commands\loglaravel::class,
         Commands\SendClientes::class,
+        Commands\SendClientesGps::class,
     ];
 
     /**
@@ -36,7 +37,8 @@ class Kernel extends ConsoleKernel
         $schedule->command('edi214gps:daimler')->hourly();
         $schedule->command('edi210:visteon')->everyMinute();
         $schedule->command('log:laravel')->daily();
-        // $schedule->command('Notificaciones:clientes')->everyMinute();
+        $schedule->command('Notificaciones:clientes')->everyMinute();
+        $schedule->command('Notificaciones:clientesGps')->everyThirtyMinutes();
     }
 
     /**
