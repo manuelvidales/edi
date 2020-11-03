@@ -74,7 +74,7 @@ class clientes extends Model
                     $datajson = $listjson[0]['EventData'];
                     $lat = $datajson[0]['GPSPoint_lat'];
                     $lon = $datajson[0]['GPSPoint_lon'];
-                    $address = 'Carretera Saltillo-Torreón,Coahuila, México';//$datajson[0]['Address'];
+                    $address = $datajson[0]['Address'];
 
                     //Enviar datos a los correo del cliente
                     if (count($sql) !== 0) {
