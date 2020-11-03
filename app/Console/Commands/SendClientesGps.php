@@ -40,7 +40,7 @@ class SendClientesGps extends Command
      */
     public function handle()
     {
-        $gps = DB::connection('sqlsrvpro')->table("bitacora_clientes_gps")->where('id_incremental','=', '114')->get();
+        $gps = DB::connection('sqlsrvpro')->table("bitacora_clientes_gps")->where('send_txt','=', '1')->get();
         $id = '2';
         if (count($gps) !== 0) {
             Log::info('Datos de viajes para gps');
