@@ -42,11 +42,12 @@ class SendClientes extends Command
     public function handle()
     {
         $viajes = DB::connection('sqlsrvpro')->table("bitacora_clientes")->where('send_txt','=', '1')->get();
+        $id = '1';
         if (count($viajes) !== 0) {
             Log::info('viajes encontrados');
             foreach ($viajes as $key => $value) {
                 $enviar = new clientes();
-                $enviar->statusViajes($value);
+                $enviar->statusData($value, $id);
             }
         }
     }
