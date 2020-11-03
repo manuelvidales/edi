@@ -19,7 +19,7 @@
 </style>
 <table>
     <tr style="background-color: #cdefdc"><th style="border-bottom: 1px solid #ddd;">Carrier Status Update Notification</th></tr>
-    <tr style="background-color: #cdefdc"><th style="border-bottom: 1px solid #ddd;">Customer: ALPS LOGISTICS (USA) INC.</th></tr>
+    <tr style="background-color: #cdefdc"><th style="border-bottom: 1px solid #ddd;">Customer: {{$cliente}}</th></tr>
     <tr><td style="border-bottom: 1px solid #fff;"><span style="font-weight: bold;">Carrier:</span> AUTOFLETES INTERNACIONALES HALCON SC</td></tr>
     <tr><td style="border-bottom: 1px solid #fff;"><img src="http://201.174.6.122:88/img/logonew.png"></td></tr>
     <tr>
@@ -59,10 +59,10 @@
         <th>Mapa:</th>
     </tr>
     <tr>
-        <td style="text-align: left;">Transitando</td>
-        <td>[Torreón], Coahuila de Zaragoza 27275, México</td>
-        <td>17/06/2019 01:25:00 p.m.</td>
-        <td><a href="https://maps.google.com/?q=25.53073,-103.31506" target="_blank"><img src="http://201.174.6.122:88/img/location.png"></a></td>
+        <td style="text-align: left;">{{$status}}</td>
+        <td>{{$address}}</td>
+        <td>{{ date('d/m/Y h:i:s a ', strtotime($fecha)) }}</td>
+        <td><a href="https://maps.google.com/?q={{$lat}},{{$lon}}" target="_blank"><img src="http://201.174.6.122:88/img/location.png"></a></td>
     </tr>
 </table>
 <br>
