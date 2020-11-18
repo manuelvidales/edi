@@ -254,8 +254,7 @@ class EdidaimlerController extends Controller
     }
     public function codegps214()
     {
-        $files214 = DB::table('edidaimlertracks')->latest()->get();
-        //dd($files214);
+        $files214 = DB::table('edidaimlertracks')->take(500)->latest()->get();
         return response()->json($files214);
     }
     public function getfile214($id)
