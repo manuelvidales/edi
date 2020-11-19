@@ -19,7 +19,7 @@ class EdidaimlerController extends Controller
         $filestore = count(Storage::disk('local')->files('Daimler/fromRyder_arch/'));
         $warning = DB::table('edidaimlers')->where('status', '3')->count();
         //archivos de tipo 204
-        $files204 = DB::table('edidaimlers')->where('code', '204')->latest()->get();
+        $files204 = DB::table('edidaimlers')->where('code', '204')->take(500)->latest()->get();
 
         return \view('daimler.index', compact('files204','filesnew','fileprocess', 'filestore', 'warning' ));
     }
@@ -249,19 +249,20 @@ class EdidaimlerController extends Controller
     }
     public function code824()
     {
-        $files824 = DB::table('edidaimlers')->where('code', '824')->latest()->get();
+        $files824 = DB::table('edidaimlers')->where('code', '824')->take(500)->latest()->get();
+        
         return response()->json($files824);
     }
     public function codegps214()
     {
         $files214 = DB::table('edidaimlertracks')->take(500)->latest()->get();
+
         return response()->json($files214);
     }
     public function getfile214($id)
     {
         $find214 = edidaimlertrack::findOrFail($id);
-        // echo ($find214);
-        // dd($find214);
+
         return response()->json($find214);
     }
 }
