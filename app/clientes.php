@@ -95,7 +95,7 @@ class clientes extends Model
                         $error->errorCorreo($cliente, $idcliente);
         
                         //update tabla send_txt a 2 Falta de correo
-                        if (DB::connection('sqlsrvpro')->table("bitacora_clientes_gps")->where([ ['id_incremental', '=', $value->id_incremental] ])->update(['send_txt' => '2'])) {
+                        if (DB::connection('sqlsrvpro')->table("bitacora_clientes_gps")->where([ ['id_incremental', '=', $value->id_incremental] ])->update(['latitud' => $lat, 'longitud' => $lon, 'direccion' => $address, 'send_txt' => '2'])) {
                             Log::info('Actualiza send_txt = 2 falta de correo');
                         }
                     }
