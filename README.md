@@ -2,7 +2,7 @@
 
 Recepcion de archivos mediante SFTP en formato .TXT el cual contiene informacion de una oferta de viaje en una sola linea.
 
-Estos archivos se identifican por codigos que se manejan por EDI Standards (electronic data interchange) y estaremos usando el 204 y 990 de respuesta.
+Estos archivos se identifican por codigos que se manejan por EDI Standards (electronic data interchange) y estaremos usando el 204 y 990 de respuesta tambien se agregan los siguientes codes: 824, 997, 214, 210.
 
 Solo se toman en cuenta algunos campos que son requeridos y se almacenan en una tabla de Sql server y se usara la informacion dentro del sistema ERP.
 
@@ -22,7 +22,7 @@ Proceso del Funcionamiento del sistema:
 - La respuesta se envia y se Actuliza la tabla principal del archivo.
 - Despues se almancenan los datos en la tabla 990 de Sql Server.
 - Enseguida se generara un Archivo .txt con el code 990 y se envia al SFTP.
-- Se notifica en misma la pantalla el envio y queda caducado el acceso al link.
+- Se notifica en la misma pantalla el envio y queda caducado el acceso al link.
 - Al Cerrar la notificacion se muestra el aviso "Informacion no disponible".
 
 
